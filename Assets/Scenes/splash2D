@@ -1,0 +1,155 @@
+@script RequireComponent (GenericFunctions)
+
+private var gen : GenericFunctions;
+var logo:Texture2D;
+var mask:Texture2D;
+var splash:Texture2D;
+
+
+
+
+
+var StartGameRect:Rect;
+var FullScreenRect:Rect;
+
+private var opacity:float;
+var state:int=0; //0-logo Fadein, 1-logo, 2-logo Fade out, 3-splash fade in, 4-splash, 5-loading menu
+
+
+function Start()
+{
+	gen=GetComponent(GenericFunctions);
+	StartGameRect=Rect( Screen.width/2-64, Screen.height*2/3, 128, 32 );
+	FullScreenRect=Rect(0,0,512,512);
+	state=0;
+}
+
+function StartGame()
+{
+	Application.LoadLevel("menu");
+}
+
+
+
+var logoFadeIn:float =1;
+var logoHold:float=4;
+var logoFadeOut:float =1;
+var splashFadeIn:float=2;
+private var content:Texture2D;
+
+function Update()
+{
+	if (state==0) SplashScreen();
+
+	
+}
+function SplashScreen()
+{
+	content=logo;
+	yield new FadeIn(logoFadeIn);
+	state=1;
+	yield new ShowLogo();
+	state=2;
+	yield new FadeOut(logoFadeOut);
+	state=3;
+	content=splash;
+	yield FadeIn(splashFadeIn);
+	state=4;
+}
+function SplashScreenrr()
+{
+	print(state);
+	switch (state)
+	{
+	case 0: //logo fade in
+	content=logo;
+	yield new FadeIn(logoFadeIn);
+	break;
+	
+	case 1: //show logo
+	yield new ShowLogo();
+	break;
+	
+	case 2: //logo fade out
+	yield new FadeOut(logoFadeOut);
+	break;
+	
+	case 3: //splash fade in
+	content=splash;
+	yield FadeIn(splashFadeIn);
+	
+	case 4: //splash screen
+	if(gen.TouchUpdate(StartGameRect)) StartGame();
+	
+	}
+	
+	
+}
+
+function ShowLogo()
+{
+	var timer:float=0;
+	while (timer<logoHold)
+	{
+		print ("showingLogo"+timer);
+		timer+=Time.deltaTime;
+		yield;
+	}
+	
+	
+}
+function FadeIn(t:float)
+{
+	var timer:float=0;
+	while (timer<t)
+	{
+		timer+=Time.deltaTime;
+		opacity=(timer/t);
+		print("opacity=" +opacity);
+		yield;
+	}
+	
+	
+}
+
+function FadeOut(t:float)
+{
+	var timer:float=t;
+	while (timer>0)
+	{
+		timer-=Time.deltaTime;
+		opacity=(timer/t);
+		print("opacity=" +opacity);
+		yield;
+	}
+	
+	
+}
+
+var GUIOpacity:float;
+function OnGUI()
+{
+	GUIOpacity=opacity;
+	switch (state)
+	{
+		
+		case 1:
+		GUI.contentColor = Color.white;
+		GUI.Label( FullScreenRect,  GUIContent(logo) );
+		break;
+		
+		case 4:
+		GUI.contentColor = Color.white;
+		GUI.Label( FullScreenRect,  GUIContent(splash) );
+		break;
+		
+		default:
+		GUI.contentColor = Color(1,1,1,GUIOpacity);
+		GUI.Label( FullScreenRect,  GUIContent(content) );
+		break;
+	}
+	
+	
+		
+		
+}
