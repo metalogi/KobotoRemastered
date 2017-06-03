@@ -7,7 +7,10 @@ var watchObjects:boolean=true;
 
 private var thisIO:InterestingObject;
 
-function Awake(){cam= GetComponent.<Camera>().main.GetComponent(CameraManager);juncCount=startCount; thisIO=GetComponent(InterestingObject);}
+function Awake(){
+return;
+cam= GetComponent.<Camera>().main.GetComponent(CameraManager);juncCount=startCount; thisIO=GetComponent(InterestingObject);
+}
 
 
 function OnTriggerEnter (other:Collider) {

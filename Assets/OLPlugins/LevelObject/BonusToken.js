@@ -16,6 +16,7 @@ var triggerTut:boolean=false;
 var tut : Tutorial2;
 function Start()
 {
+	return;
 	freshlyFound=false;
 	simManager = FindObjectOfType(SimManager);
 	cam = Camera.main.GetComponent(CameraManager);
@@ -38,6 +39,7 @@ function Start()
 }
 
 function OnTriggerEnter (col:Collider) {
+return;
 	if (!found&&col.GetComponent(Juncore))
 	{
 		Fade();

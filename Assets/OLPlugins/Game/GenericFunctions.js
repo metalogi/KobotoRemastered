@@ -122,6 +122,7 @@ function GlobalSoundToggle()
 var splashScreen : boolean =false;
 function Awake()
 {
+	return;
 	if (!splashScreen)
 	{
 	camObj = Camera.main;
@@ -163,6 +164,7 @@ var touching:boolean;
 
 function Start()
 {
+	return;
 	if(GetComponent(SimManager) == null) gameObject.AddComponent(SimManager);
 	SetOrientation();
 	input =Input.touches;
@@ -212,6 +214,7 @@ function ResetPlayerPrefs()
 
 function Update() //store input data per frame
 {
+return;
 	tCount=Input.touchCount;
 	input =Input.touches;
 	touching = (Input.touchCount >0);
