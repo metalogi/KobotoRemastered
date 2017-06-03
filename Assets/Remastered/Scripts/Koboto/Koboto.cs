@@ -27,9 +27,6 @@ public class Koboto : MonoBehaviour {
 
 
         AddAttachment(EAttachmentType.Wheels);
-
-
-
     }
 
 
@@ -70,6 +67,22 @@ public class Koboto : MonoBehaviour {
         boxCollider.center = colliderCenterTarget;
         boxCollider.size = colliderSizeTarget;
         
+    }
+
+    public void FixedUpdate() {
+
+        float input = InputManager.Instance.Read();
+
+        if (currentAttachments.Count == 0) {
+            NoAttachmentsFixedUpdate();
+            return;
+        }
+
+        float targetSpeed = 0;
+
+    }
+
+    public void NoAttachmentsFixedUpdate() {
     }
 
    
