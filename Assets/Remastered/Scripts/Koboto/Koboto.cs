@@ -14,16 +14,51 @@ public class Koboto : MonoBehaviour {
     Vector3 colliderCenterTarget;
     Vector3 colliderSizeTarget;
 
-    internal class KobProbe {
-        internal RaycastHit downHit;
-        internal RaycastHit upHit;
-        internal RaycastHit forwardHit;
-        internal RaycastHit backHit;
+    internal class KobProber {
+		internal Probe downProbe = new Probe();
+		internal Probe upProbe = new Probe();
+		internal Probe forwardProbe = new Probe();
+		internal Probe backProbe = new Probe();
+
+		internal Probe localDownProbe = new Probe();
+		internal Probe localUpProbe = new Probe();
+		internal Probe localForwardProbe = new Probe();
+		internal Probe LocalBackProbe = new Probe();
+
+		internal IEnumerator AllProbes(){
+			yield return downHit;
+			yield return upHit;
+			yield return forwardHit;
+			yield return backHit;
+			yield return localDownHit;
+			yield return localUpHit;
+			yield return localForwardHit;
+			yield return localBackHit;
+		}
+
+	
 
     }
 
+	internal class Probe {
+
+		private Vector3 startPosLocal;
+		private Vector3 direction;
+		private bool directionInWorldSpace;
+
+		internal bool didHit;
+		internal RaycastHit hit;
+
+		internal Probe(bool worldSpace, Vector3 startPos, Vector3 direction) {
+		}
+
+	}
+
+	KobProbe probe;
+
     public void Awake() {
         boxCollider = GetComponent<BoxCollider>();
+		probe = new
         colliderBaseCenter = boxCollider.center;
         colliderBaseSize = boxCollider.size;
         currentAttachments = new Dictionary<EAttachmentTarget, AttachmentBase>();
@@ -76,6 +111,9 @@ public class Koboto : MonoBehaviour {
         boxCollider.size = colliderSizeTarget;
         
     }
+
+	void UpdateProbe() {
+	}
 
     public void FixedUpdate() {
 
