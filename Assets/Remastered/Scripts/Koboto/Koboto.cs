@@ -14,6 +14,14 @@ public class Koboto : MonoBehaviour {
     Vector3 colliderCenterTarget;
     Vector3 colliderSizeTarget;
 
+    internal class KobProbe {
+        internal RaycastHit downHit;
+        internal RaycastHit upHit;
+        internal RaycastHit forwardHit;
+        internal RaycastHit backHit;
+
+    }
+
     public void Awake() {
         boxCollider = GetComponent<BoxCollider>();
         colliderBaseCenter = boxCollider.center;
