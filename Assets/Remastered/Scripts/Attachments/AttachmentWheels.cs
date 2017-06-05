@@ -13,7 +13,7 @@ public class AttachmentWheels : AttachmentBase {
 
             moveForce.upTarget = sensors.groundNormal;
         } else {
-            moveForce.upTarget = Vector3.up;
+            moveForce.upTarget = Quaternion.AngleAxis(input.move * 45f, Vector3.right) * Vector3.up;
         }
     }
 	

@@ -13,7 +13,7 @@ public class TestCam : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void LateUpdate () {
+	void FixedUpdate () {
         transform.position = Vector3.Lerp(transform.position, new Vector3(startPos.x, target.position.y +4f, target.position.z), 6f * Time.deltaTime);
 	}
 }

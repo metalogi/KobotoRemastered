@@ -174,7 +174,7 @@ public class Koboto : MonoBehaviour {
     public void Awake() {
         parameters = GetComponent<KobotoParameters>();
 
-        tiltController = new PDController(5f, 0.4f);
+        tiltController = new PDController(12f, 0.8f);
         rb = GetComponent<Rigidbody>();
         sensors = new KobotoSensor();
         moveForce = new KobotoMoveForce();
