@@ -72,15 +72,15 @@ static function AddConnector()
 static function NewConnecter(lt : Transform, rt:Transform, n:int)
 {
 	var objectNames :WorldObjectDefs = new WorldObjectDefs();
-	var cam:CameraManager = Camera.main.GetComponent(CameraManager);
-	var matPath : String;
-	if (!cam) matPath =objectNames.W1BottomMat;
-	else
-	{
-	if (cam.world==1) matPath =objectNames.W1BottomMat;
-	if (cam.world==2) matPath =objectNames.W2BottomMat;
-	if (cam.world==3) matPath =objectNames.W3BottomMat;
-	}
+	//var cam:CameraManager = Camera.main.GetComponent(CameraManager);
+	var matPath : String =objectNames.W1BottomMat;
+//	if (!cam) matPath =objectNames.W1BottomMat;
+//	else
+//	{
+//	if (cam.world==1) matPath =objectNames.W1BottomMat;
+//	if (cam.world==2) matPath =objectNames.W2BottomMat;
+//	if (cam.world==3) matPath =objectNames.W3BottomMat;
+//	}
 	var botMat : Material = EditorUtility.FindAsset(matPath, Material);
 	
 	var connector:GameObject = new GameObject("Connector");

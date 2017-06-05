@@ -8,6 +8,11 @@ public enum EInputType {
     Tilt
 }
 
+public class InputData {
+    public float move;
+    public float brake;
+}
+
 public class InputManager : MonoBehaviour {
 
     static InputManager instance;
@@ -17,6 +22,7 @@ public class InputManager : MonoBehaviour {
     HashSet<InputModule> activeModules;
 
     float inputValue;
+    InputData data;
 
     public static InputManager Instance {
         get {
@@ -30,6 +36,8 @@ public class InputManager : MonoBehaviour {
             return;
         }
         instance = this;
+
+        data = new InputData();
         activeModules = new HashSet<InputModule>();
         inputModules = new Dictionary<EInputType, InputModule>();
         inputModules.Add(EInputType.Swipe, GetComponent<InputModuleSwipe>());
@@ -41,7 +49,7 @@ public class InputManager : MonoBehaviour {
         }
 
         #if (UNITY_EDITOR)
-        inputModules[EInputType.Keys].Enable(true);
+        EnableInputType(EInputType.Keys, true);
         #endif
 	}
 	
@@ -56,15 +64,15 @@ public class InputManager : MonoBehaviour {
         }
     }
 
-    public float Read() {
-        return inputValue;
+    public InputData Read() {
+        return data;
     }
 
     public void FixedUpdate() {
-        inputValue = 0f;
+        data.move = 0f;
 
         foreach (InputModule module in activeModules) {
-            inputValue += module.Read();
+            data.move += module.Read();
         }
 
     }
