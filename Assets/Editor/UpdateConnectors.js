@@ -21,7 +21,7 @@ static function UpdateSelected() {
 	}
 }	
 	
-@MenuItem("Connectors/UpdateAllConnectors &c")
+@MenuItem("Connectors/UpdateAllConnectors")
 static function UpdateAll() 
 {
 	
@@ -47,7 +47,7 @@ static function UpdateAll()
 
 
 
-	@MenuItem("Connectors/AddConnector #c")
+	@MenuItem("Connectors/AddConnector")
 	
 static function AddConnector()
 {

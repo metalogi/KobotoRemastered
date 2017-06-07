@@ -1,7 +1,7 @@
 
 class SnapMe extends ScriptableObject
 {
-	@MenuItem("Custom/Level/Snap #s")
+
 	
 static function Snap()
 {
@@ -45,7 +45,7 @@ static function Snap()
 		
 }
 
-	@MenuItem("Custom/Level/Snap #v")
+
 	
 static function SnapLeft()
 {
@@ -90,8 +90,6 @@ static function SnapLeft()
 }
 
 
-
- @MenuItem("Custom/Level/SnapY #y")
  static function SnapY()
 {
 		var Sel: Transform[] =Selection.transforms;
@@ -134,7 +132,6 @@ static function SnapLeft()
 		
 }
 
- @MenuItem("Custom/Level/AddBase #b")
 static function AddBase()
 {
 	var d : float = 8;

@@ -14,6 +14,11 @@ public class TestCam : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(startPos.x, target.position.y +4f, target.position.z), 6f * Time.deltaTime);
+        if (target == null && LevelManager.Instance.currentState == ELevelState.Play) {
+            target = LevelManager.Instance.kobotos [0].transform;
+        }
+        if (target != null) {
+            transform.position = Vector3.Lerp (transform.position, new Vector3 (startPos.x, target.position.y + 4f, target.position.z), 6f * Time.deltaTime);
+        }
 	}
 }
