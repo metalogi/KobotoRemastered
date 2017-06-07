@@ -11414,7 +11414,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &356190485
 Mesh:
@@ -14136,7 +14136,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -90.23, z: 0}
 --- !u!114 &724160592
 MonoBehaviour:
@@ -14149,7 +14149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f407985b2888a46fbbdf66ab0f4471cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1758788970}
+  target: {fileID: 0}
 --- !u!1 &787283057
 GameObject:
   m_ObjectHideFlags: 0
@@ -14853,7 +14853,7 @@ Transform:
   - {fileID: 1070910004}
   - {fileID: 1903614947}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &823787371
 GameObject:
@@ -22520,7 +22520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1718812041
 Transform:
   m_ObjectHideFlags: 0
@@ -22718,11 +22718,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!4 &1758788970 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f,
-    type: 2}
-  m_PrefabInternal: {fileID: 1846940789}
 --- !u!43 &1792911701
 Mesh:
   m_ObjectHideFlags: 0
@@ -23401,48 +23396,6 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!1001 &1846940789
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4920698066919054, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: a1a5ea53bfbd1e9478ed0740e4b7a78f, type: 2}
-  m_IsPrefabParent: 0
 --- !u!43 &1857789366
 Mesh:
   m_ObjectHideFlags: 0
@@ -23875,6 +23828,7 @@ MonoBehaviour:
   kobotoSpawnInfo:
   - kobotoType: 0
     spawnPoint: {fileID: 169}
+  kobotoParent: {fileID: 0}
   kobotos: []
 --- !u!1 &1905329130
 GameObject:
