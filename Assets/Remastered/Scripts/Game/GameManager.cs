@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ELevelState {
+public enum EGameState {
     Unloaded,
     Transition,
     Intro,
-    Play
+    Play,
+    Lost,
+    Won
 }
 
 [System.Serializable]
@@ -16,25 +18,25 @@ public class KobotoSpawnInfo{
 }
 
 
-public class LevelManager : MonoBehaviour {
+public class GameManager : MonoBehaviour {
 
 
     public KobotoSpawnInfo[] kobotoSpawnInfo;
 
-    public ELevelState currentState{ get; private set; }
-    LevelStateBase currentStateFunctions;
-    LevelStateTransitionBase currentStateTransition;
+    public EGameState currentState{ get; private set; }
+    GameStateBase currentStateFunctions;
+    GameStateTransitionBase currentStateTransition;
 
-    Dictionary<ELevelState, LevelStateBase> stateFunctions;
-    Dictionary<ELevelState, Dictionary<ELevelState, LevelStateTransitionBase>> stateTransitions;
+    Dictionary<EGameState, GameStateBase> stateFunctions;
+    Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
 
     [HideInInspector]
     public Transform kobotoParent;
     public List<Koboto> kobotos;
 
-    static LevelManager instance;
+    static GameManager instance;
 
-    public static LevelManager Instance {
+    public static GameManager Instance {
         get { return instance; }
     }
 
@@ -46,8 +48,8 @@ public class LevelManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        currentState = ELevelState.Unloaded;
-        TransitionToState(ELevelState.Play);
+        currentState = EGameState.Unloaded;
+        TransitionToState(EGameState.Play);
 	}
 	
 
@@ -58,7 +60,7 @@ public class LevelManager : MonoBehaviour {
                 SetState(currentStateTransition.toState);
             }
         } else if (currentStateFunctions != null) {
-            ELevelState desiredState = currentStateFunctions.Update(this);
+            EGameState desiredState = currentStateFunctions.Update(this);
             if (desiredState != currentState) {
                 TransitionToState(desiredState);
             }
@@ -67,20 +69,20 @@ public class LevelManager : MonoBehaviour {
 	}
 
     void SetupStates() {
-        stateFunctions = new Dictionary<ELevelState, LevelStateBase>();
-        stateTransitions = new Dictionary<ELevelState, Dictionary<ELevelState, LevelStateTransitionBase>> ();
+        stateFunctions = new Dictionary<EGameState, GameStateBase>();
+        stateTransitions = new Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> ();
 
-        stateFunctions.Add(ELevelState.Play, new LevelStatePlay());
+        stateFunctions.Add(EGameState.Play, new GameStatePlay());
 
-        stateTransitions.Add (ELevelState.Unloaded, new Dictionary<ELevelState, LevelStateTransitionBase>());
-        stateTransitions[ELevelState.Unloaded].Add (ELevelState.Play, new LevelStateTransitionStartLevel(ELevelState.Unloaded, ELevelState.Play));
+        stateTransitions.Add (EGameState.Unloaded, new Dictionary<EGameState, GameStateTransitionBase>());
+        stateTransitions[EGameState.Unloaded].Add (EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
     }
 
-    void TransitionToState(ELevelState state) {
+    void TransitionToState(EGameState state) {
         bool foundTransition = false;
-        Dictionary<ELevelState, LevelStateTransitionBase> toTransitions;
+        Dictionary<EGameState, GameStateTransitionBase> toTransitions;
         if (stateTransitions.TryGetValue(currentState, out toTransitions)) {
-            LevelStateTransitionBase transition;
+            GameStateTransitionBase transition;
             if (toTransitions.TryGetValue(state, out transition)) {
                 currentStateTransition = transition;
                 foundTransition = true;
@@ -92,7 +94,7 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    void SetState(ELevelState state) {
+    void SetState(EGameState state) {
         currentState = state;
         if (stateFunctions.ContainsKey (currentState)) {
             currentStateFunctions = stateFunctions[currentState];
