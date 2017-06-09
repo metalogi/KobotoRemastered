@@ -4,117 +4,6 @@ using UnityEngine;
 
 
 
-
-public class KobotoSensor {
-
-    public bool onGround;
-    public Vector3 groundForward;
-    public Vector3 groundNormal;
-
-
-    Transform transform;
-    BoxCollider boxCollider;
-
-    Probe downProbe = new Probe(true, Vector3.zero, Vector3.down);
-    Probe upProbe = new Probe(true, Vector3.zero, Vector3.up);
-    Probe forwardProbe = new Probe(true, Vector3.zero, Vector3.forward);
-    Probe backProbe = new Probe(true, Vector3.zero, Vector3.back);
-
-    Probe localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down);
-    Probe localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up);
-    Probe localForwardProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward);
-    Probe localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward);
-
-
-
-    const float onGroundTestDist = 0.3f;
-    const float onGroundTestAngle = 45f;
-
-    private IEnumerable AllProbes(){
-        yield return downProbe;
-        yield return upProbe;
-        yield return forwardProbe;
-        yield return backProbe;
-        yield return localDownProbe;
-        yield return localUpProbe;
-        yield return localForwardProbe;
-        yield return localBackProbe;
-    }
-
-    public void Reset() {
-        onGround = false;
-    }
-
-
-    public void UpdateAll(Transform transform, Collider activeCollider) {
-
-        Reset();
-         
-        foreach (Probe probe in AllProbes()) {
-            probe.Update(transform, activeCollider);
-        }
-
-     
-
-        bool closeToGround = localDownProbe.didHit && localDownProbe.hit.distance < onGroundTestDist;
-        if (closeToGround) {
-            Debug.Log("Close to ground");
-            Vector3 normal = localDownProbe.hit.normal;
-            bool alignedToGround = Vector3.Angle(normal, transform.up) < onGroundTestAngle;
-            if (alignedToGround) {
-                onGround = true;
-                groundNormal = normal;
-                groundForward = Vector3.Cross( Vector3.right, normal);
-            }
-
-        }
-
-    }
-
-
-
-
-}
-
-internal class Probe {
-
-    private Vector3 startPosLocal;
-    private Vector3 direction;
-    private bool directionInWorldSpace;
-
-    const float maxDistance = 20f;
-
-    internal bool didHit;
-    internal RaycastHit hit;
-
-    internal Probe(bool worldSpace, Vector3 startPos, Vector3 direction) {
-        this.startPosLocal = startPos;
-        this.direction = direction;
-        this.directionInWorldSpace = worldSpace;
-    }
-
-    internal void Update(Transform t, Collider c) {
-        Vector3 scaledStartPos = Vector3.zero;
-        if (c is BoxCollider) {
-            BoxCollider bc = (BoxCollider)c;
-            scaledStartPos = bc.center + Vector3.Scale(bc.size/2f, startPosLocal);
-        } else if (c is CapsuleCollider) {
-            CapsuleCollider cc = (CapsuleCollider)c;
-            scaledStartPos = cc.center + new Vector3(0f, (cc.height/2f)*startPosLocal.y, (cc.radius * startPosLocal.z)); 
-        }
-        Vector3 origin = t.TransformPoint(scaledStartPos);
-        Vector3 worldDirection = directionInWorldSpace? direction : t.TransformDirection(direction);
-
-        if (!directionInWorldSpace) {
-            Debug.DrawRay(origin, worldDirection);
-        }
-
-        didHit = Physics.Raycast(origin, worldDirection, out hit, maxDistance);
-
-    }
-
-}
-
 public class KobotoMoveForce {
     public Vector3 groundMove;
     public float groundFriction;
@@ -135,8 +24,13 @@ public class KobotoMoveForce {
         airDrag = defaultAirDrag;
 
     }
+}
 
-
+public enum KobotoState {
+    Asleep,
+    Alive,
+    Rescued,
+    Dead
 }
 
 
@@ -144,6 +38,8 @@ public class Koboto : MonoBehaviour {
 
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
+
+    public KobotoState currentState {get; private set;}
 
     Dictionary<EAttachmentTarget, Transform> attachmentPointLookup;
 
@@ -232,34 +128,49 @@ public class Koboto : MonoBehaviour {
         
     }
 
-//    void RecalculateColliderBounds() {
-//        float minY = colliderBaseCenter.y - colliderBaseSize.y/2f;
-//        float maxY = colliderBaseCenter.y + colliderBaseSize.y/2f;
-//
-//        foreach (var attachment in currentAttachments.Values) {
-//            minY = Mathf.Min(minY, colliderBaseCenter.y - colliderBaseSize.y/2f - attachment.kobotoColliderExtendDown);
-//            maxY = Mathf.Max(maxY, colliderBaseCenter.y + colliderBaseSize.y/2f + attachment.kobotoColliderExtendUp);
-//        }
-//
-//        float centerY = (minY + maxY)/2f;
-//        float sizeY = maxY - minY;
-//
-//        colliderCenterTarget = new Vector3(colliderBaseCenter.x, centerY, colliderBaseCenter.z);
-//        colliderSizeTarget = new Vector3(colliderBaseSize.x, sizeY, colliderBaseSize.z);
-//
-//        boxCollider.center = colliderCenterTarget;
-//        boxCollider.size = colliderSizeTarget;
-//        
-//    }
+    public void SetState(KobotoState newState) {
+        if (newState != currentState) {
+            currentState = newState;
+        }
+
+        switch (currentState) {
+
+        case KobotoState.Alive:
+            rb.isKinematic = false;
+            break;
+
+        case KobotoState.Asleep:
+            rb.isKinematic = false;
+            break;
+
+        case KobotoState.Rescued:
+            rb.isKinematic = true;
+            break;
+
+        
+
+        }
+    }
+
+    public void Rescue(LevelObjectHome home) {
+        SetState(KobotoState.Rescued);
+        KobotoEvents.Trigger(KEventEnum.Rescued, this);
+    }
 
 
 
     public void FixedUpdate() {
 
+        if (currentState == KobotoState.Alive) {
+            SetMoveForceFromInput();
+        }
+    }
+
+    void SetMoveForceFromInput() {
+
         moveForce.Clear();
         InputData inputData = InputManager.Instance.Read();
 
-        Debug.Log("Move input " + inputData.move);
 
         sensors.UpdateAll(transform, activeCollider);
 
@@ -270,10 +181,6 @@ public class Koboto : MonoBehaviour {
 
         float targetSpeed = 0;
 
-
-
-       
-       
 
         foreach (var attachmentType in attachmentOrder) {
             if (currentAttachments.ContainsKey(attachmentType)) {
@@ -288,14 +195,11 @@ public class Koboto : MonoBehaviour {
         float tiltTarget = Utils.TiltFromUpVector(moveForce.upTarget);
         float currentTilt = Utils.TiltFromUpVector(transform.up);
 
-        Debug.Log("Up " + moveForce.upTarget + " Tilt target " + tiltTarget + " current " + currentTilt);
 
         float tiltError = tiltTarget - currentTilt;
 
         float correction = tiltController.Update(tiltError, Time.fixedDeltaTime);
         rb.AddTorque(correction * Vector3.right);
-
-
 
     }
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class InputModuleKeys : InputModule {
 
     public override float Read() {
-        Debug.Log("Reading keys");
         float v = 0f;
         if (Input.GetKey(KeyCode.D)) {
             v += 0.5f;

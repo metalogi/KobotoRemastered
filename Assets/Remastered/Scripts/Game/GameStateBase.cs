@@ -6,7 +6,7 @@ public class GameStateBase  {
 
     protected EGameState state;
 
-    public virtual EGameState Update(GameManager level) {
+    public virtual EGameState Update(GameManager game) {
         return state;
     }
 

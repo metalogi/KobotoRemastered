@@ -11,17 +11,15 @@ public enum EGameState {
     Won
 }
 
-[System.Serializable]
-public class KobotoSpawnInfo{
-    public EKobotoType kobotoType;
-    public Transform spawnPoint;
-}
+
+
+
 
 
 public class GameManager : MonoBehaviour {
 
+    public Level currentLevel;
 
-    public KobotoSpawnInfo[] kobotoSpawnInfo;
 
     public EGameState currentState{ get; private set; }
     GameStateBase currentStateFunctions;
@@ -30,9 +28,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<EGameState, GameStateBase> stateFunctions;
     Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
 
-    [HideInInspector]
-    public Transform kobotoParent;
-    public List<Koboto> kobotos;
+  
 
     static GameManager instance;
 
@@ -49,14 +45,21 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         currentState = EGameState.Unloaded;
+        currentLevel.Init(this);
+
         TransitionToState(EGameState.Play);
 	}
 	
 
 	void Update () {
+        GameStateUpdate();
+    }
+
+    #region StateMachine
+    void GameStateUpdate() {
         if (currentStateTransition != null) {
-            bool done = currentStateTransition.Update(this);
-            if (done) {
+           // bool done = currentStateTransition.Update(this);
+            if (currentStateTransition.complete) {
                 SetState(currentStateTransition.toState);
             }
         } else if (currentStateFunctions != null) {
@@ -65,8 +68,8 @@ public class GameManager : MonoBehaviour {
                 TransitionToState(desiredState);
             }
         }
-		
-	}
+    }
+
 
     void SetupStates() {
         stateFunctions = new Dictionary<EGameState, GameStateBase>();
@@ -85,6 +88,7 @@ public class GameManager : MonoBehaviour {
             GameStateTransitionBase transition;
             if (toTransitions.TryGetValue(state, out transition)) {
                 currentStateTransition = transition;
+                currentStateTransition.StartTransition(this);
                 foundTransition = true;
             }
         }
@@ -95,6 +99,10 @@ public class GameManager : MonoBehaviour {
     }
 
     void SetState(EGameState state) {
+        if (state == currentState) {
+            return;
+        }
+        EGameState fromState = currentState;
         currentState = state;
         if (stateFunctions.ContainsKey (currentState)) {
             currentStateFunctions = stateFunctions[currentState];
@@ -102,14 +110,15 @@ public class GameManager : MonoBehaviour {
             currentStateFunctions = null;
         }
         currentStateTransition = null;
+
+        GameEvents.OnGameStateChange(fromState, currentState);
     }
 
-    public void AddKoboto(Koboto koboto) {
-        if (kobotos == null) {
-            kobotos = new List<Koboto> ();
-        }
-        kobotos.Add (koboto);
-    }
+    #endregion
+
+
+
+
 
 
 
