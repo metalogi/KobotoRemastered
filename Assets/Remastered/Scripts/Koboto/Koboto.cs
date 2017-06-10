@@ -41,9 +41,9 @@ public class Koboto : MonoBehaviour {
 
     public KobotoState currentState {get; private set;}
 
-    Dictionary<EAttachmentTarget, Transform> attachmentPointLookup;
+    Dictionary<EAttachmentTarget, Transform> attachmentTargetLookup;
 
-    Dictionary<EAttachmentTarget, AttachmentBase> attachmentPointContents;
+    Dictionary<EAttachmentTarget, AttachmentBase> attachmentTargetContents;
 
     Dictionary<EAttachmentType, AttachmentBase> currentAttachments;
 
@@ -76,54 +76,93 @@ public class Koboto : MonoBehaviour {
         moveForce = new KobotoMoveForce();
         colliderBaseCenter = boxCollider.center;
         colliderBaseSize = boxCollider.size;
-        attachmentPointContents = new Dictionary<EAttachmentTarget, AttachmentBase>();
-        attachmentPointLookup = new Dictionary<EAttachmentTarget, Transform>();
+        attachmentTargetContents = new Dictionary<EAttachmentTarget, AttachmentBase>();
+        attachmentTargetLookup = new Dictionary<EAttachmentTarget, Transform>();
         currentAttachments = new Dictionary<EAttachmentType, AttachmentBase>();
         var attachPoints = GetComponentsInChildren<KobotoAttachPoint>();
         foreach (var point in attachPoints) {
-            attachmentPointLookup.Add(point.targetType, point.transform);
+            attachmentTargetLookup.Add(point.targetType, point.transform);
         }
 
 
         AddAttachment(EAttachmentType.Wheels);
     }
 
-
+    public void ToggleAttachment(EAttachmentType type) {
+        Debug.Log("Toggle attachment " + type);
+        if (currentAttachments.ContainsKey(type)) {
+            RemoveAttachmentOfType(type);
+        } else {
+            AddAttachment(type);
+        }
+    }
 
     public void AddAttachment(EAttachmentType type) {
-        var attachment = Attachments.CreateNewAttachment(type);
+        AttachmentBase attachment = Attachments.CreateNewAttachment(type);
+        EAttachmentTarget target = Attachments.AttachmentTarget(type);
 
-        Transform attachToTransform = GetAttachmentTargetTransform(attachment.attachmentTarget);
+        RemoveAttachmentFromTarget(target);
+
+       
+
+      
+        Transform attachToTransform = GetAttachmentTargetTransform(target);
         attachment.transform.SetParent(attachToTransform, false);
-        attachmentPointContents[attachment.attachmentTarget] = attachment;
+        attachmentTargetContents[target] = attachment;
         currentAttachments[attachment.attachmentType] = attachment;
-        //RecalculateColliderBounds();
-        SetupCollider(attachment.colliderType);
+    
+        SetupCollider();
 
         attachment.OnAttachToKoboto(this);
     }
 
+    public void RemoveAttachmentFromTarget(EAttachmentTarget target) {
+        AttachmentBase attachment = null;
+
+
+        if (attachmentTargetContents.TryGetValue(target, out attachment)) {
+            attachment.Remove();
+            EAttachmentType type = attachment.attachmentType;
+            currentAttachments.Remove(type);
+            attachmentTargetContents.Remove(target);
+            SetupCollider();
+
+        }
+    }
+
+    public void RemoveAttachmentOfType(EAttachmentType type) {
+        AttachmentBase attachment = null;
+        if (currentAttachments.TryGetValue(type, out attachment)) {
+            attachment.Remove();
+            EAttachmentTarget target = Attachments.AttachmentTarget(type);
+
+            currentAttachments.Remove(type);
+            attachmentTargetContents.Remove(target);
+            SetupCollider();
+        }
+    }
+
+
     public Transform GetAttachmentTargetTransform(EAttachmentTarget target) {
         Transform t = transform;
-        attachmentPointLookup.TryGetValue(target, out t);
+        attachmentTargetLookup.TryGetValue(target, out t);
         return t;
 
     }
 
-    void SetupCollider(EColliderType colType) {
-        switch (colType) {
-        case EColliderType.Box:
-            boxCollider.enabled = true;
-            capsuleCollider.enabled = false;
-            activeCollider = boxCollider;
-            break;
-        case EColliderType.Capsule:
-            boxCollider.enabled = false;
-            capsuleCollider.enabled = true;
-            activeCollider = capsuleCollider;
-            break;
-        }
+    void SetupCollider() {
+     
+        var attachments = new List<AttachmentBase>(currentAttachments.Values);
+        bool useCapsule = attachments.Count > 0 && !(attachments.TrueForAll((AttachmentBase a) => a.colliderType == EColliderType.Box));
 
+        boxCollider.enabled = !useCapsule;
+        capsuleCollider.enabled = useCapsule;
+      
+        if (useCapsule) {
+            activeCollider = capsuleCollider;
+        } else {
+            activeCollider = boxCollider;
+        }
 
         
     }
@@ -174,20 +213,18 @@ public class Koboto : MonoBehaviour {
 
         sensors.UpdateAll(transform, activeCollider);
 
+
         if (currentAttachments.Count == 0) {
-            NoAttachmentsFixedUpdate();
-            return;
-        }
+            NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
+        } else {
 
-        float targetSpeed = 0;
+            foreach (var attachmentType in attachmentOrder) {
+                if (currentAttachments.ContainsKey(attachmentType)) {
+                    AttachmentBase attachment = currentAttachments[attachmentType];
+                    attachment.ModifyMoveForce(moveForce, inputData, sensors, parameters);
+                }
 
-
-        foreach (var attachmentType in attachmentOrder) {
-            if (currentAttachments.ContainsKey(attachmentType)) {
-                AttachmentBase attachment = currentAttachments[attachmentType];
-                attachment.ModifyMoveForce(moveForce, inputData, sensors, parameters);
             }
-
         }
 
         rb.AddForce(moveForce.groundMove);
@@ -203,7 +240,12 @@ public class Koboto : MonoBehaviour {
 
     }
 
-    public void NoAttachmentsFixedUpdate() {
+    public void NoAttachmentsMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
+        if (sensors.onGround) {
+            moveForce.upTarget = sensors.groundNormal;
+        } else {
+            moveForce.upTarget = Vector3.up;
+        }
     }
 
    

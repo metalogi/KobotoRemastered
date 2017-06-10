@@ -18,6 +18,8 @@ public class Level : MonoBehaviour {
     [HideInInspector]
     public List<LevelObjectBase> levelObjects;
 
+    Koboto selectedKoboto;
+
     Transform kobotoParent;
     GameManager game;
 
@@ -28,28 +30,26 @@ public class Level : MonoBehaviour {
     }
 
     public void SpawnKobotos() {
+        kobotos = new List<Koboto>();
         kobotoParent = new GameObject("KobotoParent").transform;
         foreach (KobotoSpawnInfo spawnInfo in kobotoSpawnInfo) {
             Koboto koboto = KobotoFactory.SpawnKoboto(spawnInfo.kobotoType, spawnInfo.spawnPoint.position, kobotoParent);
-            AddKoboto(koboto);
+            kobotos.Add (koboto);
             koboto.SetState(KobotoState.Alive);
         }
+        SelectKoboto(kobotos[0]);
     }
 
-    public void ListenToKobotos(bool listen) {
-        if (listen) {
-         //   KobotoEvents.AddListener(KEventEnum.Rescued, DidRescueKoboto);
+    void SelectKoboto(Koboto koboto) {
+        selectedKoboto = koboto;
+    }
+
+    public void ToggleAttachmentOnSelectedKoboto(EAttachmentType attachmentType) {
+        if (selectedKoboto != null) {
+            selectedKoboto.ToggleAttachment(attachmentType);
         }
     }
         
-
-
-    public void AddKoboto(Koboto koboto) {
-        if (kobotos == null) {
-            kobotos = new List<Koboto> ();
-        }
-        kobotos.Add (koboto);
-    }
 
     public bool AllKobotosRescued() {
         return kobotos != null && kobotos.Count > 0 && kobotos.TrueForAll((Koboto k) => k.currentState == KobotoState.Rescued);

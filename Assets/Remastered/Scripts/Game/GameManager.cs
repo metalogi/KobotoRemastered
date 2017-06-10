@@ -19,7 +19,7 @@ public enum EGameState {
 public class GameManager : MonoBehaviour {
 
     public Level currentLevel;
-
+    public UIGame gameUI;
 
     public EGameState currentState{ get; private set; }
     GameStateBase currentStateFunctions;
@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         currentState = EGameState.Unloaded;
+        gameUI.Init(this);
         currentLevel.Init(this);
 
         TransitionToState(EGameState.Play);

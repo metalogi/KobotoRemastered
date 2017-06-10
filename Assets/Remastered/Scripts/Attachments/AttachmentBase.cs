@@ -2,26 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EAttachmentType {
-    Wheels,
-    DoubleWheels,
-    Spring,
-    Parachute
-}
 
-public enum EAttachmentTarget {
-    Wheels
-}
-
-public enum EColliderType {
-    Box,
-    Capsule
-}
 
 public class AttachmentBase : MonoBehaviour {
 
+
     public EAttachmentType attachmentType;
-    public EAttachmentTarget attachmentTarget;
+    //public EAttachmentTarget attachmentTarget;
 
     // size to add to koboto collider when attached
    // public float kobotoColliderExtendUp;
@@ -29,6 +16,9 @@ public class AttachmentBase : MonoBehaviour {
 
     public EColliderType colliderType;
 
+    public void Remove() {
+        GameObject.Destroy(gameObject);
+    }
 
     public virtual void OnAttachToKoboto(Koboto koboto) {
         
