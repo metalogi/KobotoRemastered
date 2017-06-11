@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
            // bool done = currentStateTransition.Update(this);
             if (currentStateTransition.complete) {
                 SetState(currentStateTransition.toState);
+
             }
         } else if (currentStateFunctions != null) {
             stateTime += Time.deltaTime;
@@ -86,11 +87,7 @@ public class GameManager : MonoBehaviour {
         AddTransition<GameStateTransitionRestart>(EGameState.Lost, EGameState.Play);
         AddTransition<GameStateTransitionRestart>(EGameState.Won, EGameState.Play);
 
-
-//        stateTransitions.Add (EGameState.Unloaded, new Dictionary<EGameState, GameStateTransitionBase>());
-//
-//        stateTransitions[EGameState.Unloaded].Add(EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
-//        stateTransitions[EGameState.Lost].Add EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
+       
     }
 
     void AddTransition<T>(EGameState fromState, EGameState toState)  where T : GameStateTransitionBase, new() {
@@ -111,6 +108,7 @@ public class GameManager : MonoBehaviour {
 
 
     void TransitionToState(EGameState state) {
+        GameEvents.OnGameStateExit(currentState, state);
         bool foundTransition = false;
         Dictionary<EGameState, GameStateTransitionBase> toTransitions;
         if (stateTransitions.TryGetValue(currentState, out toTransitions)) {
@@ -140,8 +138,8 @@ public class GameManager : MonoBehaviour {
             currentStateFunctions = null;
         }
         currentStateTransition = null;
-
-        GameEvents.OnGameStateChange(fromState, currentState);
+        GameEvents.OnGameStateEntered(currentState, fromState);
+        //GameEvents.OnGameStateChange(fromState, currentState);
     }
 
     public float TimeInState() {

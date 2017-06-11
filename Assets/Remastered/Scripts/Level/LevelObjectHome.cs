@@ -6,9 +6,9 @@ public class LevelObjectHome : LevelObjectBase {
 
     bool isOccupied;
 
-    protected override void GameStateDidChange (EGameState fromState, EGameState toState) {
-        base.GameStateDidChange(fromState, toState);
-        if (toState == EGameState.Play) {
+    protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
+        base.DidEnterGameState(gameState, fromState);
+        if (gameState == EGameState.Play) {
             SetOccupied(false);
         }
     }

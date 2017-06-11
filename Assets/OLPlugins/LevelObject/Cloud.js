@@ -16,6 +16,7 @@ private var paused:boolean=false;
 
 function Awake ()
 {
+	return;
 	cameraLeniance -= transform.position.x*2;
 	originZ = transform.position.z;
 	cloudSpeed = minSpeed + Random.value * speedRange;

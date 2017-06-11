@@ -5,22 +5,61 @@ using UnityEngine.Events;
 
 public static class GameEvents  {
 
+    public static EGameState gameState {get; private set;}
+
     #region GameState
     public delegate void GameStateChangeEventHandler(EGameState fromState, EGameState toState);
-    static event GameStateChangeEventHandler GameStateChanged;
-    public static void OnGameStateChange(EGameState fromState, EGameState toState) {
-        Debug.Log("Game state change " + fromState + " => " + toState);
-        if (GameStateChanged != null) {
-            GameStateChanged(fromState, toState);
+//    static event GameStateChangeEventHandler GameStateChanged;
+//    public static void OnGameStateChange(EGameState fromState, EGameState toState) {
+//        Debug.Log("Game state change " + fromState + " => " + toState);
+//
+//        if (GameStateChanged != null) {
+//            GameStateChanged(fromState, toState);
+//        }
+//    }
+//    public static void AddGameStateListener(GameStateChangeEventHandler listener) {
+//        Debug.Log("Adding game state listener");
+//        GameStateChanged -= listener;
+//        GameStateChanged += listener;
+//    }
+//    public static void RemoveGameStateListener(GameStateChangeEventHandler listener) {
+//        GameStateChanged -= listener;
+//    }
+
+    //Entered
+    static event GameStateChangeEventHandler GameStateEntered;
+    public static void OnGameStateEntered(EGameState toState, EGameState fromState) {
+        Debug.Log("Game state entered " + toState + " from " + fromState);
+        gameState = toState;
+        if (GameStateEntered != null) {
+            GameStateEntered(toState, fromState);
         }
     }
-    public static void AddGameStateListener(GameStateChangeEventHandler listener) {
-        Debug.Log("Adding game state listener");
-        GameStateChanged -= listener;
-        GameStateChanged += listener;
+    public static void AddGameStateEnteredListener(GameStateChangeEventHandler listener) {
+        Debug.Log("Adding game state entered listener");
+        GameStateEntered -= listener;
+        GameStateEntered += listener;
     }
-    public static void RemoveGameStateListener(GameStateChangeEventHandler listener) {
-        GameStateChanged -= listener;
+    public static void RemoveGameStateEnteredListener(GameStateChangeEventHandler listener) {
+        GameStateEntered -= listener;
+    }
+
+    //Will exit
+    static event GameStateChangeEventHandler GameStateWillExit;
+    public static void OnGameStateExit(EGameState fromState, EGameState toState) {
+        Debug.Log("Game state will exit " + fromState + " => " + toState);
+
+        if (GameStateWillExit != null) {
+            GameStateWillExit(fromState, toState);
+        }
+    }
+    public static void AddGameStateExitListener(GameStateChangeEventHandler listener) {
+        Debug.Log("Adding game state exit listener");
+        GameStateWillExit -= listener;
+        GameStateWillExit += listener;
+    }
+    public static void RemoveGameStateExitListener(GameStateChangeEventHandler listener) {
+        GameStateWillExit -= listener;
     }
     #endregion
 

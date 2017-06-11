@@ -2,25 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelObjectBase : MonoBehaviour {
+public class LevelObjectBase : KobotoMono {
 
     public Collider trigger;
     public Collider mainCollider;
 
     protected bool isActive;
 
-    public void Init() {
-        Debug.Log("Level Object Init");
-        GameEvents.AddGameStateListener(GameStateDidChange);
-    }
+//    public void Init() {
+//        Debug.Log("Level Object Init");
+//        GameEvents.AddGameStateListener(GameStateDidChange);
+//    }
 
     void SetActive(bool active) {
         Debug.Log("Setting level object active: " + active);
         isActive = active;
     }
 
-    protected virtual void GameStateDidChange (EGameState fromState, EGameState toState) {
-        SetActive(toState == EGameState.Play);
+    protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
+        if (gameState == EGameState.Play) {
+            SetActive(true);
+        }
+    }
+
+    protected override void WillExitGameState(EGameState gameState, EGameState toState) {
+        if (gameState == EGameState.Play) {
+            SetActive(false);
+        }
     }
 
     void Update() {
@@ -28,6 +36,7 @@ public class LevelObjectBase : MonoBehaviour {
             UpdatePlay();
         }
     }
+
     void FixedUpdate() {
         if (isActive) {
             FixedUpdatePlay();

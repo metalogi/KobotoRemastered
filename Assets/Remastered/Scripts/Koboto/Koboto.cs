@@ -44,7 +44,7 @@ public enum KobotoState {
 }
 
 
-public class Koboto : MonoBehaviour {
+public class Koboto : KobotoMono {
 
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
@@ -86,7 +86,7 @@ public class Koboto : MonoBehaviour {
     bool doFixedUpdate;
 	
 
-    public void Awake() {
+    protected override void Init(EGameState gameState) {
         parameters = GetComponent<KobotoParameters>();
 
         tiltController = new PDController(12f, 0.8f);
@@ -115,18 +115,15 @@ public class Koboto : MonoBehaviour {
 
 
         AddAttachment(EAttachmentType.Wheels);
+        doFixedUpdate = (gameState == EGameState.Play);
+        Debug.Log("Koboto init in state: " + gameState);
     }
 
-    void OnEnable() {
-        GameEvents.AddGameStateListener(GameStateDidChange);
-    }
 
-    void OnDisable() {
-        GameEvents.RemoveGameStateListener(GameStateDidChange);
-    }
 
-    void GameStateDidChange(EGameState fromState, EGameState toState) {
-        doFixedUpdate = toState == EGameState.Play;
+    protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
+        Debug.Log("Koboto detected game state change : " + gameState);
+        doFixedUpdate = (gameState == EGameState.Play);
     }
 
     public void ToggleAttachment(EAttachmentType type) {

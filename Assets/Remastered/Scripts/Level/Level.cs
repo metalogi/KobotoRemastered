@@ -31,7 +31,7 @@ public class Level : MonoBehaviour {
        
         Destroy(levelBoundsObject.gameObject);
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
-        levelObjects.ForEach((LevelObjectBase l)=>l.Init());
+        //levelObjects.ForEach((LevelObjectBase l)=>l.Init());
     }
 
     public void SpawnKobotos() {
