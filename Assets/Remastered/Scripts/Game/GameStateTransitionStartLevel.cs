@@ -9,8 +9,8 @@ public class GameStateTransitionStartLevel : GameStateTransitionBase {
 //
     protected override IEnumerator DoTransition(GameManager game) {
 
-        game.currentLevel.SpawnKobotos();
-        Debug.Log("Spawning kobotos");
+//        game.currentLevel.SpawnKobotos();
+//        Debug.Log("Spawning kobotos");
 
         yield break;
     }

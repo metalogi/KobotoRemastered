@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         currentState = EGameState.Unloaded;
         gameUI.Init(this);
-        currentLevel.Init(this);
+       
 
         TransitionToState(EGameState.Play);
 	}

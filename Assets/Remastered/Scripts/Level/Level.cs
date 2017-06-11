@@ -9,7 +9,7 @@ public class KobotoSpawnInfo{
 }
 
 
-public class Level : MonoBehaviour {
+public class Level : KobotoMono {
 
     public KobotoSpawnInfo[] kobotoSpawnInfo;
     public MeshRenderer levelBoundsObject;
@@ -22,16 +22,25 @@ public class Level : MonoBehaviour {
     Koboto selectedKoboto;
 
     Transform kobotoParent;
-    GameManager game;
+
     Bounds levelBounds;
 
-    public void Init(GameManager game) {
-        this.game = game;
+    protected override void Init(EGameState gameState) {
+
         levelBounds = levelBoundsObject.bounds;
        
         Destroy(levelBoundsObject.gameObject);
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
         //levelObjects.ForEach((LevelObjectBase l)=>l.Init());
+    }
+
+
+
+    protected override void DidEnterGameState (EGameState gameState, EGameState fromState) {
+        base.DidEnterGameState (gameState, fromState);
+        if (gameState == EGameState.Play) {
+            ResetKobotos();
+        }
     }
 
     public void SpawnKobotos() {
