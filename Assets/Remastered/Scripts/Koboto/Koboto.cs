@@ -6,22 +6,31 @@ using UnityEngine;
 
 public class KobotoMoveForce {
     public Vector3 groundMove;
-    public float groundFriction;
+    public float dynamicFriction;
+    public float staticFriction;
 
     public Vector3 airMove;
     public float airDrag;
 
-    public Vector3 upTarget;
-
-    float defaultGroundFriction = 0;
-    float defaultAirDrag = 0;
 
 
-    public void Clear() {
+    public Quaternion upRotation;
+    public float tiltAngle;
+    public float tiltStrength;
+
+
+
+
+
+
+    public void Clear(KobotoParameters parameters) {
         groundMove.Set(0,0,0);
         airMove.Set(0,0,0);
-        groundFriction = defaultGroundFriction;
-        airDrag = defaultAirDrag;
+        upRotation = Quaternion.identity;
+        tiltAngle = 0f;
+        dynamicFriction = parameters.defaultDynamicFriction;
+        staticFriction = parameters.defaultStaticFriction;
+        airDrag = parameters.defaultAirDrag;
 
     }
 }
@@ -30,6 +39,7 @@ public enum KobotoState {
     Asleep,
     Alive,
     Rescued,
+    Lost,
     Dead
 }
 
@@ -40,6 +50,7 @@ public class Koboto : MonoBehaviour {
     public CapsuleCollider capsuleCollider;
 
     public KobotoState currentState {get; private set;}
+    float stateTime;
 
     Dictionary<EAttachmentTarget, Transform> attachmentTargetLookup;
 
@@ -55,6 +66,7 @@ public class Koboto : MonoBehaviour {
 
     Collider activeCollider;
     Rigidbody rb;
+    PhysicMaterial physMat;
     Vector3 colliderBaseCenter;
     Vector3 colliderBaseSize;
 
@@ -65,6 +77,13 @@ public class Koboto : MonoBehaviour {
 
     PDController tiltController;
 
+    Quaternion upRotation;
+    float tiltAngle;
+
+    bool levelBoundsSet;
+    Bounds levelBounds;
+
+    bool doFixedUpdate;
 	
 
     public void Awake() {
@@ -76,6 +95,16 @@ public class Koboto : MonoBehaviour {
         moveForce = new KobotoMoveForce();
         colliderBaseCenter = boxCollider.center;
         colliderBaseSize = boxCollider.size;
+
+        physMat = boxCollider.material;
+        capsuleCollider.sharedMaterial = boxCollider.sharedMaterial;
+
+        physMat.name = "KobotoPhysMat";
+
+        upRotation = Quaternion.identity;
+        tiltAngle = 0f;
+
+
         attachmentTargetContents = new Dictionary<EAttachmentTarget, AttachmentBase>();
         attachmentTargetLookup = new Dictionary<EAttachmentTarget, Transform>();
         currentAttachments = new Dictionary<EAttachmentType, AttachmentBase>();
@@ -86,6 +115,18 @@ public class Koboto : MonoBehaviour {
 
 
         AddAttachment(EAttachmentType.Wheels);
+    }
+
+    void OnEnable() {
+        GameEvents.AddGameStateListener(GameStateDidChange);
+    }
+
+    void OnDisable() {
+        GameEvents.RemoveGameStateListener(GameStateDidChange);
+    }
+
+    void GameStateDidChange(EGameState fromState, EGameState toState) {
+        doFixedUpdate = toState == EGameState.Play;
     }
 
     public void ToggleAttachment(EAttachmentType type) {
@@ -150,6 +191,11 @@ public class Koboto : MonoBehaviour {
 
     }
 
+    public void SetLevelBounds(Bounds bounds) {
+        levelBounds = bounds;
+        levelBoundsSet = true;
+    }
+
     void SetupCollider() {
      
         var attachments = new List<AttachmentBase>(currentAttachments.Values);
@@ -167,9 +213,18 @@ public class Koboto : MonoBehaviour {
         
     }
 
+
+
+    public void Rescue(LevelObjectHome home) {
+        SetState(KobotoState.Rescued);
+        KobotoEvents.Trigger(KEventEnum.Rescued, this);
+    }
+        
+
     public void SetState(KobotoState newState) {
         if (newState != currentState) {
             currentState = newState;
+            stateTime = 0f;
         }
 
         switch (currentState) {
@@ -185,29 +240,33 @@ public class Koboto : MonoBehaviour {
         case KobotoState.Rescued:
             rb.isKinematic = true;
             break;
-
-        
-
         }
     }
 
-    public void Rescue(LevelObjectHome home) {
-        SetState(KobotoState.Rescued);
-        KobotoEvents.Trigger(KEventEnum.Rescued, this);
+    public float TimeInCurrentState() {
+        return stateTime;
     }
-
-
 
     public void FixedUpdate() {
 
-        if (currentState == KobotoState.Alive) {
-            SetMoveForceFromInput();
+        if (!doFixedUpdate) {
+            return;
         }
+
+        switch (currentState) {
+        case KobotoState.Alive:
+            SetMoveForceFromInput();
+            if (levelBoundsSet && !levelBounds.Contains(transform.position)) {
+                SetState(KobotoState.Lost);
+            }
+            break;
+        }
+        stateTime += Time.fixedDeltaTime;
     }
 
     void SetMoveForceFromInput() {
 
-        moveForce.Clear();
+        moveForce.Clear(parameters);
         InputData inputData = InputManager.Instance.Read();
 
 
@@ -227,24 +286,35 @@ public class Koboto : MonoBehaviour {
             }
         }
 
+        physMat.dynamicFriction = moveForce.dynamicFriction;
+        physMat.staticFriction = moveForce.staticFriction;
+        rb.drag = moveForce.airDrag;
+
         rb.AddForce(moveForce.groundMove);
-       
-        float tiltTarget = Utils.TiltFromUpVector(moveForce.upTarget);
-        float currentTilt = Utils.TiltFromUpVector(transform.up);
+
+        upRotation = Quaternion.Lerp(upRotation, moveForce.upRotation, 0.5f);
+        tiltAngle = Mathf.Lerp(tiltAngle, moveForce.tiltAngle, moveForce.tiltStrength);
+
+        float tiltTargetAngle = Utils.AngleFromWorldUp(upRotation) + tiltAngle;
+        float currentTiltAngle = Utils.AngleFromWorldUp(transform.up);
 
 
-        float tiltError = tiltTarget - currentTilt;
+        float tiltAngleError = tiltTargetAngle - currentTiltAngle;
 
-        float correction = tiltController.Update(tiltError, Time.fixedDeltaTime);
+        float correction = tiltController.Update(tiltAngleError, Time.fixedDeltaTime);
         rb.AddTorque(correction * Vector3.right);
 
     }
 
     public void NoAttachmentsMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
         if (sensors.onGround) {
-            moveForce.upTarget = sensors.groundNormal;
+            moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
+            moveForce.tiltAngle = 0f;
+            moveForce.tiltStrength = 1f;
         } else {
-            moveForce.upTarget = Vector3.up;
+            moveForce.upRotation = Quaternion.identity;
+            moveForce.tiltAngle = 0f;
+            moveForce.tiltStrength = 0.5f;
         }
     }
 

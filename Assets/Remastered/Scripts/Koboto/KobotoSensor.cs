@@ -11,6 +11,19 @@ public class KobotoSensor {
     public Vector3 groundForward;
     public Vector3 groundNormal;
 
+    public bool aboveGround;
+    public float heightAboveGround;
+
+    public bool landedThisFrame;
+    public bool launchedThisFrame;
+
+    public float onGroundTime;
+    public float inAirTime;
+
+  
+    public Vector3 upVector;
+    public Vector3 velocity;
+    public List<Vector3> positionTrail = new List<Vector3>();
 
     Transform transform;
     BoxCollider boxCollider;
@@ -29,6 +42,9 @@ public class KobotoSensor {
 
     const float onGroundTestDist = 0.3f;
     const float onGroundTestAngle = 45f;
+    const int positionTrailSize = 10;
+
+    float lastSampleTime;
 
     private IEnumerable AllProbes(){
         yield return downProbe;
@@ -43,12 +59,34 @@ public class KobotoSensor {
 
     public void Reset() {
         onGround = false;
+        landedThisFrame = false;
+        launchedThisFrame = false;
     }
 
 
     public void UpdateAll(Transform transform, Collider activeCollider) {
 
+        bool wasOnGround = onGround;
+
         Reset();
+
+        upVector = transform.up;
+
+        positionTrail.Insert(0, transform.position);
+
+        if (positionTrail.Count > positionTrailSize) {
+            positionTrail.RemoveRange(positionTrailSize, positionTrail.Count - positionTrailSize);
+        }
+
+
+
+        if (positionTrail.Count >= 2) {
+            velocity = (positionTrail[0] - positionTrail[1])/Time.fixedDeltaTime;
+        } else  {
+            velocity = Vector3.zero;
+        }
+
+
 
         foreach (Probe probe in AllProbes()) {
             probe.Update(transform, activeCollider);
@@ -68,6 +106,20 @@ public class KobotoSensor {
             }
 
         }
+
+        if (onGround && !wasOnGround) {
+            landedThisFrame = true;
+            onGroundTime = 0;
+        } else if (!onGround && wasOnGround) {
+            launchedThisFrame = true;
+            inAirTime = 0;
+        } else if (onGround) {
+            onGroundTime += Time.fixedDeltaTime;
+        } else {
+            inAirTime += Time.fixedDeltaTime;
+        }
+
+        lastSampleTime = Time.time;
 
     }
 

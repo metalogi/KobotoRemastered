@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<EGameState, GameStateBase> stateFunctions;
     Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
 
+    float stateTime;
   
 
     static GameManager instance;
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour {
                 SetState(currentStateTransition.toState);
             }
         } else if (currentStateFunctions != null) {
+            stateTime += Time.deltaTime;
             EGameState desiredState = currentStateFunctions.Update(this);
             if (desiredState != currentState) {
                 TransitionToState(desiredState);
@@ -77,10 +79,36 @@ public class GameManager : MonoBehaviour {
         stateTransitions = new Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> ();
 
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
+        stateFunctions.Add(EGameState.Lost, new GameStateLost());
+        stateFunctions.Add(EGameState.Won, new GameStateWon());
 
-        stateTransitions.Add (EGameState.Unloaded, new Dictionary<EGameState, GameStateTransitionBase>());
-        stateTransitions[EGameState.Unloaded].Add (EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
+        AddTransition<GameStateTransitionStartLevel>(EGameState.Unloaded, EGameState.Play);
+        AddTransition<GameStateTransitionRestart>(EGameState.Lost, EGameState.Play);
+        AddTransition<GameStateTransitionRestart>(EGameState.Won, EGameState.Play);
+
+
+//        stateTransitions.Add (EGameState.Unloaded, new Dictionary<EGameState, GameStateTransitionBase>());
+//
+//        stateTransitions[EGameState.Unloaded].Add(EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
+//        stateTransitions[EGameState.Lost].Add EGameState.Play, new GameStateTransitionStartLevel(EGameState.Unloaded, EGameState.Play));
     }
+
+    void AddTransition<T>(EGameState fromState, EGameState toState)  where T : GameStateTransitionBase, new() {
+        T transition = new T();
+        transition.SetFromToStates(fromState, toState);
+
+
+        Dictionary<EGameState, GameStateTransitionBase> transitionsFrom = null;
+        if (!stateTransitions.TryGetValue(fromState, out transitionsFrom)) {
+            transitionsFrom = new Dictionary<EGameState, GameStateTransitionBase>();
+            stateTransitions[fromState] = transitionsFrom;
+        }
+        transitionsFrom.Add(toState, transition);
+    }
+
+
+
+
 
     void TransitionToState(EGameState state) {
         bool foundTransition = false;
@@ -103,6 +131,7 @@ public class GameManager : MonoBehaviour {
         if (state == currentState) {
             return;
         }
+        stateTime = 0f;
         EGameState fromState = currentState;
         currentState = state;
         if (stateFunctions.ContainsKey (currentState)) {
@@ -113,6 +142,10 @@ public class GameManager : MonoBehaviour {
         currentStateTransition = null;
 
         GameEvents.OnGameStateChange(fromState, currentState);
+    }
+
+    public float TimeInState() {
+        return stateTime;
     }
 
     #endregion

@@ -9,7 +9,11 @@ public class GameStateTransitionBase  {
 
     public bool complete {get; private set;}
 
-    public GameStateTransitionBase(EGameState fromState, EGameState toState) {
+//    public GameStateTransitionBase() {
+//        
+//    }
+
+    public void SetFromToStates(EGameState fromState, EGameState toState) {
         this.fromState = fromState;
         this.toState = toState;
     }
