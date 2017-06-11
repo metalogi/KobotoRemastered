@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e2ad435d2d2d7a2409b2d6190e7a61ff
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: '[z] Arista'
+  fontNames:
+  - '[z] Arista'
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

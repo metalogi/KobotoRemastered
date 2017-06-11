@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 50cc1c5f1a0e7854db847a3a30d6d92e
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Continuum Bold
+  fontNames:
+  - Continuum Bold
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
