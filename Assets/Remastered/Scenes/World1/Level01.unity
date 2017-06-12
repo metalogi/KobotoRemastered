@@ -1957,7 +1957,6 @@ GameObject:
   - component: {fileID: 570}
   - component: {fileID: 569}
   - component: {fileID: 568}
-  - component: {fileID: 135}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -2189,23 +2188,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 533.4486, y: 40.000004, z: 189.40312}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e35c006b94384c13a718cc2c5788bbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  kobotoSpawnInfo:
-  - kobotoType: 0
-    spawnPoint: {fileID: 169}
-  levelBoundsObject: {fileID: 617964722}
-  kobotos: []
-  levelObjects: []
 --- !u!4 &164
 Transform:
   m_ObjectHideFlags: 0
@@ -8836,48 +8818,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 55238332}
   m_Mesh: {fileID: 558432035}
---- !u!1001 &78129747
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4438685201944474, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 42e6aabdc8c0b46d9b48274a22f37787, type: 2}
-  m_IsPrefabParent: 0
 --- !u!43 &82391785
 Mesh:
   m_ObjectHideFlags: 0
@@ -14076,11 +14016,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 822604340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2364e410e53d1694fb1ab55b7425aa0c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e35c006b94384c13a718cc2c5788bbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: {fileID: 135}
-  gameUI: {fileID: 1991304396}
+  kobotoSpawnInfo:
+  - kobotoType: 0
+    spawnPoint: {fileID: 169}
+  levelBoundsObject: {fileID: 617964722}
+  kobotos: []
+  levelObjects: []
 --- !u!1 &823787371
 GameObject:
   m_ObjectHideFlags: 0
@@ -24529,12 +24473,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1991242875}
   m_Mesh: {fileID: 1567815377}
---- !u!114 &1991304396 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114386970326974156, guid: 42e6aabdc8c0b46d9b48274a22f37787,
-    type: 2}
-  m_PrefabInternal: {fileID: 78129747}
-  m_Script: {fileID: 11500000, guid: 5773822932eed4f29ae8ffe808934186, type: 3}
 --- !u!43 &1996790288
 Mesh:
   m_ObjectHideFlags: 0

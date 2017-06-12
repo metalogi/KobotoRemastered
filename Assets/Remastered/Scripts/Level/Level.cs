@@ -25,6 +25,15 @@ public class Level : KobotoMono {
 
     Bounds levelBounds;
 
+    IEnumerator Start() {
+        if (GameManager.Instance == null) {
+            Instantiate(Resources.Load<GameObject>("Game"));      
+        }
+        while (GameManager.Instance == null) {
+            yield return null;
+        }
+        GameManager.Instance.currentLevel = this;
+    }
     protected override void Init(EGameState gameState) {
 
         levelBounds = levelBoundsObject.bounds;

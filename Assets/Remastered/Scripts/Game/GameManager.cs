@@ -38,20 +38,18 @@ public class GameManager : MonoBehaviour {
     }
 
     void Awake() {
+        if (instance != null) {
+            GameObject.Destroy (this);
+            return;
+        }
         SetupStates ();
+
+        gameUI.Init(this);
         instance = this;
+        SetState (EGameState.Unloaded, true);
     }
         
 
-	// Use this for initialization
-	void Start () {
-        currentState = EGameState.Unloaded;
-        gameUI.Init(this);
-       
-
-        TransitionToState(EGameState.Play);
-	}
-	
 
 	void Update () {
         GameStateUpdate();
@@ -79,6 +77,7 @@ public class GameManager : MonoBehaviour {
         stateFunctions = new Dictionary<EGameState, GameStateBase>();
         stateTransitions = new Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> ();
 
+        stateFunctions.Add(EGameState.Unloaded, new GameStateUnloaded());
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
         stateFunctions.Add(EGameState.Lost, new GameStateLost());
         stateFunctions.Add(EGameState.Won, new GameStateWon());
@@ -125,8 +124,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void SetState(EGameState state) {
-        if (state == currentState) {
+    void SetState(EGameState state, bool force = false) {
+        if (state == currentState && !force) {
             return;
         }
         stateTime = 0f;

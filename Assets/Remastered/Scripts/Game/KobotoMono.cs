@@ -14,7 +14,7 @@ public class KobotoMono : MonoBehaviour {
         GameEvents.RemoveGameStateExitListener(WillExitGameState);
     }
 
-    void Awake() {
+    public virtual void Awake() {
         Init(GameEvents.gameState);
     }
 
