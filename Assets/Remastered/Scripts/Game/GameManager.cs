@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum EGameState {
+    None,
     Unloaded,
     Transition,
     Intro,
     Play,
     Lost,
-    Won
+    Won,
+    LoadNextLevel,
+    ReturnToMenu
 }
 
 
@@ -29,7 +32,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
 
     float stateTime;
-  
+    public EGameState requestedState {get; private set;}
 
     static GameManager instance;
 
@@ -53,6 +56,11 @@ public class GameManager : MonoBehaviour {
 
 	void Update () {
         GameStateUpdate();
+        requestedState = EGameState.None;
+    }
+
+    public void RequestState(EGameState state) {
+        requestedState = state;
     }
 
     #region StateMachine
@@ -145,7 +153,11 @@ public class GameManager : MonoBehaviour {
         return stateTime;
     }
 
+
+
     #endregion
+
+
 
 
 

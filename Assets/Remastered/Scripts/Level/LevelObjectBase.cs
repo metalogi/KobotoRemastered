@@ -43,10 +43,10 @@ public class LevelObjectBase : KobotoMono {
         }
     }
 
-    protected void UpdatePlay() {
+    protected virtual void UpdatePlay() {
     }
 
-    protected void FixedUpdatePlay() {
+    protected virtual void FixedUpdatePlay() {
     }
 
     void OnTriggerEnter(Collider other) {
