@@ -50,6 +50,7 @@ public class InputManager : MonoBehaviour {
 
         #if (UNITY_EDITOR)
         EnableInputType(EInputType.Keys, true);
+        EnableInputType(EInputType.Tilt, true);
         #endif
 	}
 	

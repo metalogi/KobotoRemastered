@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour {
 
     void Awake() {
         if (instance != null) {
-            GameObject.Destroy (this);
+            GameObject.Destroy(gameObject);
             return;
         }
         SetupStates ();

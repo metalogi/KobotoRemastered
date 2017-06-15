@@ -10,7 +10,7 @@ public class InputModule : MonoBehaviour  {
         return 0f;
     }
 
-    public void Enable(bool e) {
+    public virtual void Enable(bool e) {
         enabled = e;
 
     }

@@ -65,6 +65,7 @@ public class UIGame : KobotoMono {
 
 
     public void AttachmentButtonPressed(UIAttachmentButton button, EAttachmentType type) {
+        Debug.Log("Attachment: " + type);
         game.currentLevel.ToggleAttachmentOnSelectedKoboto(type);
     }
 

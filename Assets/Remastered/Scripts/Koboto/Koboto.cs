@@ -114,7 +114,7 @@ public class Koboto : KobotoMono {
         }
 
 
-        AddAttachment(EAttachmentType.Wheels);
+      //  AddAttachment(EAttachmentType.Wheels);
         doFixedUpdate = (gameState == EGameState.Play);
         Debug.Log("Koboto init in state: " + gameState);
     }
