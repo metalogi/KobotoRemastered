@@ -136,6 +136,8 @@ public class Koboto : KobotoMono {
     }
 
     public void AddAttachment(EAttachmentType type) {
+
+
         AttachmentBase attachment = Attachments.CreateNewAttachment(type);
         EAttachmentTarget target = Attachments.AttachmentTarget(type);
 
@@ -148,6 +150,8 @@ public class Koboto : KobotoMono {
         attachment.transform.SetParent(attachToTransform, false);
         attachmentTargetContents[target] = attachment;
         currentAttachments[attachment.attachmentType] = attachment;
+
+        Debug.Log("Adding attachment: " + type + " to " + target);
     
         SetupCollider();
 
@@ -159,11 +163,13 @@ public class Koboto : KobotoMono {
 
 
         if (attachmentTargetContents.TryGetValue(target, out attachment)) {
+           
             attachment.Remove();
             EAttachmentType type = attachment.attachmentType;
             currentAttachments.Remove(type);
             attachmentTargetContents.Remove(target);
             SetupCollider();
+            Debug.Log("Removeing attachment: " + type + " from " + target);
 
         }
     }

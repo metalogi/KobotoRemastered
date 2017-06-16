@@ -8,6 +8,8 @@ public enum EGameState {
     Transition,
     Intro,
     Play,
+    Paused,
+    Map,
     Lost,
     Won,
     LoadNextLevel,

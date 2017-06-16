@@ -59,6 +59,19 @@ public class LevelObjectBase : KobotoMono {
         }
     }
 
+    void OnTriggerExit(Collider other) {
+        if (!isActive) {
+            return;
+        }
+        Koboto koboto = other.gameObject.GetComponent<Koboto>();
+        if (koboto != null) {
+            OnKobotoExit(koboto);
+        }
+    }
+
     protected virtual void OnKobotoEnter(Koboto koboto) {
+    }
+
+    protected virtual void OnKobotoExit(Koboto koboto) {
     }
 }

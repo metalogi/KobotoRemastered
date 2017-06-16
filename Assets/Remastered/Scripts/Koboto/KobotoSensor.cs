@@ -11,13 +11,34 @@ public class KobotoSensor {
     public Vector3 groundForward;
     public Vector3 groundNormal;
 
+    public bool onCeiling;
+    public Vector3 ceilingForward;
+    public Vector3 ceilingNormal;
+
     public bool aboveGround;
     public float heightAboveGround;
+    public Vector3 aboveGroundPoint;
+    public Collider aboveGroundCollider;
+
+    public bool localAboveGround;
+    public float localGroundDist;
+    public Vector3 localAboveGroundPoint;
+
+    public bool belowCeiling;
+    public float belowCeilingDist;
+    public Vector3 belowCeilingPoint;
+
+    public bool localBelowCeiling;
+    public float localCeilingDist;
+    public Vector3 localBelowCeilingPoint;
+    public Collider localBelowCeilingCollider;
+
 
     public bool landedThisFrame;
     public bool launchedThisFrame;
 
     public float onGroundTime;
+    public float onCeilingTime;
     public float inAirTime;
 
   
@@ -39,9 +60,10 @@ public class KobotoSensor {
     Probe localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward);
 
 
-
     const float onGroundTestDist = 0.3f;
     const float onGroundTestAngle = 45f;
+    const float onCeilingTestDist = 0.3f;
+    const float onCeilingTestAngle = 45f;
     const int positionTrailSize = 10;
 
     float lastSampleTime;
@@ -59,6 +81,7 @@ public class KobotoSensor {
 
     public void Reset() {
         onGround = false;
+        onCeiling = false;
         landedThisFrame = false;
         launchedThisFrame = false;
     }
@@ -67,6 +90,7 @@ public class KobotoSensor {
     public void UpdateAll(Transform transform, Collider activeCollider) {
 
         bool wasOnGround = onGround;
+        bool wasOnCeiling = onCeiling;
 
         Reset();
 
@@ -104,17 +128,46 @@ public class KobotoSensor {
                 groundNormal = normal;
                 groundForward = Vector3.Cross( Vector3.right, normal);
             }
+        }
+            
 
+        bool closeToCeiling = localUpProbe.didHit && localUpProbe.hit.distance < onCeilingTestDist;
+        if (!onGround && closeToCeiling) {
+
+            Vector3 normal = localUpProbe.hit.normal;
+            bool alignedToCeiling = Vector3.Angle(normal, -transform.up) < onCeilingTestAngle;
+            if (alignedToCeiling) {
+                onCeiling = true;
+                ceilingNormal = normal;
+                ceilingForward = Vector3.Cross( Vector3.right, -normal);
+            }
         }
 
-        if (onGround && !wasOnGround) {
+        aboveGround = downProbe.didHit;
+        if (aboveGround) {
+            heightAboveGround = downProbe.hit.distance;
+            aboveGroundPoint = downProbe.hit.point;
+            aboveGroundCollider = downProbe.hit.collider;
+        }
+
+        localBelowCeiling = localUpProbe.didHit;
+        if (localBelowCeiling) {
+            localCeilingDist = localUpProbe.hit.distance;
+            localBelowCeilingPoint = localUpProbe.hit.point;
+            localBelowCeilingCollider = localUpProbe.hit.collider;
+        }
+
+        if ((onGround && !wasOnGround) || (onCeiling && !wasOnCeiling)) {
             landedThisFrame = true;
             onGroundTime = 0;
-        } else if (!onGround && wasOnGround) {
+            onCeilingTime = 0;
+        } else if ((!onGround && wasOnGround) || (!onCeiling && wasOnCeiling)) {
             launchedThisFrame = true;
             inAirTime = 0;
         } else if (onGround) {
             onGroundTime += Time.fixedDeltaTime;
+        } else if (onCeiling) {
+            onCeilingTime += Time.fixedDeltaTime;
         } else {
             inAirTime += Time.fixedDeltaTime;
         }

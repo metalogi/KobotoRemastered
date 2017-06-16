@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class KSpline : MonoBehaviour  {
+public class KSpline : AbstractLine  {
 
 
     public int pointsPerSection = 2;
@@ -152,7 +152,7 @@ public class KSpline : MonoBehaviour  {
         return sLength;
     }
 
-    public Vector3 ReadSpline(float t)
+    public override Vector3 ReadPoint(float t)
     {
         t = Mathf.Clamp(t,0,1);
         Vector3 p;

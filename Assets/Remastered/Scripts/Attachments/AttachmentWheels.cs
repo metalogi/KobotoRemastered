@@ -12,7 +12,16 @@ public class AttachmentWheels : AttachmentBase {
         if (sensors.onGround) {
            // moveForce.airDrag = 0f;
 
-            Vector3 driveForce =  input.move * parameters.groundMoveStength * sensors.groundForward;
+            float groundV = Vector3.Dot(sensors.groundForward, sensors.velocity);
+            float targetV = input.move * parameters.groundMoveSpeed;
+
+            float forceMultiplier = 1f;
+            if (Mathf.Sign(targetV) == Mathf.Sign(groundV)) {
+                float t = Mathf.Clamp01(Mathf.Abs(groundV)/parameters.groundMoveSpeed);
+                forceMultiplier = parameters.groundAccelerationCurve.Evaluate(t);
+            }
+
+            Vector3 driveForce =  forceMultiplier * input.move * parameters.groundMoveStength * sensors.groundForward;
             moveForce.groundMove += driveForce;
 
             moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
