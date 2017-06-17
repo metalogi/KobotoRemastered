@@ -12,16 +12,9 @@ public class KobotoMoveForce {
     public Vector3 airMove;
     public float airDrag;
 
-
-
     public Quaternion upRotation;
     public float tiltAngle;
     public float tiltStrength;
-
-
-
-
-
 
     public void Clear(KobotoParameters parameters) {
         groundMove.Set(0,0,0);
@@ -31,7 +24,11 @@ public class KobotoMoveForce {
         dynamicFriction = parameters.defaultDynamicFriction;
         staticFriction = parameters.defaultStaticFriction;
         airDrag = parameters.defaultAirDrag;
+    }
 
+    public Vector3 TotalForce() {
+       // Debug.Log("Ground: " + groundMove + " Air: " + airMove);
+        return groundMove + airMove;
     }
 }
 
@@ -59,7 +56,9 @@ public class Koboto : KobotoMono {
     Dictionary<EAttachmentType, AttachmentBase> currentAttachments;
 
     List<EAttachmentType> attachmentOrder = new List<EAttachmentType>(){
-        EAttachmentType.Wheels
+        EAttachmentType.Wheels,
+        EAttachmentType.Magnet,
+        EAttachmentType.Spring
     };
 
     KobotoParameters parameters;
@@ -293,7 +292,7 @@ public class Koboto : KobotoMono {
         physMat.staticFriction = moveForce.staticFriction;
         rb.drag = moveForce.airDrag;
 
-        rb.AddForce(moveForce.groundMove);
+        rb.AddForce(moveForce.TotalForce());
 
         upRotation = Quaternion.Lerp(upRotation, moveForce.upRotation, 0.5f);
         tiltAngle = Mathf.Lerp(tiltAngle, moveForce.tiltAngle, moveForce.tiltStrength);

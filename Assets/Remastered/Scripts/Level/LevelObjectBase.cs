@@ -50,6 +50,7 @@ public class LevelObjectBase : KobotoMono {
     }
 
     void OnTriggerEnter(Collider other) {
+        Debug.Log("Trigger enter");
         if (!isActive) {
             return;
         }

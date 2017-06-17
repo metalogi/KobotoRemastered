@@ -49,15 +49,15 @@ public class KobotoSensor {
     Transform transform;
     BoxCollider boxCollider;
 
-    Probe downProbe = new Probe(true, Vector3.zero, Vector3.down);
-    Probe upProbe = new Probe(true, Vector3.zero, Vector3.up);
-    Probe forwardProbe = new Probe(true, Vector3.zero, Vector3.forward);
-    Probe backProbe = new Probe(true, Vector3.zero, Vector3.back);
+    Probe downProbe = new Probe(true, Vector3.zero, Vector3.down, "down");
+    Probe upProbe = new Probe(true, Vector3.zero, Vector3.up, "up");
+    Probe forwardProbe = new Probe(true, Vector3.zero, Vector3.forward, "forward");
+    Probe backProbe = new Probe(true, Vector3.zero, Vector3.back, "back");
 
-    Probe localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down);
-    Probe localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up);
-    Probe localForwardProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward);
-    Probe localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward);
+    Probe localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down, "localDown");
+    Probe localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up, "local up");
+    Probe localForwardProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward, "local forward");
+    Probe localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.back, "local back");
 
 
     const float onGroundTestDist = 0.3f;
@@ -67,6 +67,33 @@ public class KobotoSensor {
     const int positionTrailSize = 10;
 
     float lastSampleTime;
+
+    #if UNITY_EDITOR
+
+    public bool visualize = true;
+
+    void OnGUI() {
+        if (visualize) {
+            Visualize();
+        }
+    }
+    void Visualize() {
+        Color[] colors = new Color[] {
+            Color.red, Color.blue, Color.black, Color.green, Color.yellow, Color.magenta, Color.grey
+        };
+
+        int colorI = 0;
+
+        foreach (Probe p in AllProbes()) {
+            int c = colorI++ % colors.Length;
+            p.Visualize(colors[c]);
+        }
+        
+    }
+
+
+
+    #endif
 
     private IEnumerable AllProbes(){
         yield return downProbe;
@@ -85,6 +112,8 @@ public class KobotoSensor {
         landedThisFrame = false;
         launchedThisFrame = false;
     }
+
+
 
 
     public void UpdateAll(Transform transform, Collider activeCollider) {
@@ -120,6 +149,7 @@ public class KobotoSensor {
 
         bool closeToGround = localDownProbe.didHit && localDownProbe.hit.distance < onGroundTestDist;
         if (closeToGround) {
+           // Debug.Log("Hit ground: " + localDownProbe.hit.collider.name);
 
             Vector3 normal = localDownProbe.hit.normal;
             bool alignedToGround = Vector3.Angle(normal, transform.up) < onGroundTestAngle;
@@ -133,6 +163,9 @@ public class KobotoSensor {
 
         bool closeToCeiling = localUpProbe.didHit && localUpProbe.hit.distance < onCeilingTestDist;
         if (!onGround && closeToCeiling) {
+
+
+          //  Debug.Log("Hit ceiling: " + localUpProbe.hit.collider.name);
 
             Vector3 normal = localUpProbe.hit.normal;
             bool alignedToCeiling = Vector3.Angle(normal, -transform.up) < onCeilingTestAngle;
@@ -187,15 +220,22 @@ internal class Probe {
     private Vector3 direction;
     private bool directionInWorldSpace;
 
-    const float maxDistance = 20f;
+    private Vector3 worldSpaceOrigin;
+
+    const float maxDistance = 200f;
 
     internal bool didHit;
     internal RaycastHit hit;
+    internal string name;
 
-    internal Probe(bool worldSpace, Vector3 startPos, Vector3 direction) {
+    int layerMask;
+
+    internal Probe(bool worldSpace, Vector3 startPos, Vector3 direction, string name) {
+        this.name = name;
         this.startPosLocal = startPos;
         this.direction = direction;
         this.directionInWorldSpace = worldSpace;
+        layerMask = 1 << LayerMask.NameToLayer("Default");
     }
 
     internal void Update(Transform t, Collider c) {
@@ -207,15 +247,29 @@ internal class Probe {
             CapsuleCollider cc = (CapsuleCollider)c;
             scaledStartPos = cc.center + new Vector3(0f, (cc.height/2f)*startPosLocal.y, (cc.radius * startPosLocal.z)); 
         }
-        Vector3 origin = t.TransformPoint(scaledStartPos);
+        worldSpaceOrigin = t.TransformPoint(scaledStartPos);
         Vector3 worldDirection = directionInWorldSpace? direction : t.TransformDirection(direction);
 
         if (!directionInWorldSpace) {
-            Debug.DrawRay(origin, worldDirection);
+            Debug.DrawRay(worldSpaceOrigin, worldDirection);
         }
 
-        didHit = Physics.Raycast(origin, worldDirection, out hit, maxDistance);
+        didHit = Physics.Raycast(worldSpaceOrigin, worldDirection, out hit, maxDistance, layerMask);
 
+        if (didHit )
+        {
+        //    Debug.Log(name + "Probe hit: " + hit.collider.name, hit.collider.gameObject);
+        }
+        
+
+    }
+
+    internal void Visualize(Color color) {
+        if (didHit) {
+            Vector3 worldSpaceVector = hit.point - worldSpaceOrigin;
+
+            Debug.DrawLine(worldSpaceOrigin, hit.point, color);
+        }
     }
 
 }

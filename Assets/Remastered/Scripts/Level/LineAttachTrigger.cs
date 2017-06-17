@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineAttachTrigger : KobotoMono {
+public class LineAttachTrigger : LevelObjectBase {
 
     public LevelObjectLineAttach lineAttach;
 
@@ -18,7 +18,8 @@ public class LineAttachTrigger : KobotoMono {
         }
     }
 
-    protected virtual void OnKobotoEnter(Koboto koboto) {
+    protected override void OnKobotoEnter(Koboto koboto) {
+        Debug.Log("Koboto enter");
         if (onceOnly) {
             if (onceOnlyTriggered) {
                 return;

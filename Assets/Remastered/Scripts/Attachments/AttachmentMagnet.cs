@@ -16,13 +16,18 @@ public class AttachmentMagnet : AttachmentBase {
 
         bool belowMagnetic = sensors.localBelowCeiling && sensors.localBelowCeilingCollider.tag == "magnetic";
 
-        const float magnetStrengthMax = 10f;
-        const float magnetStrengthMin = 2f;
-        const float magnetDist = 8f;
+      
+
+        const float magnetStrengthMax = 1000f;
+        const float magnetStrengthMin = 100f;
+        const float magnetDist = 20f;
 
         if (belowMagnetic) {
+            
             float t = Mathf.Clamp01((magnetDist - sensors.localCeilingDist)/magnetDist);
-            moveForce.airMove += sensors.upVector * Mathf.Lerp(magnetStrengthMin, magnetStrengthMax, t);
+            Vector3 magnetForce = sensors.upVector * Mathf.Lerp(magnetStrengthMin, magnetStrengthMax, t);
+            moveForce.airMove += magnetForce;
+           // Debug.Log("Magnet force: " + magnetForce);
         }
 
     }
