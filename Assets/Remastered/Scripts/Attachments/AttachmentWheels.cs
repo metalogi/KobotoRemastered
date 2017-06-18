@@ -6,11 +6,12 @@ public class AttachmentWheels : AttachmentBase {
 
 
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
-        moveForce.dynamicFriction = 0f;
-        moveForce.staticFriction = 0f;
+        
 
         if (sensors.onGround) {
            // moveForce.airDrag = 0f;
+            moveForce.dynamicFriction = 0f;
+            moveForce.staticFriction = 0f;
 
             float groundV = Vector3.Dot(sensors.groundForward, sensors.velocity);
             float targetV = input.move * parameters.groundMoveSpeed;

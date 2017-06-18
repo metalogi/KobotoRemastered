@@ -7,6 +7,7 @@ public enum EAttachmentType {
     DoubleWheels,
     Spring,
     Magnet,
+    Propellor,
     Parachute
 }
 

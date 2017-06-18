@@ -88,9 +88,9 @@ public class Level : KobotoMono {
         return KobotosReady && kobotos.TrueForAll((Koboto k) => k.currentState == KobotoState.Rescued);
     }
 
-    public bool AnyKobotoDeadOrLost() {
+    public bool AnyKobotoDead() {
         return KobotosReady &&
-            !kobotos.TrueForAll((Koboto k) => k.currentState != KobotoState.Dead && k.currentState != KobotoState.Lost);
+            !kobotos.TrueForAll((Koboto k) => k.currentState != KobotoState.Dead);
     }
 
     bool KobotosReady {

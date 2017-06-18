@@ -178,9 +178,11 @@ public class KobotoSensor {
 
         aboveGround = downProbe.didHit;
         if (aboveGround) {
+            
             heightAboveGround = downProbe.hit.distance;
             aboveGroundPoint = downProbe.hit.point;
             aboveGroundCollider = downProbe.hit.collider;
+            Debug.Log("above ground, " + heightAboveGround);
         }
 
         localBelowCeiling = localUpProbe.didHit;

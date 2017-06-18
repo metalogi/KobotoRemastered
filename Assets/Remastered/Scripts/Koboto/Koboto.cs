@@ -36,8 +36,14 @@ public enum KobotoState {
     Asleep,
     Alive,
     Rescued,
-    Lost,
     Dead
+}
+
+public enum KobotoDeath {
+    Imapaled,
+    Lost,
+    Drowned,
+    Squashed
 }
 
 
@@ -58,7 +64,10 @@ public class Koboto : KobotoMono {
     List<EAttachmentType> attachmentOrder = new List<EAttachmentType>(){
         EAttachmentType.Wheels,
         EAttachmentType.Magnet,
-        EAttachmentType.Spring
+        EAttachmentType.Spring,
+        EAttachmentType.Propellor,
+        EAttachmentType.DoubleWheels,
+        EAttachmentType.Parachute
     };
 
     KobotoParameters parameters;
@@ -221,6 +230,36 @@ public class Koboto : KobotoMono {
         SetState(KobotoState.Rescued);
         KobotoEvents.Trigger(KEventEnum.Rescued, this);
     }
+
+    public void Kill(KobotoDeath deathType, Transform killer) {
+        SetState(KobotoState.Dead);
+
+        switch (deathType) {
+        case KobotoDeath.Imapaled:
+            StartCoroutine(ImpaleAnim(killer));
+            break;
+        }
+    }
+
+    IEnumerator ImpaleAnim(Transform impaler) {
+
+        rb.isKinematic = true;
+
+        Vector3 sink = -1.0f * impaler.up;
+
+        rb.MoveRotation(rb.rotation * Quaternion.AngleAxis(Random.Range(-15f,15f), Vector3.right));
+
+        while (currentState == KobotoState.Dead) {
+            Vector3 pos = rb.position + sink * Time.deltaTime;
+            sink *= 0.98f;
+            rb.MovePosition(pos);
+            yield return null;
+        }
+        yield break;
+    }
+
+    public void ParentToTransform(Transform t) {
+    }
         
 
     public void SetState(KobotoState newState) {
@@ -259,7 +298,7 @@ public class Koboto : KobotoMono {
         case KobotoState.Alive:
             SetMoveForceFromInput();
             if (levelBoundsSet && !levelBounds.Contains(transform.position)) {
-                SetState(KobotoState.Lost);
+                Kill(KobotoDeath.Lost, null);
             }
             break;
         }

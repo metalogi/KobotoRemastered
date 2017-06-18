@@ -15,6 +15,7 @@ public class LevelObjectLineAttach : LevelObjectBase {
 
     float startT;
     Rigidbody rb;
+    float dT;
 
     public enum MovePhase {
         MoveUp,
@@ -65,6 +66,7 @@ public class LevelObjectLineAttach : LevelObjectBase {
             if (fromState != EGameState.Paused && fromState != EGameState.Map) {
                 phase = startState;
                 frozen = startFrozen;
+                dT = 0f;
             }
 
         }
@@ -73,50 +75,65 @@ public class LevelObjectLineAttach : LevelObjectBase {
     protected override void FixedUpdatePlay() {
         base.FixedUpdatePlay();
 
-        float dT = Time.fixedDeltaTime;
+         
+
+
 
         if (!frozen) {
 
+          
             switch(phase) {
             case MovePhase.MoveUp:
-                dT /= moveTime;
-                t += dT;
-                Debug.Log("t= " + t);
+                
+                dT = Mathf.Lerp(dT, Time.fixedDeltaTime / moveTime, 0.25f);
+              
+
                 if (t >= 1f) {
                     phase = MovePhase.PauseTop;
                     phaseTime = 0f;
                 }
                 break;
             case MovePhase.PauseTop:
-                phaseTime += dT;
+                phaseTime += Time.fixedDeltaTime;
+                dT = 0f;
                 if (phaseTime >= pauseTime) {
                     phase = MovePhase.MoveDown;
                     phaseTime = 0f;
                 }
                 break;
             case MovePhase.MoveDown:
-                dT /= moveTime;
-                t -= dT;
+                dT = Mathf.Lerp(dT, -Time.fixedDeltaTime / moveTime, 0.25f);
+              
+        
                 if (t <= 0f) {
                     phase = MovePhase.PauseBottom;
                     phaseTime = 0f;
                 }
                 break;
             case MovePhase.PauseBottom:
-                phaseTime += dT;
+                phaseTime += Time.fixedDeltaTime;
+                dT = 0;
                 if (phaseTime >= pauseTime) {
                     phase = MovePhase.MoveUp;
                     phaseTime = 0f;
                 }
                 break;
             }
+          
+        } else {
+
+            dT *= 0.98f;
         }
+
+        t += dT;
 
         float outT = t;
         if (smooth) {
             outT = KSpline.SmoothT(t);
         }
-            
-        rb.MovePosition(line.ReadPoint(outT));
+
+        Vector3 newPos = line.ReadPoint(outT);
+
+        rb.MovePosition(newPos);
     }
 }

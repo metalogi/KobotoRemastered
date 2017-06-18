@@ -8,7 +8,7 @@ public class GameStatePlay : GameStateBase {
         Level level = game.currentLevel;
         if (level.AllKobotosRescued()) {
             return EGameState.Won;
-        } else if (level.AnyKobotoDeadOrLost()) {
+        } else if (level.AnyKobotoDead()) {
             return EGameState.Lost;
         }
         return EGameState.Play;

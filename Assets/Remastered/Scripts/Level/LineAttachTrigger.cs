@@ -29,7 +29,7 @@ public class LineAttachTrigger : LevelObjectBase {
         lineAttach.Freeze(false);
     } 
 
-    protected virtual void OnKobotoExit(Koboto koboto) {
+    protected override void OnKobotoExit(Koboto koboto) {
         lineAttach.Freeze(true);
     } 
 }

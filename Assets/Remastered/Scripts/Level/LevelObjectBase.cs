@@ -9,14 +9,28 @@ public class LevelObjectBase : KobotoMono {
 
     protected bool isActive;
 
-//    public void Init() {
-//        Debug.Log("Level Object Init");
-//        GameEvents.AddGameStateListener(GameStateDidChange);
-//    }
+    protected override void Init(EGameState gameState) {
+        if (trigger == null) {
+            trigger = FindCollider(true);
+        }
+        if (mainCollider == null) {
+            mainCollider = FindCollider(false);
+        }
+    }
+
+    Collider FindCollider(bool trigger) {
+        foreach (Collider c in GetComponentsInChildren<Collider>()) {
+            if (c.isTrigger == trigger) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     void SetActive(bool active) {
         Debug.Log("Setting level object active: " + active);
         isActive = active;
+       
     }
 
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
@@ -61,6 +75,7 @@ public class LevelObjectBase : KobotoMono {
     }
 
     void OnTriggerExit(Collider other) {
+        Debug.Log("Trigger exit");
         if (!isActive) {
             return;
         }

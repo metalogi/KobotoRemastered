@@ -21,7 +21,12 @@ public class PDController  {
         return currentError * p + delta * d;
     }
 
-    public void Reset() {
-        lastError  = 0;
+    public void Reset(float setError = 0) {
+        lastError = setError;
+    }
+
+    public void AdjustPD(float p, float d) {
+        this.p = p;
+        this.d = d;
     }
 }
