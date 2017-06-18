@@ -83,7 +83,16 @@ public class Koboto : KobotoMono {
     KobotoSensor sensors;
     KobotoMoveForce moveForce;
 
-    PDController tiltController;
+    PIDController tiltController;
+    // for testing pd values at runtime
+    [SerializeField]
+    float tiltControllerP = 6f;
+    [SerializeField]
+    float tiltControllerI = 0.05f;
+    [SerializeField]
+    float tiltControllerD = 0.8f;
+    [SerializeField]
+    bool tiltControllerEditParams;
 
     Quaternion upRotation;
     float tiltAngle;
@@ -97,7 +106,7 @@ public class Koboto : KobotoMono {
     protected override void Init(EGameState gameState) {
         parameters = GetComponent<KobotoParameters>();
 
-        tiltController = new PDController(12f, 0.8f);
+        tiltController = new PIDController(tiltControllerP, tiltControllerI, tiltControllerD);
         rb = GetComponent<Rigidbody>();
         sensors = new KobotoSensor();
         moveForce = new KobotoMoveForce();
@@ -292,6 +301,10 @@ public class Koboto : KobotoMono {
 
         if (!doFixedUpdate) {
             return;
+        }
+
+        if (tiltControllerEditParams) {
+            tiltController.AdjustPD (tiltControllerP, tiltControllerI, tiltControllerD);
         }
 
         switch (currentState) {

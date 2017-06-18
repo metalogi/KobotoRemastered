@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class AttachmentWheels : AttachmentBase {
 
+    Quaternion airBaseRotation;
 
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
         
 
         if (sensors.onGround) {
+         
            // moveForce.airDrag = 0f;
             moveForce.dynamicFriction = 0f;
             moveForce.staticFriction = 0f;
 
-            float groundV = Vector3.Dot(sensors.groundForward, sensors.velocity);
+            float groundV = Vector3.Dot(sensors.forwardWheelForward, sensors.velocity);
             float targetV = input.move * parameters.groundMoveSpeed;
 
             float forceMultiplier = 1f;
@@ -22,28 +24,33 @@ public class AttachmentWheels : AttachmentBase {
                 forceMultiplier = parameters.groundAccelerationCurve.Evaluate(t);
             }
 
-            Vector3 driveForce =  forceMultiplier * input.move * parameters.groundMoveStength * sensors.groundForward;
+            Vector3 driveForce =  forceMultiplier * input.move * parameters.groundMoveStength * sensors.forwardWheelForward;
             moveForce.groundMove += driveForce;
 
-            moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
+            moveForce.upRotation = Utils.TiltFromUpVector(sensors.forwardWheelNormal);
+            airBaseRotation = moveForce.upRotation;
             moveForce.tiltAngle = 0f;
             moveForce.tiltStrength = 1f;
         } else {
+
+
+            Debug.Log ("Off ground");
            // moveForce.airDrag = 0.3f;
             Vector3 airMove = input.move * parameters.airMoveStrength * Vector3.forward;
             moveForce.airMove += airMove;
-            moveForce.upRotation = Quaternion.identity;
-//            float speed = sensors.velocity.magnitude;
-//            Vector3 direction = sensors.velocity.normalized;
-//
-//            float speedContribution = Mathf.Clamp(speed, 0f, 1f) * (1f - Mathf.Abs(direction.y));
-//
-//            Quaternion speedRot = Utils.TiltFromUpVector(Vector3.Cross(sensors.velocity.normalized, Vector3.right));
-//            moveForce.upRotation = Quaternion.Lerp(Quaternion.identity, speedRot, speedContribution);
+            moveForce.upRotation = airBaseRotation;
+
+            moveForce.tiltStrength = 1f;
+
+            float inputTiltAmount = 45f * Mathf.Clamp01(sensors.inAirTime - 0.5f);
+
+            moveForce.tiltAngle = inputTiltAmount * input.move;
+
+            if (sensors.inAirTime > 0.5f) {
+                airBaseRotation = Quaternion.Lerp (airBaseRotation, Quaternion.identity, 4f * Time.fixedDeltaTime);
+            }
 
 
-            moveForce.tiltAngle = 45f * input.move;
-            moveForce.tiltStrength = 0.1f * Mathf.Clamp(sensors.inAirTime, 0f, 1f);
         }
     }
 	

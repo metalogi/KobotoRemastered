@@ -11,6 +11,11 @@ public class KobotoSensor {
     public Vector3 groundForward;
     public Vector3 groundNormal;
 
+    public bool forwardWheelOnGround;
+    public Vector3 forwardWheelForward;
+    public Vector3 forwardWheelNormal;
+
+
     public bool onCeiling;
     public Vector3 ceilingForward;
     public Vector3 ceilingNormal;
@@ -46,18 +51,10 @@ public class KobotoSensor {
     public Vector3 velocity;
     public List<Vector3> positionTrail = new List<Vector3>();
 
+
+
     Transform transform;
     BoxCollider boxCollider;
-
-    Probe downProbe = new Probe(true, Vector3.zero, Vector3.down, "down");
-    Probe upProbe = new Probe(true, Vector3.zero, Vector3.up, "up");
-    Probe forwardProbe = new Probe(true, Vector3.zero, Vector3.forward, "forward");
-    Probe backProbe = new Probe(true, Vector3.zero, Vector3.back, "back");
-
-    Probe localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down, "localDown");
-    Probe localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up, "local up");
-    Probe localForwardProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward, "local forward");
-    Probe localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.back, "local back");
 
 
     const float onGroundTestDist = 0.3f;
@@ -67,6 +64,45 @@ public class KobotoSensor {
     const int positionTrailSize = 10;
 
     float lastSampleTime;
+
+    Probe downProbe;
+    Probe upProbe;
+    Probe frontProbe;
+    Probe backProbe;
+
+    Probe localDownProbe;
+    Probe localUpProbe;
+    Probe localForwardProbe;
+    Probe localBackProbe;
+
+    Probe frontWheelProbe;
+    Probe backWheelProbe;
+
+    public KobotoSensor() {
+        downProbe = new Probe(true, Vector3.zero, Vector3.down, "down");
+        upProbe = new Probe(true, Vector3.zero, Vector3.up, "up");
+        frontProbe = new Probe(true, Vector3.zero, Vector3.forward, "front");
+        backProbe = new Probe(true, Vector3.zero, Vector3.back, "back");
+
+        localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down, "localDown");
+        localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up, "local up");
+        localForwardProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.forward, "local forward");
+        localBackProbe = new Probe(false, 0.9f*Vector3.forward, Vector3.back, "local back");
+
+        Vector3 frontWheelStart = 0.8f*Vector3.down + 0.9f*Vector3.forward;
+        Vector3 frontWheelStartOut =  4f*Vector3.forward;
+        Vector3 frontWheelDown = Vector3.down;
+
+        Vector3 backWheelStart = 0.8f*Vector3.down - 0.9f*Vector3.forward;
+        Vector3 backWheelStartOut =  -4f*Vector3.forward;
+        Vector3 backWheelDown = Vector3.down;
+
+        frontWheelProbe = new Probe(false, frontWheelStart, frontWheelDown, "wheel front");
+        backWheelProbe = new Probe(false, backWheelStart, backWheelDown, "wheel back");
+
+        frontWheelProbe.SetPeturbedStartPoint(frontWheelStartOut);
+        backWheelProbe.SetPeturbedStartPoint(backWheelStartOut);
+    }
 
     #if UNITY_EDITOR
 
@@ -98,12 +134,14 @@ public class KobotoSensor {
     private IEnumerable AllProbes(){
         yield return downProbe;
         yield return upProbe;
-        yield return forwardProbe;
+        yield return frontProbe;
         yield return backProbe;
         yield return localDownProbe;
         yield return localUpProbe;
         yield return localForwardProbe;
         yield return localBackProbe;
+        yield return frontWheelProbe;
+        yield return backWheelProbe;
     }
 
     public void Reset() {
@@ -140,9 +178,30 @@ public class KobotoSensor {
         }
 
 
-
         foreach (Probe probe in AllProbes()) {
-            probe.Update(transform, activeCollider);
+            float peturb = 0f;
+            if (probe == frontWheelProbe) {
+                peturb = Mathf.Clamp01 (Vector3.Dot (velocity, Vector3.forward));
+            } else if (probe == backWheelProbe) {
+                peturb = Mathf.Clamp01 (Vector3.Dot (velocity, Vector3.back));
+            }
+            probe.Update(transform, activeCollider, peturb);
+        }
+
+        // forward is direction of travel
+        bool frontIsForward = Vector3.Dot(velocity, Vector3.forward) > 0f;
+        if (frontIsForward) {
+            forwardWheelOnGround = frontWheelProbe.didHit;
+            if (forwardWheelOnGround) {
+                forwardWheelNormal = frontWheelProbe.hit.normal;
+                forwardWheelForward = Vector3.Cross (Vector3.right, forwardWheelNormal);
+            }
+        } else {
+            forwardWheelOnGround = backWheelProbe.didHit;
+            if (forwardWheelOnGround) {
+                forwardWheelNormal = backWheelProbe.hit.normal;
+                forwardWheelForward = Vector3.Cross (Vector3.right, forwardWheelNormal);
+            }
         }
 
 
@@ -182,7 +241,6 @@ public class KobotoSensor {
             heightAboveGround = downProbe.hit.distance;
             aboveGroundPoint = downProbe.hit.point;
             aboveGroundCollider = downProbe.hit.collider;
-            Debug.Log("above ground, " + heightAboveGround);
         }
 
         localBelowCeiling = localUpProbe.didHit;
@@ -221,6 +279,8 @@ internal class Probe {
     private Vector3 startPosLocal;
     private Vector3 direction;
     private bool directionInWorldSpace;
+    private bool peturbStartPoint;
+    private Vector3 peturbedStart;
 
     private Vector3 worldSpaceOrigin;
 
@@ -230,6 +290,8 @@ internal class Probe {
     internal RaycastHit hit;
     internal string name;
 
+
+
     int layerMask;
 
     internal Probe(bool worldSpace, Vector3 startPos, Vector3 direction, string name) {
@@ -237,17 +299,24 @@ internal class Probe {
         this.startPosLocal = startPos;
         this.direction = direction;
         this.directionInWorldSpace = worldSpace;
-        layerMask = 1 << LayerMask.NameToLayer("Default");
+        layerMask = LayerMask.GetMask ("Default", "Koboto");
+       
     }
 
-    internal void Update(Transform t, Collider c) {
+    internal void SetPeturbedStartPoint(Vector3 peturbedStart) {
+        peturbStartPoint = true;
+        this.peturbedStart = peturbedStart;
+    }
+
+    internal void Update(Transform t, Collider c, float peturb) {
+        Vector3 fixedStartPoint = peturbStartPoint ? Vector3.Lerp (startPosLocal, peturbedStart, peturb) : startPosLocal;
         Vector3 scaledStartPos = Vector3.zero;
         if (c is BoxCollider) {
             BoxCollider bc = (BoxCollider)c;
-            scaledStartPos = bc.center + Vector3.Scale(bc.size/2f, startPosLocal);
+            scaledStartPos = bc.center + Vector3.Scale(bc.size/2f, fixedStartPoint);
         } else if (c is CapsuleCollider) {
             CapsuleCollider cc = (CapsuleCollider)c;
-            scaledStartPos = cc.center + new Vector3(0f, (cc.height/2f)*startPosLocal.y, (cc.radius * startPosLocal.z)); 
+            scaledStartPos = cc.center + new Vector3(0f, (cc.height/2f)*fixedStartPoint.y, (cc.radius * fixedStartPoint.z)); 
         }
         worldSpaceOrigin = t.TransformPoint(scaledStartPos);
         Vector3 worldDirection = directionInWorldSpace? direction : t.TransformDirection(direction);
