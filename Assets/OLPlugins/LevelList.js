@@ -1,4 +1,0 @@
-class LevelList extends ScriptableObject
-{
-
-}

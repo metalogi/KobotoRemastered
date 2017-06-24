@@ -1,4 +1,0 @@
-
-function CutAway(cam:CameraManager)
-{
-}
