@@ -8,6 +8,7 @@ public class LevelObjectLineAttach : LevelObjectBase {
     public float moveTime = 1f;
     public float pauseTime = 1f;
     public bool pingPong;
+    public bool cycle;
     public bool smooth = true;
     public AbstractLine line;
     public MovePhase startState;
@@ -97,7 +98,10 @@ public class LevelObjectLineAttach : LevelObjectBase {
                 phaseTime += Time.fixedDeltaTime;
                 dT = 0f;
                 if (phaseTime >= pauseTime) {
-                    phase = MovePhase.MoveDown;
+                    phase = cycle? MovePhase.MoveUp : MovePhase.MoveDown;
+                    if (cycle) {
+                        t = 0f;
+                    }
                     phaseTime = 0f;
                 }
                 break;
