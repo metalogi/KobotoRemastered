@@ -1449,7 +1449,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  airMoveStrength: 10
+  airMoveStrength: 60
   defaultDynamicFriction: 0.8
   defaultStaticFriction: 1
   defaultAirDrag: 0.15
@@ -1515,6 +1515,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 65103193873308572}
   capsuleCollider: {fileID: 136604390257887542}
+  tiltControllerP: 6
+  tiltControllerI: 0.05
+  tiltControllerD: 0.8
+  tiltControllerEditParams: 0
 --- !u!114 &114784677853437668
 MonoBehaviour:
   m_ObjectHideFlags: 1

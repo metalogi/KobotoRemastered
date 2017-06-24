@@ -28,7 +28,7 @@ public class UpgradeLevel : MonoBehaviour {
         GameObject bounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
         bounds.name = "LevelBounds";
         bounds.transform.parent = root.transform;
-        Destroy (bounds.GetComponent<Collider> ());
+        DestroyImmediate(bounds.GetComponent<Collider> ());
 
         level.levelBoundsObject = bounds.GetComponent<MeshRenderer> ();
 

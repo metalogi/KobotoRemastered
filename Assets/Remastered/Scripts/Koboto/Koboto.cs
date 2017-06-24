@@ -100,6 +100,8 @@ public class Koboto : KobotoMono {
     bool levelBoundsSet;
     Bounds levelBounds;
 
+    Transform defaultParent;
+
     bool doFixedUpdate;
 	
 
@@ -133,6 +135,8 @@ public class Koboto : KobotoMono {
 
       //  AddAttachment(EAttachmentType.Wheels);
         doFixedUpdate = (gameState == EGameState.Play);
+        SetupCollider ();
+        defaultParent = transform.parent;
         Debug.Log("Koboto init in state: " + gameState);
     }
 
@@ -268,6 +272,7 @@ public class Koboto : KobotoMono {
     }
 
     public void ParentToTransform(Transform t) {
+        transform.parent = t;
     }
         
 
@@ -281,10 +286,12 @@ public class Koboto : KobotoMono {
 
         case KobotoState.Alive:
             rb.isKinematic = false;
+            ParentToTransform (defaultParent);
             break;
 
         case KobotoState.Asleep:
             rb.isKinematic = false;
+         
             break;
 
         case KobotoState.Rescued:
@@ -326,9 +333,9 @@ public class Koboto : KobotoMono {
 
         sensors.UpdateAll(transform, activeCollider);
 
-
+        NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
         if (currentAttachments.Count == 0) {
-            NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
+           // NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
         } else {
 
             foreach (var attachmentType in attachmentOrder) {
@@ -369,6 +376,8 @@ public class Koboto : KobotoMono {
             moveForce.upRotation = Quaternion.identity;
             moveForce.tiltAngle = 0f;
             moveForce.tiltStrength = 0.5f;
+
+            moveForce.airMove = input.move * Vector3.forward * parameters.airMoveStrength;
         }
     }
 

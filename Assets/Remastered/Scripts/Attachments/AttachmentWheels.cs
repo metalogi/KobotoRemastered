@@ -36,8 +36,7 @@ public class AttachmentWheels : AttachmentBase {
 
             Debug.Log ("Off ground");
            // moveForce.airDrag = 0.3f;
-            Vector3 airMove = input.move * parameters.airMoveStrength * Vector3.forward;
-            moveForce.airMove += airMove;
+  
             moveForce.upRotation = airBaseRotation;
 
             moveForce.tiltStrength = 1f;
