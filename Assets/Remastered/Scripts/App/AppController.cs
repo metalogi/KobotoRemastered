@@ -16,32 +16,60 @@ public class AppController : MonoBehaviour {
 	
 	void Awake() {
         instance = this;
+        ProgressManager.Init();
         
 	}
 	
     const string sceneRoot = "Remastered/Scenes/";
+
     Scene currentLevelScene;
     string currentLevelScenePath;
-    int currentLevelWorldNumber;
-    int currentLevelNumber;
+//    int currentLevelWorldNumber;
+//    int currentLevelNumber;
+
+    Scene currentMapScene;
 
     void Start(){
         GameEvents.AddGameStateEnteredListener(GameStateEnteredListener);
-        LoadLevel(1,1);
+        LoadWorldMap(1);
+    }
+
+    public void LoadWorldMap(int world) {
+        string scenePath = sceneRoot + "World" + world.ToString("0") + "_Map";
+        StartCoroutine(TransitionToScene(scenePath));
+      
     }
 
     public void LoadLevel(int world, int level) {
-        StartCoroutine(TransitionToLevel(world, level));
+        string scenePath = sceneRoot + "World" + world.ToString("0") + "/Level" + level.ToString("00");
+        StartCoroutine(TransitionToScene(scenePath));
     }
 
     void GameStateEnteredListener(EGameState state, EGameState fromState) {
         Debug.Log("App controller detected game state change: " + state);
-        if (currentLevelScene != null && state == EGameState.LoadNextLevel) {
-            LoadLevel(currentLevelWorldNumber, currentLevelNumber + 1);
+        if (currentLevelScene == null) {
+            return;
+        }
+        switch (state) {
+        case EGameState.Won:
+            ProgressManager.instance.MarkCurrentLevelComplete();
+            break;
+        }
+        if (state == EGameState.LoadNextLevel) {
+
+            int currentWorld = ProgressManager.CurrentWorldNumber;
+            ProgressManager.instance.AdvanceToNextLevel();
+
+            if (ProgressManager.CurrentWorldNumber != currentWorld) {
+                // Load world select
+            } else {
+            
+                LoadLevel(ProgressManager.CurrentWorldNumber, ProgressManager.CurrentLevelNumber);
+            }
         }
     }
 
-    IEnumerator TransitionToLevel(int world, int level) {
+    IEnumerator TransitionToScene(string scenePath) {
 
         yield return StartCoroutine(ShowLoadingScreen());
 
@@ -51,7 +79,7 @@ public class AppController : MonoBehaviour {
                 yield return null;
             }
         }
-        string scenePath = sceneRoot + "World" + world.ToString("0") + "/Level" + level.ToString("00");
+       
         Debug.Log("Loading scene from path " + scenePath);
        
 
@@ -64,8 +92,8 @@ public class AppController : MonoBehaviour {
 
         currentLevelScene = SceneManager.GetSceneByPath(fullPath);
         currentLevelScenePath = scenePath;
-        currentLevelWorldNumber = world;
-        currentLevelNumber = level;
+
+
 
         SceneManager.SetActiveScene(currentLevelScene);
 
