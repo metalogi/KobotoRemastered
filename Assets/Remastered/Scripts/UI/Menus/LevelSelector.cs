@@ -6,12 +6,16 @@ using UnityEngine.UI;
 public class LevelSelector : MonoBehaviour {
 
     public Animator cardAnimator;
+    public Animator houseAnimator;
     public Text levelTitle;
     public Button playButton;
+    public CanvasGroup selectorButtonGroup;
 
     private int levelNumber ;
 
     private WorldMap worldMap;
+
+    bool showingCard;
 
     public void Setup(WorldMap worldMap, int levelNumber) {
         this.worldMap = worldMap;
@@ -22,17 +26,33 @@ public class LevelSelector : MonoBehaviour {
     }
 
     public void Show(bool show) {
+        showingCard = show;
         Debug.Log("Showing card " + levelNumber + " " + show);
         cardAnimator.SetBool("Visible", show);
+
+        if (!show) {
+            houseAnimator.SetTrigger("Normal");
+        }
+
+        //selectorButtonGroup.interactable = selectorButtonGroup.blocksRaycasts = !show;
+
     }
 
     public void PlayLevel() {
-     //   cardAnimator.SetBool("Visible", show);
+
+        worldMap.PlayLevel(levelNumber);
     }
 
     public void OnSelect() {
-        Debug.Log("Level selector " + levelNumber);
-        worldMap.SelectLevel(this);
+
+        if (showingCard) {
+            PlayLevel();
+            
+        } else {
+            Debug.Log("Level selector " + levelNumber);
+            worldMap.SelectLevel(this);
+        }
+
     }
         
 

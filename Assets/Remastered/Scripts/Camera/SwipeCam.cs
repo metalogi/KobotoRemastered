@@ -9,8 +9,7 @@ public class SwipeCam : KCam {
     List<Vector3> targetPoints;
     int currentTargetIndex;
 
-    public override void Start() {
-        base.Start();
+    public void Start() {
         targetPoints = new List<Vector3>();
     }
 
@@ -23,20 +22,11 @@ public class SwipeCam : KCam {
         transform.position = targetPoints[targetIndex] + targetOffset;
     }
 
+    void Update() {
+        transform.position = targetPoints[currentTargetIndex] + targetOffset;
+    }
 
-//    public override void OnDragStart(Vector2 dragPosition) {
-//
-//    }
-//
-//    public override void OnDrag(Vector2 dragPosition, bool direct) {
-//
-//  
-//    }
-//
-//    public override void OnDirectDragStop(Vector2 dragPositon) {
-//    }
-//
-//    public override void OnDragStop(Vector2 dragPositon) {
-//    }
+
+
 
 }

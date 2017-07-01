@@ -17,8 +17,7 @@ public class DragCam : KCam {
     bool cancelled;
 
 
-	public override void Start() {
-        base.Start();
+	public void Start() {
 
         //dragControl.dragDelegate = this;
         dragPlane = new Plane (Vector3.right, Vector3.zero);

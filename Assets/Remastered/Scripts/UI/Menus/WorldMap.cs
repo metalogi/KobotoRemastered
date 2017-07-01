@@ -42,17 +42,24 @@ public class WorldMap : KobotoMono {
             if (selector == levelSelectors[i]) {
                 levelSelectors[i].Show(true);
                 swipeCam.JumpToTarget(i);
-                camController.SwitchToCamera("Swipe");
+                camController.LerpToCamera("Swipe", 0.25f);
             } else {
                 levelSelectors[i].Show(false);
             }
         }
     }
 
+    public void PlayLevel(int levelNumber) {
+        AppController.Instance.LoadLevel(1, levelNumber);
+    }
+
     protected override void OnPointerDown (UnityEngine.EventSystems.PointerEventData eventData)
     {
         if (camController.IsCamActive("Swipe")) {
-            camController.SwitchToCamera("Drag");
+            camController.LerpToCamera("Drag", 0.6f);
+            for (int i=0; i<levelSelectors.Length; i++) {
+                levelSelectors[i].Show(false);
+            }
         }
     }
 

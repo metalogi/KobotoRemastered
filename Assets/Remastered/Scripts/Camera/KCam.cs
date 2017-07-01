@@ -9,15 +9,15 @@ public class KCam : KobotoMono {
 
     protected bool isActive;
 
-    public virtual void Start() {
+    public void Awake() {
         camera = GetComponent<Camera>();
         ListenToPointerEvents();
     }
 
     public virtual void SetActive(bool active) {
-        gameObject.SetActive(active);
+       
         enabled = active;
-        camera.enabled = active;    
+       // camera.enabled = active;    
         isActive = active;
     }
 

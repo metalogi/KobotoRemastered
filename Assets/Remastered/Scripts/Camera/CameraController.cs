@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     public Camera mainCamera;
-    Dictionary<string, KCam> cameras;
-    List<KCam> camList;
+    Dictionary<string, KCam> cameras = new Dictionary<string, KCam>();
+    List<KCam> camList = new List<KCam>();
     KCam activeCam;
 
     bool inTransition;
@@ -20,8 +20,7 @@ public class CameraController : MonoBehaviour {
         transitionCam = transitionCamObj.AddComponent<Camera>();
 
         transitionCam.enabled = false;
-        cameras = new Dictionary<string, KCam>();
-        camList = new List<KCam>();
+
     }
 
     public void RegisterCamera(string tag, KCam cam) {
@@ -39,6 +38,9 @@ public class CameraController : MonoBehaviour {
     }
 
     public void SwitchToCamera(string tag) {
+        if (inTransition) {
+            return;
+        }
         if (!cameras.TryGetValue(tag, out activeCam)) {
             return;
         }
@@ -51,6 +53,42 @@ public class CameraController : MonoBehaviour {
           
         }
         
+    }
+
+    public void LerpToCamera(string tag, float time) {
+        if (inTransition) {
+            return;
+        }
+        KCam toCam;
+        if (!cameras.TryGetValue(tag, out toCam)) {
+            return;
+        }
+        mainCamera.enabled = true;
+        StartCoroutine(CameraLerp(activeCam, toCam, time));
+    }
+
+    IEnumerator CameraLerp(KCam fromCam, KCam toCam, float time) {
+
+        inTransition = true;
+        toCam.SetActive(true);
+
+        float lerpTime = 0;
+        while (lerpTime < time) {
+            float t = lerpTime / time;
+            mainCamera.transform.position = Vector3.Lerp(fromCam.transform.position, toCam.transform.position, t);
+            mainCamera.transform.rotation = Quaternion.Lerp(fromCam.transform.rotation, toCam.transform.rotation, t);
+            mainCamera.fieldOfView = Mathf.Lerp(fromCam.camera.fieldOfView, toCam.camera.fieldOfView, t);
+            mainCamera.aspect = Mathf.Lerp(fromCam.camera.aspect, toCam.camera.aspect, t);
+            lerpTime += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCamera.transform.SetParent(toCam.transform, false);
+        mainCamera.CopyFrom(toCam.camera);
+       
+        activeCam = toCam;
+        fromCam.SetActive(false);
+        inTransition = false;
     }
         
 
