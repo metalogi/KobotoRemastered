@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class KobotoMono : MonoBehaviour {
 
@@ -18,6 +19,12 @@ public class KobotoMono : MonoBehaviour {
         Init(GameEvents.gameState);
     }
 
+    protected void ListenToPointerEvents() {
+        UIEvents.AddListener(EPointerEvent.PointerDown, OnPointerDown);
+        UIEvents.AddListener(EPointerEvent.DragStart, OnDragStart);
+        UIEvents.AddListener(EPointerEvent.Drag, OnDrag);
+    }
+
     protected virtual void DidEnterGameState(EGameState gameState, EGameState fromState) {
     }
 
@@ -25,5 +32,19 @@ public class KobotoMono : MonoBehaviour {
     }
 
     protected virtual void Init(EGameState gameState) {
+    }
+
+    protected virtual void OnPointerDown(PointerEventData eventData) {
+    }
+
+    protected virtual void OnDragStart(PointerEventData eventData) {
+
+    }
+
+    protected virtual void OnDrag(PointerEventData eventData) {
+
+    }
+        
+    protected virtual void OnDragStop(PointerEventData eventData) {
     }
 }

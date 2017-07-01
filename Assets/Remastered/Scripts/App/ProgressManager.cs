@@ -17,8 +17,9 @@ public class ProgressManager : MonoBehaviour {
     public static int[] levelCounts = new int[3]{10,10,10};
     public static int bonusTokensPerLevel = 3;
 
-    // static flags
-
+    // current level
+    int currentWorldIndex;
+    int currentLevelIndex;
 
     #region saveFileContents
     [SerializeField]
@@ -31,10 +32,6 @@ public class ProgressManager : MonoBehaviour {
     List<LevelProgress> world2Progress;
     [SerializeField]
     List<LevelProgress> world3Progress;
-    [SerializeField]
-    int currentWorldIndex;
-    [SerializeField]
-    int currentLevelIndex;
 
     [SerializeField]
     SerializableDictionaryOfStringAndInt playerStats;
@@ -60,6 +57,7 @@ public class ProgressManager : MonoBehaviour {
         if (!instance.InitFromSaveFile()) {
             instance.InitAsNewPlayer();
         }
+        instance.SetCurrentWorldToLastUnlocked();
        
 
     }
@@ -109,32 +107,31 @@ public class ProgressManager : MonoBehaviour {
         } else {
             currentLevelIndex++;
         }
-            
 
-
-        
     }
-//
-//    void SetCurrentWorldToLastUnlocked() {
-//        currentWorldIndex = 0;
-//        currentLevelIndex = 0;
-//
-//        while (currentWorldIndex < (worldCount -1) && worldsUnlocked[currentLevelIndex + 1]) {
-//            currentWorldIndex++;
-//        }
-//
-//        while (currentLevelIndex < (levelCounts[currentWorldIndex] - 1)) {
-//        }
-//
-//        if (worldsUnlocked[1]) {
-//            currentWorld = 2;
-//        }
-//
-//        if (worldsUnlocked[2]) {
-//            currentWorld = 3;
-//        } 
-//
-//    }
+
+    public void SetCurrentLevel(int worldNumber, int levelNumber) {
+        currentWorldIndex = worldNumber - 1;
+        currentLevelIndex = levelNumber - 1;
+    }
+
+    void SetCurrentWorldToLastUnlocked() {
+        currentWorldIndex = 0;
+        currentLevelIndex = 0;
+
+        while (currentWorldIndex < (worldCount -1) && worldsUnlocked[currentLevelIndex + 1]) {
+            currentWorldIndex++;
+        }
+
+        for (int i=0; i<levelCounts[currentWorldIndex]; i++) {
+            LevelProgress nextLevelProgress = gameProgress[currentWorldIndex][i];
+            if (!nextLevelProgress.passed) {
+                currentLevelIndex = i;
+                break;
+            }
+        }
+
+    }
 
     void InitAsNewPlayer() {
        

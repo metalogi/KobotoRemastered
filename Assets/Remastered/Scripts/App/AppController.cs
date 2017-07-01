@@ -36,13 +36,13 @@ public class AppController : MonoBehaviour {
 
     public void LoadWorldMap(int world) {
         string scenePath = sceneRoot + "World" + world.ToString("0") + "_Map";
-        StartCoroutine(TransitionToScene(scenePath));
+        StartCoroutine(TransitionToScene(scenePath, EGameState.Unloaded));
       
     }
 
     public void LoadLevel(int world, int level) {
         string scenePath = sceneRoot + "World" + world.ToString("0") + "/Level" + level.ToString("00");
-        StartCoroutine(TransitionToScene(scenePath));
+        StartCoroutine(TransitionToScene(scenePath, EGameState.Play));
     }
 
     void GameStateEnteredListener(EGameState state, EGameState fromState) {
@@ -69,7 +69,7 @@ public class AppController : MonoBehaviour {
         }
     }
 
-    IEnumerator TransitionToScene(string scenePath) {
+    IEnumerator TransitionToScene(string scenePath, EGameState endState) {
 
         yield return StartCoroutine(ShowLoadingScreen());
 
@@ -100,6 +100,8 @@ public class AppController : MonoBehaviour {
 
 
         yield return StartCoroutine(HideLoadingScreen());
+
+        GameManager.Instance.RequestState(endState);
 
 
     }

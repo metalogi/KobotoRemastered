@@ -75,10 +75,14 @@ public class GameManager : MonoBehaviour {
             }
         } else if (currentStateFunctions != null) {
             stateTime += Time.deltaTime;
+
+
             EGameState desiredState = currentStateFunctions.Update(this);
             if (desiredState != currentState) {
                 TransitionToState(desiredState);
             }
+
+           
         }
     }
 
@@ -91,10 +95,12 @@ public class GameManager : MonoBehaviour {
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
         stateFunctions.Add(EGameState.Lost, new GameStateLost());
         stateFunctions.Add(EGameState.Won, new GameStateWon());
+        stateFunctions.Add(EGameState.LoadNextLevel, new GameStateLoadNextLevel());
 
         AddTransition<GameStateTransitionStartLevel>(EGameState.Unloaded, EGameState.Play);
         AddTransition<GameStateTransitionRestart>(EGameState.Lost, EGameState.Play);
         AddTransition<GameStateTransitionRestart>(EGameState.Won, EGameState.Play);
+
 
        
     }

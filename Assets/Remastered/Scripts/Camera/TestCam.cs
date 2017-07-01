@@ -14,7 +14,7 @@ public class TestCam : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (target == null && GameManager.Instance != null && GameManager.Instance.currentState == EGameState.Play) {
+        if ( GameManager.Instance != null && GameManager.Instance.currentState == EGameState.Play) {
             target = GameManager.Instance.currentLevel.kobotos[0].transform;
         }
         if (target != null) {

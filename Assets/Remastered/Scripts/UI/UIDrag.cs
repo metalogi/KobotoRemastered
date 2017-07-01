@@ -9,9 +9,11 @@ public interface UIDragDelegate {
     void OnDrag(Vector2 dragPosition, bool direct);
     void OnDirectDragStop(Vector2 dragPosition);
     void OnDragStop(Vector2 dragPosition);
+
+    void OnPointerDown(Vector2 position);
 }
 
-public class UIDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
+public class UIDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerDownHandler {
 
     public UIDragDelegate dragDelegate;
     public float slowdown = 1f;
@@ -40,6 +42,7 @@ public class UIDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
         touching = false;
         afterTouch = true;
+        dragDelegate.OnDragStop (dragPos);
     }
 
     public void OnDrag (PointerEventData eventData) {
@@ -47,6 +50,10 @@ public class UIDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 
         
+    }
+
+    public void OnPointerDown(PointerEventData eventData) {
+        dragDelegate.OnPointerDown(eventData.position);
     }
 
     void FixedUpdate() {
