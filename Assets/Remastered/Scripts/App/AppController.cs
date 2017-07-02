@@ -54,8 +54,7 @@ public class AppController : MonoBehaviour {
         case EGameState.Won:
             ProgressManager.instance.MarkCurrentLevelComplete();
             break;
-        }
-        if (state == EGameState.LoadNextLevel) {
+        case EGameState.LoadNextLevel:
 
             int currentWorld = ProgressManager.CurrentWorldNumber;
             ProgressManager.instance.AdvanceToNextLevel();
@@ -66,6 +65,10 @@ public class AppController : MonoBehaviour {
             
                 LoadLevel(ProgressManager.CurrentWorldNumber, ProgressManager.CurrentLevelNumber);
             }
+            break;
+        case EGameState.ReturnToMenu:
+            LoadWorldMap(ProgressManager.CurrentWorldNumber);
+            break;
         }
     }
 

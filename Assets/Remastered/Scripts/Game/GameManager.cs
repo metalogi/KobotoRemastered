@@ -26,9 +26,14 @@ public class GameManager : MonoBehaviour {
     public Level currentLevel;
     public UIGame gameUI;
 
+    public GameCam gameCam;
+    public KCam mapCam;
+
     public EGameState currentState{ get; private set; }
     GameStateBase currentStateFunctions;
     GameStateTransitionBase currentStateTransition;
+
+    public CameraController cameraController;
 
     Dictionary<EGameState, GameStateBase> stateFunctions;
     Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
@@ -47,6 +52,9 @@ public class GameManager : MonoBehaviour {
             GameObject.Destroy(gameObject);
             return;
         }
+       
+        cameraController.RegisterCamera("Game", gameCam);
+
         SetupStates ();
 
         gameUI.Init(this);
@@ -93,9 +101,11 @@ public class GameManager : MonoBehaviour {
 
         stateFunctions.Add(EGameState.Unloaded, new GameStateUnloaded());
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
+        stateFunctions.Add(EGameState.Paused, new GameStatePaused());
         stateFunctions.Add(EGameState.Lost, new GameStateLost());
         stateFunctions.Add(EGameState.Won, new GameStateWon());
         stateFunctions.Add(EGameState.LoadNextLevel, new GameStateLoadNextLevel());
+        stateFunctions.Add(EGameState.ReturnToMenu, new GameStateReturnToMenu());
 
         AddTransition<GameStateTransitionStartLevel>(EGameState.Unloaded, EGameState.Play);
         AddTransition<GameStateTransitionRestart>(EGameState.Lost, EGameState.Play);
@@ -165,6 +175,37 @@ public class GameManager : MonoBehaviour {
 
     #endregion
 
+    #region UI callbacks
+    public void RestartCurrentLevel() {
+        currentLevel.ResetKobotos();
+        RequestState(EGameState.Play);
+    }
+
+    public void ResumeCurrentLevel() {
+        RequestState(EGameState.Play);
+    }
+
+    public void ReturnToMenu() {
+        RequestState(EGameState.ReturnToMenu);
+    }
+
+    public void LoadNextLevel() {
+        RequestState(EGameState.LoadNextLevel);
+    }
+
+    public void AttachmentButtonPressed(EAttachmentType type) {
+        currentLevel.ToggleAttachmentOnSelectedKoboto(type);
+    }
+
+    public void Pause() {
+        RequestState(EGameState.Paused);
+    }
+
+    public void ShowMap() {
+        RequestState(EGameState.Map);
+    }
+
+    #endregion
 
 
 

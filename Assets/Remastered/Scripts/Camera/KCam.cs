@@ -4,13 +4,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class KCam : KobotoMono {
-    [HideInInspector]
-    public Camera camera;
+    private Camera _camera;
+    public Camera camera {
+        get {
+            if (_camera == null) {
+                _camera = GetComponent<Camera>();
+            }
+            return _camera;
+        }
+    }
 
     protected bool isActive;
 
     public void Awake() {
-        camera = GetComponent<Camera>();
+       
         ListenToPointerEvents();
     }
 

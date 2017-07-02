@@ -6,7 +6,8 @@ public delegate void KobotoEventHandler(Koboto koboto);
 
 public enum KEventEnum {
     Rescued,
-    Died
+    Died,
+    Selected
 }
 
 
@@ -14,7 +15,8 @@ public static class KobotoEvents   {
 
     static Dictionary<KEventEnum, KEvent> events = new Dictionary<KEventEnum, KEvent> {
         {KEventEnum.Rescued, new KEvent()},
-        {KEventEnum.Died, new KEvent()}
+        {KEventEnum.Died, new KEvent()},
+        {KEventEnum.Selected, new KEvent()}
 
     };
 
@@ -52,7 +54,5 @@ public static class KobotoEvents   {
             e.Trigger(koboto);
         }
     }
-
-
 
 }

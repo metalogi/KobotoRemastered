@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameStateUnloaded : GameStateBase {
 
     public override EGameState Update(GameManager game) {
-        if (game.currentLevel != null) {
+        if (game.requestedState == EGameState.Play ) {
             return EGameState.Play;
         }
         return EGameState.Unloaded;

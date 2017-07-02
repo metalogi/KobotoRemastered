@@ -46,6 +46,7 @@ public class CameraController : MonoBehaviour {
         }
         mainCamera.enabled = true;
 
+
         mainCamera.transform.SetParent(activeCam.transform, false);
         mainCamera.CopyFrom(activeCam.camera);
         foreach (KCam c in camList) {

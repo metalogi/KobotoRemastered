@@ -33,6 +33,7 @@ public class Level : KobotoMono {
             yield return null;
         }
         GameManager.Instance.currentLevel = this;
+        GameManager.Instance.cameraController.SwitchToCamera("Game");
     }
     protected override void Init(EGameState gameState) {
 
@@ -47,7 +48,7 @@ public class Level : KobotoMono {
 
     protected override void DidEnterGameState (EGameState gameState, EGameState fromState) {
         base.DidEnterGameState (gameState, fromState);
-        if (gameState == EGameState.Play) {
+        if (gameState == EGameState.Play && fromState != EGameState.Paused && fromState != EGameState.Map) {
             ResetKobotos();
         }
     }
@@ -75,6 +76,7 @@ public class Level : KobotoMono {
 
     void SelectKoboto(Koboto koboto) {
         selectedKoboto = koboto;
+        KobotoEvents.Trigger(KEventEnum.Selected, koboto);
     }
 
     public void ToggleAttachmentOnSelectedKoboto(EAttachmentType attachmentType) {

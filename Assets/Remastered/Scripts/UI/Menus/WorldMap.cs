@@ -50,7 +50,7 @@ public class WorldMap : KobotoMono {
     }
 
     public void PlayLevel(int levelNumber) {
-        AppController.Instance.LoadLevel(1, levelNumber);
+        AppController.Instance.LoadLevel(ProgressManager.CurrentWorldNumber, levelNumber);
     }
 
     protected override void OnPointerDown (UnityEngine.EventSystems.PointerEventData eventData)

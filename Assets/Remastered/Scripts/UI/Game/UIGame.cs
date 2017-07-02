@@ -8,6 +8,7 @@ public class UIGame : KobotoMono {
     public RectTransform attachmentButtonParent;
     public RectTransform navButtonParent;
     public RectTransform navButtonGroupWin;
+    public RectTransform buttonGroupPauseMenu;
 
 
     GameManager game;
@@ -33,6 +34,9 @@ public class UIGame : KobotoMono {
         case EGameState.Won:
             ShowNavButtons(navButtonGroupWin);
             break;
+        case EGameState.Paused:
+            ShowNavButtons(buttonGroupPauseMenu);
+            break;
         }
     }
 
@@ -40,6 +44,7 @@ public class UIGame : KobotoMono {
         base.WillExitGameState(gameState, toState);
         switch(gameState) {
         case EGameState.Won:
+        case EGameState.Paused:
             HideNavButtons();
             break;
         }
@@ -66,10 +71,31 @@ public class UIGame : KobotoMono {
 
     public void AttachmentButtonPressed(UIAttachmentButton button, EAttachmentType type) {
         Debug.Log("Attachment: " + type);
-        game.currentLevel.ToggleAttachmentOnSelectedKoboto(type);
+        game.AttachmentButtonPressed(type);
+
     }
 
     public void NextLevelButtonPressed(){
-        game.RequestState(EGameState.LoadNextLevel);
+        game.LoadNextLevel();
+    }
+
+    public void RestartButtonPressed() {
+        game.RestartCurrentLevel();
+    }
+
+    public void ResumeButtonPressed() {
+        game.ResumeCurrentLevel();
+    }
+
+    public void MenuButtonPressed() {
+        game.ReturnToMenu();
+    }
+
+    public void PauseButtonPressed() {
+        game.Pause();
+    }
+
+    public void MapButtonPressed() {
+        game.ShowMap();
     }
 }
