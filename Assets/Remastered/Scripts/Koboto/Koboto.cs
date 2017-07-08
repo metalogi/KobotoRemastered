@@ -47,7 +47,7 @@ public enum KobotoDeath {
 }
 
 
-public class Koboto : KobotoMono {
+public class Koboto : KobotoMonoRigidbody {
 
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
@@ -73,7 +73,6 @@ public class Koboto : KobotoMono {
     KobotoParameters parameters;
 
     Collider activeCollider;
-    Rigidbody rb;
     PhysicMaterial physMat;
     Vector3 colliderBaseCenter;
     Vector3 colliderBaseSize;
@@ -103,13 +102,14 @@ public class Koboto : KobotoMono {
     Transform defaultParent;
 
     bool doFixedUpdate;
+
 	
 
     protected override void Init(EGameState gameState) {
         parameters = GetComponent<KobotoParameters>();
 
         tiltController = new PIDController(tiltControllerP, tiltControllerI, tiltControllerD);
-        rb = GetComponent<Rigidbody>();
+      
         sensors = new KobotoSensor();
         moveForce = new KobotoMoveForce();
         colliderBaseCenter = boxCollider.center;
@@ -143,8 +143,11 @@ public class Koboto : KobotoMono {
 
 
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
+        base.DidEnterGameState(gameState, fromState);
         Debug.Log("Koboto detected game state change : " + gameState);
         doFixedUpdate = (gameState == EGameState.Play);
+
+       
     }
 
     public void ToggleAttachment(EAttachmentType type) {
