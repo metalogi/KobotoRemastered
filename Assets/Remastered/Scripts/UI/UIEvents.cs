@@ -30,9 +30,17 @@ public static class UIEvents  {
         }
     }
 
+    public static void RemoveListener(EPointerEvent eventType, PointerEventHandler listener) {
+        KPointerEvent e;
+        if (events.TryGetValue(eventType, out e)) {
+            e.RemoveListener(listener);
+        }
+    }
+
     public static void Trigger(EPointerEvent eventType, PointerEventData pointerData) {
         KPointerEvent e;
         if (events.TryGetValue(eventType, out e)) {
+            Debug.Log("Pointer event " + eventType);
             e.Trigger(pointerData);
         }
     }

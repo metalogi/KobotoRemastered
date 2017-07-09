@@ -24,8 +24,8 @@ public class AppController : MonoBehaviour {
 
     Scene currentLevelScene;
     string currentLevelScenePath;
-//    int currentLevelWorldNumber;
-//    int currentLevelNumber;
+
+    bool inTransition;
 
     Scene currentMapScene;
 
@@ -73,10 +73,16 @@ public class AppController : MonoBehaviour {
     }
 
     IEnumerator TransitionToScene(string scenePath, EGameState endState) {
+        if (inTransition) {
+            yield break;
+        }
 
+        inTransition = true;
+        
         yield return StartCoroutine(ShowLoadingScreen());
 
         if (!string.IsNullOrEmpty(currentLevelScenePath)) {
+            Debug.Log("unloading scene from path " + FullPath(currentLevelScenePath));
             AsyncOperation unloader = SceneManager.UnloadSceneAsync(FullPath(currentLevelScenePath));
             while (!unloader.isDone) {
                 yield return null;
@@ -105,6 +111,8 @@ public class AppController : MonoBehaviour {
         yield return StartCoroutine(HideLoadingScreen());
 
         GameManager.Instance.RequestState(endState);
+
+        inTransition = false;
 
 
     }

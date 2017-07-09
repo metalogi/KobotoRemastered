@@ -98,4 +98,8 @@ public class UIGame : KobotoMono {
     public void MapButtonPressed() {
         game.ShowMap();
     }
+
+    public void MapBackButtonPressed() {
+        game.HideMap();
+    }
 }

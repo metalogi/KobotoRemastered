@@ -16,6 +16,10 @@ public class GameStatePlay : GameStateBase {
         if (game.requestedState == EGameState.Paused) {
             return EGameState.Paused;
         }
+
+        if (game.requestedState == EGameState.Map) {
+            return EGameState.Map;
+        }
         return EGameState.Play;
     }
 }

@@ -1,22 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Flags]
 public enum EGameState {
-    None,
-    Unloaded,
-    Transition,
-    Intro,
-    Play,
-    Paused,
-    Map,
-    Lost,
-    Won,
-    LoadNextLevel,
-    ReturnToMenu
+    None = 1,
+    Unloaded = 2,
+    Transition = 4,
+    Intro = 8,
+    Play = 16,
+    Paused = 32,
+    Map = 64,
+    Lost = 128,
+    Won = 256,
+    LoadNextLevel = 512,
+    ReturnToMenu = 1024
 }
-
-
 
 
 
@@ -26,14 +26,11 @@ public class GameManager : MonoBehaviour {
     public Level currentLevel;
     public UIGame gameUI;
 
-    public GameCam gameCam;
-    public KCam mapCam;
 
     public EGameState currentState{ get; private set; }
     GameStateBase currentStateFunctions;
     GameStateTransitionBase currentStateTransition;
 
-    public CameraController cameraController;
 
     Dictionary<EGameState, GameStateBase> stateFunctions;
     Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> stateTransitions;
@@ -53,13 +50,22 @@ public class GameManager : MonoBehaviour {
             return;
         }
        
-        cameraController.RegisterCamera("Game", gameCam);
 
         SetupStates ();
 
         gameUI.Init(this);
         instance = this;
+       
+
+
+    }
+
+    void Start() {
         SetState (EGameState.Unloaded, true);
+        if (AppController.Instance == null) {
+            // funning level scene directly in editor
+            RequestState(EGameState.Play);
+        } 
     }
         
 
@@ -101,6 +107,7 @@ public class GameManager : MonoBehaviour {
 
         stateFunctions.Add(EGameState.Unloaded, new GameStateUnloaded());
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
+        stateFunctions.Add(EGameState.Map, new GameStateMap());
         stateFunctions.Add(EGameState.Paused, new GameStatePaused());
         stateFunctions.Add(EGameState.Lost, new GameStateLost());
         stateFunctions.Add(EGameState.Won, new GameStateWon());
@@ -203,6 +210,10 @@ public class GameManager : MonoBehaviour {
 
     public void ShowMap() {
         RequestState(EGameState.Map);
+    }
+
+    public void HideMap() {
+        RequestState(EGameState.Play);
     }
 
     #endregion

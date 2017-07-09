@@ -88,7 +88,9 @@ public class CameraController : MonoBehaviour {
         mainCamera.CopyFrom(toCam.camera);
        
         activeCam = toCam;
-        fromCam.SetActive(false);
+        if (fromCam != toCam) {
+            fromCam.SetActive(false);
+        }
         inTransition = false;
     }
         

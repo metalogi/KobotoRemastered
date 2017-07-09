@@ -307,6 +307,10 @@ public class Koboto : KobotoMonoRigidbody {
         return stateTime;
     }
 
+    public float GetSpeed() {
+        return sensors.velocity.magnitude;
+    }
+
     public void FixedUpdate() {
 
         if (!doFixedUpdate) {

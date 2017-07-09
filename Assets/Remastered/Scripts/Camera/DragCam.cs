@@ -31,11 +31,18 @@ public class DragCam : KCam {
 //        }
     }
 
+    public void SetFocus(Vector3 focus, float depth) {
+       
+        transform.position = focus - transform.forward * depth;
+    }
+
 
     protected override void OnDragStart(PointerEventData eventData) {
         if (!isActive) {
             return;
         }
+
+        Debug.Log("Drag cam start");
 
         cancelled = false;
         dragStartPos =  eventData.position;

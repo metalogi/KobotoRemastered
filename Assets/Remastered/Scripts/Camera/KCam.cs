@@ -16,13 +16,14 @@ public class KCam : KobotoMono {
 
     protected bool isActive;
 
-    public void Awake() {
+    public void OnEnable() {
        
         ListenToPointerEvents();
     }
 
     public virtual void SetActive(bool active) {
        
+        Debug.Log(gameObject.name + " set active: " + active);
         enabled = active;
        // camera.enabled = active;    
         isActive = active;
