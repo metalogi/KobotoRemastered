@@ -58,7 +58,7 @@ public class KobotoSensor {
 
 
     const float onGroundTestDist = 0.3f;
-    const float onGroundTestAngle = 45f;
+    const float onGroundTestAngle = 115f;
     const float onCeilingTestDist = 0.3f;
     const float onCeilingTestAngle = 45f;
     const int positionTrailSize = 10;

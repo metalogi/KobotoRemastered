@@ -18,6 +18,8 @@ public class Level : KobotoMono {
     public GameCam gameCam;
     public DragCam mapCam;
 
+    public MusicTrack musicTrack = MusicTrack.World1;
+
     [HideInInspector]
     public List<Koboto> kobotos;
     [HideInInspector]
@@ -54,15 +56,29 @@ public class Level : KobotoMono {
 
     protected override void DidEnterGameState (EGameState gameState, EGameState fromState) {
         base.DidEnterGameState (gameState, fromState);
-        if (gameState == EGameState.Play) {
-            cameraController.LerpToCamera("Game", 0.5f);
+
+        switch (gameState) {
+
+        case EGameState.Play:
+            cameraController.LerpToCamera ("Game", 0.5f);
             if (fromState != EGameState.Paused && fromState != EGameState.Map) {
-                ResetKobotos();
+                ResetKobotos ();
             }
-        } else if (gameState == EGameState.Map) {
-            mapCam.SetFocus(gameCam.target.position, 30f);
-            cameraController.LerpToCamera("Map", 0.5f);
+            MusicPlayer.Instance.PlayTrack (musicTrack, true);
+            break;
+
+        case EGameState.Map:
+            mapCam.SetFocus (gameCam.target.position, 30f);
+            cameraController.LerpToCamera ("Map", 0.5f);
+            MusicPlayer.Instance.PlayTrack (MusicTrack.Pause, false);
+            break;
+
+        case EGameState.Won:
+            MusicPlayer.Instance.PlayTrack (MusicTrack.WinLevel, true);
+            break;
         }
+
+        
     }
 
     public void SpawnKobotos() {
