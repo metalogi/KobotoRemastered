@@ -60,10 +60,16 @@ public class CameraController : MonoBehaviour {
         if (inTransition) {
             return;
         }
+        if (activeCam == null) {
+            SwitchToCamera (tag);
+            return;
+        }
+
         KCam toCam;
         if (!cameras.TryGetValue(tag, out toCam)) {
             return;
         }
+
         mainCamera.enabled = true;
         StartCoroutine(CameraLerp(activeCam, toCam, time));
     }

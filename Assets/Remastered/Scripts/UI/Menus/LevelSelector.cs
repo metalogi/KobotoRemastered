@@ -17,7 +17,11 @@ public class LevelSelector : MonoBehaviour {
 
     bool showingCard;
 
-    public void Setup(WorldMap worldMap, int levelNumber) {
+    public void Setup(WorldMap worldMap, int levelNumber, bool unlocked, bool selected) {
+        if (!unlocked) {
+            gameObject.SetActive (false);
+            return;
+        }
         this.worldMap = worldMap;
         this.levelNumber = levelNumber;
         playButton.onClick.AddListener(PlayLevel);

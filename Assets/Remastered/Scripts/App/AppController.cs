@@ -35,6 +35,10 @@ public class AppController : MonoBehaviour {
     }
 
     public void LoadWorldMap(int world) {
+        if (ProgressManager.CurrentWorldNumber != world) {
+            // set current world, and level to last unlocked in that world
+            ProgressManager.instance.SetCurrentLevelToLastUnlockedInWorld(world);
+        }
         string scenePath = sceneRoot + "World" + world.ToString("0") + "_Map";
         StartCoroutine(TransitionToScene(scenePath, EGameState.Unloaded));
       

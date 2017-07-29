@@ -57,7 +57,7 @@ public class ProgressManager : MonoBehaviour {
         if (!instance.InitFromSaveFile()) {
             instance.InitAsNewPlayer();
         }
-        instance.SetCurrentWorldToLastUnlocked();
+        instance.SetCurrentLevelToLastUnlocked();
        
 
     }
@@ -70,6 +70,22 @@ public class ProgressManager : MonoBehaviour {
     public static int CurrentLevelNumber {
         get { return instance == null? 1 : instance.currentLevelIndex + 1;}
       
+    }
+
+    public bool IsLevelUnlocked(int worldNumber, int levelNumber) {
+        int levelIndex = levelNumber - 1;
+
+        if (worldNumber == 1 && levelIndex < world1Progress.Count) { 
+            return world1Progress [levelIndex].unlocked;
+
+        } else if (worldNumber == 2 && levelIndex < world2Progress.Count) { 
+            return world2Progress [levelIndex].unlocked;
+
+        } else if (worldNumber == 3 && levelIndex < world3Progress.Count) { 
+            return world3Progress [levelIndex].unlocked;
+        }
+
+        return false;
     }
 
     public void MarkCurrentLevelComplete() {
@@ -115,7 +131,21 @@ public class ProgressManager : MonoBehaviour {
         currentLevelIndex = levelNumber - 1;
     }
 
-    void SetCurrentWorldToLastUnlocked() {
+    public void SetCurrentLevelToLastUnlockedInWorld(int worldNumber) {
+        currentWorldIndex = worldNumber - 1;
+        currentLevelIndex = 0;
+
+        for (int i=0; i<levelCounts[currentWorldIndex]; i++) {
+            LevelProgress nextLevelProgress = gameProgress[currentWorldIndex][i];
+            if (!nextLevelProgress.passed) {
+                currentLevelIndex = i;
+                break;
+            }
+        }
+
+    }
+
+    void SetCurrentLevelToLastUnlocked() {
         currentWorldIndex = 0;
         currentLevelIndex = 0;
 
@@ -158,6 +188,9 @@ public class ProgressManager : MonoBehaviour {
         currentWorldIndex = 0;
         currentLevelIndex = 0;
 
+        worldsUnlocked [0] = true;
+        world1Progress [0].unlocked = true;
+
         SaveToFile();
        
 
@@ -165,6 +198,7 @@ public class ProgressManager : MonoBehaviour {
 
     bool InitFromSaveFile() {
         if (File.Exists(savePath)) {
+            Debug.Log ("Loading save from : " + savePath);
             string jsonStr = File.ReadAllText(savePath);
             JsonUtility.FromJsonOverwrite(jsonStr, this);
             gameProgress = new List<List<LevelProgress>>();
