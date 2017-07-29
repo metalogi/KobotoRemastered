@@ -12,17 +12,6 @@ public class CameraController : MonoBehaviour {
     bool inTransition;
 
 
-
-    Camera transitionCam;
-
-    void Start() {
-        GameObject transitionCamObj = new GameObject("TransitionCam");
-        transitionCam = transitionCamObj.AddComponent<Camera>();
-
-        transitionCam.enabled = false;
-
-    }
-
     public void RegisterCamera(string tag, KCam cam) {
       
         cameras.Add(tag, cam);

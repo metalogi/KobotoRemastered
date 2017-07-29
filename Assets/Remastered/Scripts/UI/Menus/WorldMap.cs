@@ -20,8 +20,7 @@ public class WorldMap : KobotoMono {
 
         int currentWorldNumber = ProgressManager.CurrentWorldNumber;
 
-        LevelSelector selected = null;
-
+      
         for (int i=0; i<levelSelectors.Length; i++) {
             int levelNumber = i + 1;
             bool isUnlocked = ProgressManager.instance.IsLevelUnlocked (currentWorldNumber, levelNumber);
@@ -30,21 +29,16 @@ public class WorldMap : KobotoMono {
             if (isUnlocked) {
                 swipeCam.AddTarget (levelSelectors [i].transform.position);
             }
-            if (isSelected && isUnlocked) {
-                selected = levelSelectors [i];
-            }
+            levelSelectors [i].Highlight (isSelected);
+        
                 
         }
 
         camController.RegisterCamera("Drag", dragCam);
         camController.RegisterCamera("Swipe", swipeCam);
-
-        if (selected != null) {
-            SelectLevel (selected);
-        } else {
-            camController.SwitchToCamera ("Drag");
-        }
  
+        camController.SwitchToCamera ("Drag");
+
     }
 
     public void Update() {

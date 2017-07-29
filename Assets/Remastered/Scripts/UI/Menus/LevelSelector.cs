@@ -7,6 +7,7 @@ public class LevelSelector : MonoBehaviour {
 
     public Animator cardAnimator;
     public Animator houseAnimator;
+    public GameObject arrow;
     public Text levelTitle;
     public Button playButton;
     public CanvasGroup selectorButtonGroup;
@@ -57,6 +58,10 @@ public class LevelSelector : MonoBehaviour {
             worldMap.SelectLevel(this);
         }
 
+    }
+
+    public void Highlight(bool highlighted) {
+        arrow.SetActive (highlighted);
     }
         
 

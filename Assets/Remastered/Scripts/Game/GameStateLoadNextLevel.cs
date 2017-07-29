@@ -8,6 +8,9 @@ public class GameStateLoadNextLevel : GameStateBase {
         if (game.requestedState == EGameState.Unloaded) {
             return EGameState.Unloaded;
         }
+        if (game.requestedState == EGameState.Play) {
+            return EGameState.Play;
+        }
         return EGameState.LoadNextLevel;
         
     }
