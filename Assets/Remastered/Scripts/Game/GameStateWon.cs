@@ -8,8 +8,9 @@ public class GameStateWon : GameStateBase {
         if (game.requestedState == EGameState.LoadNextLevel) {
             return EGameState.LoadNextLevel;
         }
-        if (game.TimeInState() > 10f) {
-            return EGameState.Play;
+
+        if (game.requestedState == EGameState.ReturnToMenu) {
+            return EGameState.ReturnToMenu;
         }
 
         return EGameState.Won;

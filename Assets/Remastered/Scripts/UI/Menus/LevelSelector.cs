@@ -7,6 +7,7 @@ public class LevelSelector : MonoBehaviour {
 
     public Animator cardAnimator;
     public Animator houseAnimator;
+    public GameObject arrow;
     public Text levelTitle;
     public Button playButton;
     public CanvasGroup selectorButtonGroup;
@@ -17,7 +18,11 @@ public class LevelSelector : MonoBehaviour {
 
     bool showingCard;
 
-    public void Setup(WorldMap worldMap, int levelNumber) {
+    public void Setup(WorldMap worldMap, int levelNumber, bool unlocked, bool selected) {
+        if (!unlocked) {
+            gameObject.SetActive (false);
+            return;
+        }
         this.worldMap = worldMap;
         this.levelNumber = levelNumber;
         playButton.onClick.AddListener(PlayLevel);
@@ -53,6 +58,10 @@ public class LevelSelector : MonoBehaviour {
             worldMap.SelectLevel(this);
         }
 
+    }
+
+    public void Highlight(bool highlighted) {
+        arrow.SetActive (highlighted);
     }
         
 

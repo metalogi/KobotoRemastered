@@ -12,17 +12,6 @@ public class CameraController : MonoBehaviour {
     bool inTransition;
 
 
-
-    Camera transitionCam;
-
-    void Start() {
-        GameObject transitionCamObj = new GameObject("TransitionCam");
-        transitionCam = transitionCamObj.AddComponent<Camera>();
-
-        transitionCam.enabled = false;
-
-    }
-
     public void RegisterCamera(string tag, KCam cam) {
       
         cameras.Add(tag, cam);
@@ -60,10 +49,16 @@ public class CameraController : MonoBehaviour {
         if (inTransition) {
             return;
         }
+        if (activeCam == null) {
+            SwitchToCamera (tag);
+            return;
+        }
+
         KCam toCam;
         if (!cameras.TryGetValue(tag, out toCam)) {
             return;
         }
+
         mainCamera.enabled = true;
         StartCoroutine(CameraLerp(activeCam, toCam, time));
     }

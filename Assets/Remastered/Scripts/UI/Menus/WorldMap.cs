@@ -18,16 +18,27 @@ public class WorldMap : KobotoMono {
         camController = GetComponent<CameraController>();
         levelSelectors = GetComponentsInChildren<LevelSelector>();
 
+        int currentWorldNumber = ProgressManager.CurrentWorldNumber;
+
+      
         for (int i=0; i<levelSelectors.Length; i++) {
-            levelSelectors[i].Setup(this, i+1);
-            swipeCam.AddTarget(levelSelectors[i].transform.position);
+            int levelNumber = i + 1;
+            bool isUnlocked = ProgressManager.instance.IsLevelUnlocked (currentWorldNumber, levelNumber);
+            bool isSelected = levelNumber == ProgressManager.CurrentLevelNumber;
+            levelSelectors[i].Setup(this, levelNumber, isUnlocked, isSelected);
+            if (isUnlocked) {
+                swipeCam.AddTarget (levelSelectors [i].transform.position);
+            }
+            levelSelectors [i].Highlight (isSelected);
+        
+                
         }
 
         camController.RegisterCamera("Drag", dragCam);
         camController.RegisterCamera("Swipe", swipeCam);
+ 
+        camController.SwitchToCamera ("Drag");
 
-        camController.SwitchToCamera("Drag");
-        
     }
 
     public void Update() {
@@ -50,6 +61,7 @@ public class WorldMap : KobotoMono {
     }
 
     public void PlayLevel(int levelNumber) {
+        ProgressManager.instance.SetCurrentLevel (ProgressManager.CurrentWorldNumber, levelNumber);
         AppController.Instance.LoadLevel(ProgressManager.CurrentWorldNumber, levelNumber);
     }
 
