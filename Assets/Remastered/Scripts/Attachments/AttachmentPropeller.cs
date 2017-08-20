@@ -10,14 +10,24 @@ public class AttachmentPropeller : AttachmentBase {
     public float motorP = 5f;
     public float motorD = 0.5f;
 
+    public float visualBladeSpeedMax = 50f;
+    public float visualBladeSpeedMin = 20f;
+    public float visualBladeSpeedSlowdown = 8f;
+
+    public Transform bladeTransform;
+    public GameObject dustVFX;
+
     bool resetMotor;
     PDController motorControl;
+    float bladeSpeed;
 
     public override void OnAttachToKoboto (Koboto koboto)
     {
         base.OnAttachToKoboto (koboto);
         motorControl = new PDController(motorP, motorD);
+        bladeTransform.rotation = Quaternion.identity;
         resetMotor = true; 
+        dustVFX.SetActive(false);
     }
 
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
@@ -26,8 +36,10 @@ public class AttachmentPropeller : AttachmentBase {
         bool overGround = sensors.aboveGround && height < maxHeight;
 
         if (overGround) {
-            
 
+            dustVFX.transform.position = sensors.aboveGroundPoint;
+            dustVFX.SetActive(true);
+           
             float heightError =  targetHeight - height;
            
 
@@ -37,6 +49,9 @@ public class AttachmentPropeller : AttachmentBase {
             }
 
             float motorForce = motorControl.Update(heightError, Time.fixedDeltaTime);
+
+            float propSpeed = Mathf.Clamp01(motorForce/100f);
+            bladeSpeed = Mathf.Lerp(visualBladeSpeedMin, visualBladeSpeedMax, propSpeed);
 
             //motorControl.AdjustPD(motorP, motorD);
 //            
@@ -49,6 +64,11 @@ public class AttachmentPropeller : AttachmentBase {
 
             moveForce.tiltAngle = 45f * input.move;
             moveForce.tiltStrength = 0.4f;
+        } else {
+            bladeSpeed *= 1f - visualBladeSpeedSlowdown * Time.fixedDeltaTime;
+            dustVFX.SetActive(false);
         }
+
+        bladeTransform.Rotate(Vector3.up * bladeSpeed, Space.Self);
     }
 }

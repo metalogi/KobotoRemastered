@@ -8977,6 +8977,10 @@ MonoBehaviour:
   - kobotoType: 0
     spawnPoint: {fileID: 121}
   levelBoundsObject: {fileID: 2062898914}
+  cameraController: {fileID: 1723552371}
+  gameCam: {fileID: 1723552370}
+  mapCam: {fileID: 1723552369}
+  musicTrack: 3
   kobotos: []
   levelObjects: []
 --- !u!4 &1382534303
@@ -9181,6 +9185,7 @@ MonoBehaviour:
   attachmentButtonParent: {fileID: 390864159}
   navButtonParent: {fileID: 1371600683}
   navButtonGroupWin: {fileID: 1225836217}
+  buttonGroupPauseMenu: {fileID: 0}
 --- !u!224 &1653534962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9285,6 +9290,66 @@ MonoBehaviour:
   deathType: 0
   killer: {fileID: 0}
   parentToKiller: 1
+--- !u!1001 &1723552368
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222783700146192, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d9518f4b82e7143c29891ed339c68551, type: 2}
+  m_IsPrefabParent: 0
+--- !u!114 &1723552369 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114806138942889022, guid: d9518f4b82e7143c29891ed339c68551,
+    type: 2}
+  m_PrefabInternal: {fileID: 1723552368}
+  m_Script: {fileID: 11500000, guid: 7c0558428c8144a1b90ec199d40c857a, type: 3}
+--- !u!114 &1723552370 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114307802626906180, guid: d9518f4b82e7143c29891ed339c68551,
+    type: 2}
+  m_PrefabInternal: {fileID: 1723552368}
+  m_Script: {fileID: 11500000, guid: cc8e08775e5f94833aed947176e04b90, type: 3}
+--- !u!114 &1723552371 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114232809282371220, guid: d9518f4b82e7143c29891ed339c68551,
+    type: 2}
+  m_PrefabInternal: {fileID: 1723552368}
+  m_Script: {fileID: 11500000, guid: c2dc3feba55e94490b703753c1aba455, type: 3}
 --- !u!1 &1867440336
 GameObject:
   m_ObjectHideFlags: 0
@@ -9321,7 +9386,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 31.299988, y: 22.130005}
+  m_AnchoredPosition: {x: 31.300049, y: 22.130005}
   m_SizeDelta: {x: 542.5, y: 202.4}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1867440338
