@@ -11,6 +11,9 @@ public class GameStateLoadNextLevel : GameStateBase {
         if (game.requestedState == EGameState.Play) {
             return EGameState.Play;
         }
+        if (game.requestedState == EGameState.Intro) {
+            return EGameState.Intro;
+        }
         return EGameState.LoadNextLevel;
         
     }

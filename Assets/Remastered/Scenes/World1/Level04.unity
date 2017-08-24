@@ -7437,6 +7437,7 @@ MonoBehaviour:
   kobotoSpawnInfo:
   - kobotoType: 0
     spawnPoint: {fileID: 203}
+  availableAttachments: 0000000004000000
   levelBoundsObject: {fileID: 562937821}
   cameraController: {fileID: 1792790297}
   gameCam: {fileID: 1792790296}

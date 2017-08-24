@@ -10,64 +10,40 @@ Material:
   m_Shader: {fileID: 4800000, guid: 3c17987f9483248f0a07ae6b2557940d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-    - first:
-        name: _AlphaTex
-      second:
+    - _AlphaTex:
         m_Texture: {fileID: 2800000, guid: 2a49aa5b76842305fc65897abcdcf30f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - first:
-        name: _BumpTex
-      second:
+    - _BumpTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - first:
-        name: _DecalTex
-      second:
+    - _DecalTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - first:
-        name: _MainTex
-      second:
+    - _MainTex:
         m_Texture: {fileID: 2800000, guid: f3253199880e1491aa0ca33c538f7220, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - first:
-        name: _Highlight
-      second: 30
-    - first:
-        name: _Shininess
-      second: 20
-    - first:
-        name: _alphTest
-      second: 0.5
+    - _Highlight: 30
+    - _Shininess: 20
+    - _alphTest: 0.5
     m_Colors:
-    - first:
-        name: BumpMapScale
-      second: {r: 1, g: 1, b: 1, a: 1}
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1.002092}
-    - first:
-        name: _SpecColor
-      second: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - first:
-        name: _Tint
-      second: {r: 1, g: 1, b: 1, a: 1}
-    - first:
-        name: _TintColor
-      second: {r: 0.50403225, g: 0.43951613, b: 0.16532259, a: 0.12}
-    - first:
-        name: _color
-      second: {r: 0.5, g: 0, b: 0, a: 1}
+    - BumpMapScale: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 0.50403225, g: 0.43951613, b: 0.16532259, a: 0.12}
+    - _color: {r: 0.5, g: 0, b: 0, a: 1}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6

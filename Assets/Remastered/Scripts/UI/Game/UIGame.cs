@@ -13,14 +13,17 @@ public class UIGame : KobotoMono {
 
     GameManager game;
     Dictionary<EAttachmentType, UIAttachmentButton> attachmentButtons;
+    CanvasGroup attachmentButtonGroup;
     RectTransform currentNavButtons = null;
     Animator navButtonAnimator;
     RectTransform root;
 
     public void Init(GameManager gameManger) {
         root = (RectTransform)transform;
+        attachmentButtonGroup = attachmentButtonParent.GetComponent<CanvasGroup> ();
         game = gameManger;
         attachmentButtons = new Dictionary<EAttachmentType, UIAttachmentButton>();
+
         foreach (var attachmentButton in attachmentButtonParent.GetComponentsInChildren<UIAttachmentButton>()) {
             attachmentButton.Init(this);
             attachmentButtons.Add(attachmentButton.attachmentType, attachmentButton);
@@ -31,8 +34,11 @@ public class UIGame : KobotoMono {
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
         base.DidEnterGameState(gameState, fromState);
         switch(gameState) {
+        case EGameState.Play:
+            ShowAttachmentButtons(game.currentLevel.availableAttachments);
+            break;
         case EGameState.Won:
-            ShowNavButtons(navButtonGroupWin);
+            ShowNavButtons (navButtonGroupWin);
             break;
         case EGameState.Paused:
             ShowNavButtons(buttonGroupPauseMenu);
@@ -43,6 +49,9 @@ public class UIGame : KobotoMono {
     protected override void WillExitGameState(EGameState gameState, EGameState toState) {
         base.WillExitGameState(gameState, toState);
         switch(gameState) {
+        case EGameState.Play:
+            HideAttachmentButtons();
+            break;
         case EGameState.Won:
         case EGameState.Paused:
             HideNavButtons();
@@ -66,7 +75,20 @@ public class UIGame : KobotoMono {
         navButtonAnimator.SetTrigger("Hide");
     }
 
+    void ShowAttachmentButtons(List<EAttachmentType> availableAttachments) {
+        foreach (var kvp in attachmentButtons) {
+            kvp.Value.Show (availableAttachments.Contains (kvp.Key));
+        }
+        attachmentButtonGroup.alpha = 1f;
+        attachmentButtonGroup.interactable = true;
+        attachmentButtonGroup.blocksRaycasts = true;
+    }
 
+    void HideAttachmentButtons() {
+        attachmentButtonGroup.alpha = 0f;
+        attachmentButtonGroup.interactable = false;
+        attachmentButtonGroup.blocksRaycasts = false;
+    }
 
 
     public void AttachmentButtonPressed(UIAttachmentButton button, EAttachmentType type) {

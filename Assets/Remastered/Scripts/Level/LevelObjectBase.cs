@@ -7,6 +7,7 @@ public class LevelObjectBase : KobotoMono {
     public Collider trigger;
     public Collider mainCollider;
 
+    public EGameState stateMask = EGameState.Play;
     public bool activeInEndgame;
 
     protected bool isActive;
@@ -36,17 +37,17 @@ public class LevelObjectBase : KobotoMono {
     }
 
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
-        if (gameState == EGameState.Play) {
+        if ((gameState & stateMask) == gameState) {
             SetActive(true);
         }
     }
 
     protected override void WillExitGameState(EGameState gameState, EGameState toState) {
         
-        if (gameState == EGameState.Play) {
-            if (!activeInEndgame || (toState != EGameState.Lost && toState != EGameState.Won)) {    
-                SetActive (false);
-            }
+        if ((gameState & stateMask) == gameState && (gameState & stateMask) != toState) {
+  
+            SetActive (false);
+
         }
     }
 

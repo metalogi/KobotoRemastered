@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour {
         SetState (EGameState.Unloaded, true);
         if (AppController.Instance == null) {
             // funning level scene directly in editor
-            RequestState(EGameState.Play);
+            RequestState(EGameState.Intro);
         } 
     }
         
@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour {
         stateTransitions = new Dictionary<EGameState, Dictionary<EGameState, GameStateTransitionBase>> ();
 
         stateFunctions.Add(EGameState.Unloaded, new GameStateUnloaded());
+        stateFunctions.Add (EGameState.Intro, new GameStateIntro());
         stateFunctions.Add(EGameState.Play, new GameStatePlay());
         stateFunctions.Add(EGameState.Map, new GameStateMap());
         stateFunctions.Add(EGameState.Paused, new GameStatePaused());

@@ -20,7 +20,7 @@ public class AttachmentMagnet : AttachmentBase {
 
         const float magnetStrengthMax = 400f;
         const float magnetStrengthMin = 10f;
-        const float magnetDist = 8f;
+        const float magnetDist = 12f;
 
         if (belowMagnetic) {
 
@@ -31,7 +31,7 @@ public class AttachmentMagnet : AttachmentBase {
             float t = Mathf.Clamp01((magnetDist - sensors.localCeilingDist)/magnetDist);
             Vector3 magnetForce = sensors.upVector * Mathf.Lerp(magnetStrengthMin, magnetStrengthMax, t);
             moveForce.airMove += magnetForce;
-           // Debug.Log("Magnet force: " + magnetForce);
+            Debug.Log("Magnet force: " + magnetForce);
         } else {
             lineRenderer.positionCount = 0;
             lineRenderer.enabled = false;

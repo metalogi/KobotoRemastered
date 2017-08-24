@@ -13,6 +13,7 @@ public class LevelObjectLineAttach : LevelObjectBase {
     public AbstractLine line;
     public MovePhase startState;
     public bool startFrozen;
+ 
 
     float startT;
     Rigidbody rb;
@@ -37,7 +38,9 @@ public class LevelObjectLineAttach : LevelObjectBase {
   
         startT = t;
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+        if (rb != null) {
+            rb.isKinematic = true;
+        }
         phase = startState;
         frozen = startFrozen;
 
@@ -54,14 +57,13 @@ public class LevelObjectLineAttach : LevelObjectBase {
 
     protected override void WillExitGameState(EGameState gameState, EGameState toState) {
         base.WillExitGameState (gameState, toState);
-        if (gameState == EGameState.Play) {
-            
-        }
+
     }
 
     protected override void DidEnterGameState (EGameState gameState, EGameState fromState) {
+        bool wasActive = isActive;
         base.DidEnterGameState (gameState, fromState);
-        if (gameState == EGameState.Play) {
+        if (isActive) {
             t = startT;
             phaseTime = 0f;
             if (fromState != EGameState.Paused && fromState != EGameState.Map) {
@@ -138,6 +140,11 @@ public class LevelObjectLineAttach : LevelObjectBase {
 
         Vector3 newPos = line.ReadPoint(outT);
 
-        rb.MovePosition(newPos);
+        if (rb != null) {
+            rb.MovePosition (newPos);
+        } else {
+            transform.position = newPos;
+        }
+
     }
 }

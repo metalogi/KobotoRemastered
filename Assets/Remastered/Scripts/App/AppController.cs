@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class AppController : MonoBehaviour {
@@ -19,6 +20,8 @@ public class AppController : MonoBehaviour {
         ProgressManager.Init();
         
 	}
+
+    public Animator splashScreenAnimator;
 	
     const string sceneRoot = "Remastered/Scenes/";
 
@@ -33,7 +36,7 @@ public class AppController : MonoBehaviour {
         GameEvents.AddGameStateEnteredListener(GameStateEnteredListener);
         LoadWorldMap(1);
     }
-
+        
     public void LoadWorldMap(int world) {
         if (ProgressManager.CurrentWorldNumber != world) {
             // set current world, and level to last unlocked in that world
@@ -46,7 +49,7 @@ public class AppController : MonoBehaviour {
 
     public void LoadLevel(int world, int level) {
         string scenePath = sceneRoot + "World" + world.ToString("0") + "/Level" + level.ToString("00");
-        StartCoroutine(TransitionToScene(scenePath, EGameState.Play));
+        StartCoroutine(TransitionToScene(scenePath, EGameState.Intro));
     }
 
     void GameStateEnteredListener(EGameState state, EGameState fromState) {

@@ -12,11 +12,13 @@ public class KobotoSpawnInfo{
 public class Level : KobotoMono {
 
     public KobotoSpawnInfo[] kobotoSpawnInfo;
+    public List<EAttachmentType> availableAttachments;
     public MeshRenderer levelBoundsObject;
 
     public CameraController cameraController;
     public GameCam gameCam;
     public DragCam mapCam;
+    public IntroCam introCam;
 
     public MusicTrack musicTrack = MusicTrack.World1;
 
@@ -41,6 +43,7 @@ public class Level : KobotoMono {
         GameManager.Instance.currentLevel = this;
         cameraController.RegisterCamera("Game", gameCam);
         cameraController.RegisterCamera("Map", mapCam);
+        cameraController.RegisterCamera ("Intro", introCam);
         cameraController.SwitchToCamera("Game");
     }
     protected override void Init(EGameState gameState) {
@@ -59,8 +62,13 @@ public class Level : KobotoMono {
 
         switch (gameState) {
 
+        case EGameState.Intro:
+            cameraController.SwitchToCamera ("Intro");
+            break;
+
         case EGameState.Play:
-            cameraController.LerpToCamera ("Game", 0.5f);
+            float camLerpTime = fromState == EGameState.Intro ? 2f : 0.5f;
+            cameraController.LerpToCamera ("Game", camLerpTime);
             if (fromState != EGameState.Paused && fromState != EGameState.Map) {
                 ResetKobotos ();
             }

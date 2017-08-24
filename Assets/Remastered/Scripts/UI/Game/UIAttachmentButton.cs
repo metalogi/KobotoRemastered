@@ -8,10 +8,37 @@ public class UIAttachmentButton : MonoBehaviour {
 
     public EAttachmentType attachmentType;
     Button button;
+    UIGame uiGame;
+   
 
     public void Init(UIGame uiGame) {
-        if (button == null) button = GetComponent<Button>();
-        button.onClick.AddListener(()=> uiGame.AttachmentButtonPressed(this, attachmentType));
+        this.uiGame = uiGame;
+    }
+
+    public void OnEnable() {
+        if (button == null) {
+            button = GetComponent<Button> ();
+        }
+
+        button.onClick.AddListener(OnClick);
+    }
+
+    public void OnDisable() {
+        button.onClick.RemoveListener (OnClick);
+    }
+
+
+    public void Show(bool show) {
+        gameObject.SetActive (show);
+    }
+
+
+    void OnClick() {
+        if (uiGame == null) {
+            return;
+        }
+        uiGame.AttachmentButtonPressed (this, attachmentType);
+
     }
 
   

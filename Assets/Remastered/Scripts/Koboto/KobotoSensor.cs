@@ -329,7 +329,7 @@ internal class Probe {
 
         if (didHit )
         {
-        //    Debug.Log(name + "Probe hit: " + hit.collider.name, hit.collider.gameObject);
+            Debug.Log(name + "Probe hit: " + hit.collider.name, hit.collider.gameObject);
         }
         
 
