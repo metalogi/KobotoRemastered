@@ -8,8 +8,12 @@ public class CameraController : MonoBehaviour {
     Dictionary<string, KCam> cameras = new Dictionary<string, KCam>();
     List<KCam> camList = new List<KCam>();
     KCam activeCam;
-
+    AudioListener audioListener;
     bool inTransition;
+
+    void OnEnable() {
+        audioListener = mainCamera.GetComponent<AudioListener> ();
+    }
 
 
     public void RegisterCamera(string tag, KCam cam) {
@@ -54,6 +58,7 @@ public class CameraController : MonoBehaviour {
         }
 
         mainCamera.enabled = true;
+        GameManager.SetAudioListener (audioListener);
 
 
         StartCoroutine(CameraLerp(activeCam, toCam, time));
@@ -65,7 +70,7 @@ public class CameraController : MonoBehaviour {
 
         activeCam = toCam;
         mainCamera.enabled = true;
-
+        GameManager.SetAudioListener (audioListener);
 
         mainCamera.transform.SetParent(activeCam.transform, false);
         mainCamera.CopyFrom(activeCam.camera);

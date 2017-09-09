@@ -15,6 +15,7 @@ public class KCam : KobotoMono {
     }
 
     protected bool isActive;
+    AudioListener audioListener;
 
     public void OnEnable() {
        

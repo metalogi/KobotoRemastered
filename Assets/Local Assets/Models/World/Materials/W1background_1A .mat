@@ -27,7 +27,7 @@ Material:
     - _alphTest: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0.43382353, g: 0.43382353, b: 0.43382353, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6

@@ -6,6 +6,15 @@ public class AttachmentWheels : AttachmentBase {
 
     Quaternion airBaseRotation;
 
+    public override void UpdateKoboto(Koboto koboto, KobotoSensor sensors) {
+        float rollVol = 0f;
+        if (sensors.onGround) {
+            rollVol = Mathf.Clamp01 (sensors.velocity.magnitude / 10f);
+        }
+        koboto.soundPlayer.PlayRoll (rollVol);
+       
+    }
+
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
         
 

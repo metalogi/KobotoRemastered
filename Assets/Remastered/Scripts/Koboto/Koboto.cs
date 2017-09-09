@@ -51,6 +51,8 @@ public class Koboto : KobotoMonoRigidbody {
 
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
+    [HideInInspector]
+    public KobotoSoundPlayer soundPlayer;
 
     public KobotoState currentState {get; private set;}
     float stateTime;
@@ -107,6 +109,7 @@ public class Koboto : KobotoMonoRigidbody {
 
     protected override void Init(EGameState gameState) {
         parameters = GetComponent<KobotoParameters>();
+        soundPlayer = GetComponent<KobotoSoundPlayer> ();
 
         tiltController = new PIDController(tiltControllerP, tiltControllerI, tiltControllerD);
       
@@ -310,6 +313,13 @@ public class Koboto : KobotoMonoRigidbody {
     public float GetSpeed() {
         return sensors.velocity.magnitude;
     }
+
+    public void Update() {
+        foreach (AttachmentBase attachment in currentAttachments.Values) {
+            attachment.UpdateKoboto (this, sensors);
+        }
+    }
+        
 
     public void FixedUpdate() {
 

@@ -24,6 +24,9 @@ public class AttachmentBase : MonoBehaviour {
         
     }
 
+    public virtual void UpdateKoboto(Koboto koboto, KobotoSensor sensor) {
+    }
+
     public virtual void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
     }
 

@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 114540220042482674}
   - component: {fileID: 114419479541781906}
   - component: {fileID: 136604390257887542}
+  - component: {fileID: 114314397557849234}
   m_Layer: 8
   m_Name: TreeGuy
   m_TagString: Junction
@@ -781,7 +782,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -904,7 +905,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1418,6 +1419,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetType: 2
+--- !u!114 &114314397557849234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1623554700618270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f283277f45b9d4e86e0673e80cf0c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rollSound: {fileID: 82647599646050398}
 --- !u!114 &114419479541781906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1515,6 +1528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 65103193873308572}
   capsuleCollider: {fileID: 136604390257887542}
+  soundPlayer: {fileID: 0}
   tiltControllerP: 6
   tiltControllerI: 0.05
   tiltControllerD: 0.8

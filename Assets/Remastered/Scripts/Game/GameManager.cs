@@ -39,9 +39,18 @@ public class GameManager : MonoBehaviour {
     public EGameState requestedState {get; private set;}
 
     static GameManager instance;
+    static AudioListener currentAudioListener;
 
     public static GameManager Instance {
         get { return instance; }
+    }
+
+    public static void SetAudioListener(AudioListener a) {
+        if (currentAudioListener != null) {
+            currentAudioListener.enabled = false;
+        }
+        currentAudioListener = a;
+        currentAudioListener.enabled = true;
     }
 
     void Awake() {
