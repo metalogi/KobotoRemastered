@@ -9,7 +9,18 @@ var debugParticleCount:int;
 
 var sfx : AudioSource[];
 
+function OnEnable() {
+	on=true;
+	StartFireworks();
+}
+
+function OnDisable() {
+	on = false;
+}
+
 function LateUpdate () {
+
+
 	if(on)
 	{count=0;
 		if (Random.value<Time.deltaTime*(rate+Mathf.Sin(100*Time.time))) GetComponent.<ParticleEmitter>().Emit(1);
@@ -59,7 +70,7 @@ function LateUpdate () {
     		  expAnimator.colorAnimation = modifiedColors;
     		 
     		 //particles[i].velocity.y=1000;
-    		 DestroyDelayed(exp);
+    		// DestroyDelayed(exp);
     	}
     	if (particles[i].velocity.y<-8)
     	{
@@ -81,7 +92,7 @@ function Awake()
 	//sfx = GetComponentsInChildren(AudioSource);
 }
 
-function TurnOn()
+function StartFireworks()
 {
 	on=true;
 	GetComponent.<ParticleEmitter>().emit=true;
@@ -91,6 +102,10 @@ function TurnOn()
 		var rend:MeshRenderer = cloud.GetComponent(MeshRenderer);
 		if (rend) rend.enabled=false;
 	}
+}
+
+function StopFireworks() {
+	on = false;
 }
 
 function DestroyDelayed(obj:GameObject)

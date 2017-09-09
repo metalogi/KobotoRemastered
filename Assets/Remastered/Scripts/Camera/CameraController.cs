@@ -30,19 +30,13 @@ public class CameraController : MonoBehaviour {
         if (inTransition) {
             return;
         }
-        if (!cameras.TryGetValue(tag, out activeCam)) {
+        KCam toCam;
+        if (!cameras.TryGetValue(tag, out toCam)) {
             return;
         }
-        mainCamera.enabled = true;
 
-
-        mainCamera.transform.SetParent(activeCam.transform, false);
-        mainCamera.CopyFrom(activeCam.camera);
-        foreach (KCam c in camList) {
-            c.SetActive(c == activeCam);
-          
-        }
-        
+        SwitchToKCam (toCam);
+       
     }
 
     public void LerpToCamera(string tag, float time) {
@@ -59,6 +53,44 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
+        mainCamera.enabled = true;
+
+
+        StartCoroutine(CameraLerp(activeCam, toCam, time));
+    }
+
+    public void SwitchToKCam(KCam toCam) {
+
+
+
+        activeCam = toCam;
+        mainCamera.enabled = true;
+
+
+        mainCamera.transform.SetParent(activeCam.transform, false);
+        mainCamera.CopyFrom(activeCam.camera);
+        foreach (KCam c in camList) {
+            c.SetActive(c == activeCam);
+
+        }
+
+        if (!camList.Contains(toCam)) {
+            camList.Add(toCam);
+        }
+
+    }
+
+    public void LerpToKCam(KCam toCam, float time) {
+        if (inTransition) {
+            return;
+        }
+        if (activeCam == null) {
+            SwitchToKCam(toCam);
+            return;
+        }
+        if (!camList.Contains(toCam)) {
+            camList.Add(toCam);
+        }
         mainCamera.enabled = true;
         StartCoroutine(CameraLerp(activeCam, toCam, time));
     }

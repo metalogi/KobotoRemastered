@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LevelObjectHome : LevelObjectBase {
 
+    public Animator animator;
+    public Transform rescuedKobotoParent;
     bool isOccupied;
 
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
@@ -19,6 +21,8 @@ public class LevelObjectHome : LevelObjectBase {
         }
         if (koboto.currentState == KobotoState.Alive || koboto.currentState == KobotoState.Asleep) {
             koboto.Rescue(this);
+            koboto.ParentToTransform (rescuedKobotoParent);
+            animator.SetTrigger ("Rescue");
         }
     }
 
@@ -26,5 +30,6 @@ public class LevelObjectHome : LevelObjectBase {
         isOccupied = status;
         mainCollider.enabled = isOccupied;
         trigger.enabled = !isOccupied;
+        animator.SetTrigger ("Reset");
     }
 }

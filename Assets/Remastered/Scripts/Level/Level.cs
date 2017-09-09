@@ -19,6 +19,7 @@ public class Level : KobotoMono {
     public GameCam gameCam;
     public DragCam mapCam;
     public IntroCam introCam;
+    public KCam winCam;
 
     public MusicTrack musicTrack = MusicTrack.World1;
 
@@ -44,6 +45,7 @@ public class Level : KobotoMono {
         cameraController.RegisterCamera("Game", gameCam);
         cameraController.RegisterCamera("Map", mapCam);
         cameraController.RegisterCamera ("Intro", introCam);
+        cameraController.RegisterCamera ("Win", winCam);
         cameraController.SwitchToCamera("Game");
     }
     protected override void Init(EGameState gameState) {
@@ -82,6 +84,7 @@ public class Level : KobotoMono {
             break;
 
         case EGameState.Won:
+            cameraController.LerpToCamera("Win", 0.5f);
             MusicPlayer.Instance.PlayTrack (MusicTrack.WinLevel, true);
             break;
         }
