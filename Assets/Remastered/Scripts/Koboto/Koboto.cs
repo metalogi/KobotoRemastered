@@ -150,6 +150,10 @@ public class Koboto : KobotoMonoRigidbody {
         Debug.Log("Koboto detected game state change : " + gameState);
         doFixedUpdate = (gameState == EGameState.Play);
 
+        if (fromState == EGameState.Play) {
+            soundPlayer.StopRoll ();
+        }
+
        
     }
 
@@ -315,8 +319,10 @@ public class Koboto : KobotoMonoRigidbody {
     }
 
     public void Update() {
-        foreach (AttachmentBase attachment in currentAttachments.Values) {
-            attachment.UpdateKoboto (this, sensors);
+        if (currentGameState == EGameState.Play) {
+            foreach (AttachmentBase attachment in currentAttachments.Values) {
+                attachment.UpdateKoboto (this, sensors);
+            }
         }
     }
         

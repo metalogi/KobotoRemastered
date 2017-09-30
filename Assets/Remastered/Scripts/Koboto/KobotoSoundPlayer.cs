@@ -10,7 +10,6 @@ public class KobotoSoundPlayer : MonoBehaviour {
     public void PlayRoll(float volume) {
         volume = Mathf.Clamp01 (volume);
         if (!rollSound.isPlaying) {
-            Debug.Log ("Playing roll sound");
             rollSound.Play ();
             rollSound.volume = volume;
         } else {

@@ -5,9 +5,13 @@ using UnityEngine.EventSystems;
 
 public class KobotoMono : MonoBehaviour {
 
+    protected EGameState currentGameState;
+
     void OnEnable() {
+        GameEvents.AddGameStateEnteredListener(SetGameState);
         GameEvents.AddGameStateEnteredListener(DidEnterGameState);
         GameEvents.AddGameStateExitListener(WillExitGameState);
+
     }
 
     void OnDisable() {
@@ -23,6 +27,7 @@ public class KobotoMono : MonoBehaviour {
 
     public virtual void Awake() {
         Init(GameEvents.gameState);
+        currentGameState = GameEvents.gameState;
     }
 
     protected void ListenToPointerEvents() {
@@ -31,13 +36,16 @@ public class KobotoMono : MonoBehaviour {
         UIEvents.AddListener(EPointerEvent.Drag, OnDrag);
     }
 
-
+    private void SetGameState(EGameState gameState, EGameState fromState) {
+        currentGameState = gameState;
+    }
 
     protected virtual void DidEnterGameState(EGameState gameState, EGameState fromState) {
     }
 
     protected virtual void WillExitGameState(EGameState gameState, EGameState toState) {
     }
+        
 
     protected virtual void Init(EGameState gameState) {
     }
