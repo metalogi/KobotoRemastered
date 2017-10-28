@@ -6,6 +6,7 @@ public class GameCam : KCam {
 
     public Transform target;
     public int stackSize = 20;
+    public float aimYOffset = 0.1f;
     public float baseOutDist = 10f;
 
     public float speedOutDistMultilpier = 1f;
@@ -50,7 +51,7 @@ public class GameCam : KCam {
 	void FixedUpdate () {
         
         if (target != null) {
-            posStack.Record(target.position);
+            posStack.Record(target.position + aimYOffset * Vector3.up);
 
             Vector3 aimAt = posStack.Read();
 

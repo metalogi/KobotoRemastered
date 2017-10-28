@@ -6,7 +6,7 @@
 		var Selection: Transform[] =Selection.transforms;
 		for (var sel:Transform in Selection)
 		{
-			path =("Prefabs/World/Snow_Floor.prefab");
+			var path =("Prefabs/World/Snow_Floor.prefab");
 			//instantiate it
 		var prefab:Transform =EditorUtility.FindAsset(path, Transform);
 		if (prefab)

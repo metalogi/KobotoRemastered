@@ -10,34 +10,25 @@ Material:
   m_Shader: {fileID: 4800000, guid: 74766b50673cd4285b7a2fc896911e33, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
+    - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - first:
-        name: _FogEnd
-      second: 4000
-    - first:
-        name: _FogStart
-      second: 3000
-    - first:
-        name: _alphTest
-      second: 0.5
+    - _FogEnd: 4000
+    - _FogStart: 3000
+    - _alphTest: 0.5
     m_Colors:
-    - first:
-        name: _Color
-      second: {r: 0.2743834, g: 0.43014368, b: 0.31715968, a: 1}
-    - first:
-        name: _Tint
-      second: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.28654844, g: 0.3897059, b: 0.31487846, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6

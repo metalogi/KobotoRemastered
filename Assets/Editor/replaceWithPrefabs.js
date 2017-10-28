@@ -65,7 +65,7 @@
 		var Houses : GameObject[] = GameObject.FindGameObjectsWithTag("house");
 		for (var go:GameObject in Houses)
 		{
-			sel =go.transform;
+			var sel =go.transform;
 			var path:String;
 			if (cam.world ==1) path = "Prefabs/LevelObject/house.prefab";
 			if (cam.world ==2) path = "Prefabs/LevelObject/houseW2.prefab";

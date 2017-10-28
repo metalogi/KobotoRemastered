@@ -237,7 +237,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!20 &20872334842561522
 Camera:
   m_ObjectHideFlags: 1
@@ -273,7 +272,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!20 &20936947510603042
 Camera:
   m_ObjectHideFlags: 1
@@ -309,7 +307,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!81 &81873562713477304
 AudioListener:
   m_ObjectHideFlags: 1
@@ -376,6 +373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   stackSize: 12
+  aimYOffset: 2
   baseOutDist: 10
   speedOutDistMultilpier: 0.4
   maxOutDist: 30

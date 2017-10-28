@@ -76,7 +76,7 @@ function OnTriggerEnter( other : Collider )
 			if (bt.freshlyFound) bt.Celebrate(transform,bti);
 			bti++;
 		}
-		if (fireworks) fireworks.TurnOn();
+		//if (fireworks) fireworks.TurnOn();
 		
 		
 		
