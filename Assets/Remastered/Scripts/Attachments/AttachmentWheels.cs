@@ -43,19 +43,45 @@ public class AttachmentWheels : AttachmentBase {
         } else {
 
 
-            Debug.Log ("Off ground");
-           // moveForce.airDrag = 0.3f;
-  
-            moveForce.upRotation = airBaseRotation;
+            // Debug.Log ("Off ground");
 
-            moveForce.tiltStrength = 1f;
+            const float alignToGroundStartDist = 6f;
+            const float alignToGroundEndDist = 2f;
+            const float alignToGroundSpeedMultiplier = 1f;
 
-            float inputTiltAmount = 45f * Mathf.Clamp01(sensors.inAirTime - 0.5f);
+            float speed = sensors.velocity.magnitude;
 
-            moveForce.tiltAngle = inputTiltAmount * input.move;
+            float alignStart = alignToGroundStartDist;
+            float alignEnd = alignToGroundEndDist;
+
+            Debug.Log("Speed " + speed);
+
+            if (sensors.inAirTime > 0.5f && speed > 0.1f && sensors.closeToGround && sensors.distanceToGround < alignStart && Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f) {
+
+                Quaternion groundAlign = Utils.TiltFromUpVector(sensors.closestGroundNormal);
+                Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);
+                if (sensors.distanceToGround > alignEnd) {
+                    groundAlign = Quaternion.Lerp(currentRot, groundAlign, 8f * Time.fixedDeltaTime);
+                }
+                float t = Mathf.Clamp01((alignStart - sensors.distanceToGround)/(alignStart - alignEnd));
+                moveForce.upRotation = Quaternion.Lerp(airBaseRotation, groundAlign, t);
+                moveForce.tiltStrength = Mathf.Clamp01(1f - 4f*t);
+            } else {
+
+
+                moveForce.upRotation = airBaseRotation;
+
+                moveForce.tiltStrength = 1f;
+
+                float inputTiltAmount = 45f * Mathf.Clamp01(sensors.inAirTime - 0.5f);
+
+                moveForce.tiltAngle = inputTiltAmount * input.move;
+
+            }
+
 
             if (sensors.inAirTime > 0.5f) {
-                airBaseRotation = Quaternion.Lerp (airBaseRotation, Quaternion.identity, 4f * Time.fixedDeltaTime);
+                airBaseRotation = Quaternion.Lerp(airBaseRotation, Quaternion.identity, 4f * Time.fixedDeltaTime);
             }
 
 

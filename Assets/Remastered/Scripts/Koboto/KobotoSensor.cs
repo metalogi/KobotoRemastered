@@ -25,6 +25,14 @@ public class KobotoSensor {
     public Vector3 aboveGroundPoint;
     public Collider aboveGroundCollider;
 
+    public bool closeToGround;
+    public float distanceToGround;
+    public Vector3 closestGroundPoint;
+    public Vector3 closestGroundNormal;
+    public Collider closestGroundCollider;
+
+
+
     public bool localAboveGround;
     public float localGroundDist;
     public Vector3 localAboveGroundPoint;
@@ -78,11 +86,35 @@ public class KobotoSensor {
     Probe frontWheelProbe;
     Probe backWheelProbe;
 
+    Probe[] airProbes;
+    const int airProbesPerQuadrant = 6;
+
     public KobotoSensor() {
-        downProbe = new Probe(true, Vector3.zero, Vector3.down, "down");
-        upProbe = new Probe(true, Vector3.zero, Vector3.up, "up");
-        frontProbe = new Probe(true, Vector3.zero, Vector3.forward, "front");
-        backProbe = new Probe(true, Vector3.zero, Vector3.back, "back");
+
+        int airProbeCount = airProbesPerQuadrant * 4;
+        airProbes = new Probe[airProbeCount];
+
+        float airProbeAngle = 0f;
+
+        for (int i=0; i<airProbeCount; i++) {
+            Vector3 airProbeDirection = new Vector3(0, Mathf.Cos(airProbeAngle), Mathf.Sin(airProbeAngle));
+            string label = ("AirProbe_" + (airProbeAngle * Mathf.Rad2Deg).ToString());
+            Probe airProbe = new Probe(true, Vector3.zero, airProbeDirection, label);
+            airProbes[i] = airProbe;
+
+            airProbeAngle += 2.0f * Mathf.PI / airProbeCount;
+
+        }
+        upProbe = airProbes[0];
+        frontProbe = airProbes[airProbesPerQuadrant];
+        downProbe = airProbes[airProbesPerQuadrant * 2];
+        backProbe = airProbes[airProbesPerQuadrant * 3];
+
+        
+        //downProbe = new Probe(true, Vector3.zero, Vector3.down, "down");
+        //upProbe = new Probe(true, Vector3.zero, Vector3.up, "up");
+        //frontProbe = new Probe(true, Vector3.zero, Vector3.forward, "front");
+        //backProbe = new Probe(true, Vector3.zero, Vector3.back, "back");
 
         localDownProbe = new Probe(false, 0.9f*Vector3.down, Vector3.down, "localDown");
         localUpProbe = new Probe(false, 0.9f*Vector3.up, Vector3.up, "local up");
@@ -132,10 +164,10 @@ public class KobotoSensor {
     #endif
 
     private IEnumerable AllProbes(){
-        yield return downProbe;
-        yield return upProbe;
-        yield return frontProbe;
-        yield return backProbe;
+        foreach (var airProbe in airProbes) {
+            yield return airProbe;
+        }
+
         yield return localDownProbe;
         yield return localUpProbe;
         yield return localForwardProbe;
@@ -206,8 +238,8 @@ public class KobotoSensor {
 
 
 
-        bool closeToGround = localDownProbe.didHit && localDownProbe.hit.distance < onGroundTestDist;
-        if (closeToGround) {
+        bool adjacentToGround = localDownProbe.didHit && localDownProbe.hit.distance < onGroundTestDist;
+        if (adjacentToGround) {
            // Debug.Log("Hit ground: " + localDownProbe.hit.collider.name);
 
             Vector3 normal = localDownProbe.hit.normal;
@@ -218,10 +250,12 @@ public class KobotoSensor {
                 groundForward = Vector3.Cross( Vector3.right, normal);
             }
         }
+
+
             
 
-        bool closeToCeiling = localUpProbe.didHit && localUpProbe.hit.distance < onCeilingTestDist;
-        if (!onGround && closeToCeiling) {
+        bool adjacentToCeiling = localUpProbe.didHit && localUpProbe.hit.distance < onCeilingTestDist;
+        if (!onGround && adjacentToCeiling) {
 
 
           //  Debug.Log("Hit ceiling: " + localUpProbe.hit.collider.name);
@@ -232,6 +266,32 @@ public class KobotoSensor {
                 onCeiling = true;
                 ceilingNormal = normal;
                 ceilingForward = Vector3.Cross( Vector3.right, -normal);
+            }
+        }
+        closeToGround = false;
+
+        if (!onGround && !onCeiling) { // in air
+            // Find closest ground point
+            bool foundGround = false;
+            float closestDist = float.MaxValue;
+            int closestHitIndex = 0;
+            for (int i=0; i<airProbes.Length; i++) {
+                var probe = airProbes[i];
+                if (!probe.didHit) {
+                    continue;
+                }
+                if (probe.hit.distance < closestDist) {
+                    closestHitIndex = i;
+                    foundGround = true;
+                }
+            }
+            if (foundGround) {
+                RaycastHit closestHit = airProbes[closestHitIndex].hit;
+                closeToGround = true;
+                closestGroundPoint = closestHit.point;
+                closestGroundNormal = closestHit.normal;
+                closestGroundCollider = closestHit.collider;
+                distanceToGround = closestHit.distance;
             }
         }
 
@@ -327,10 +387,10 @@ internal class Probe {
 
         didHit = Physics.Raycast(worldSpaceOrigin, worldDirection, out hit, maxDistance, layerMask);
 
-        if (didHit )
-        {
-            Debug.Log(name + "Probe hit: " + hit.collider.name, hit.collider.gameObject);
-        }
+        //if (didHit )
+        //{
+        //    Debug.Log(name + "Probe hit: " + hit.collider.name, hit.collider.gameObject);
+        //}
         
 
     }
