@@ -56,7 +56,12 @@ public class AttachmentWheels : AttachmentBase {
 
             Debug.Log("Speed " + speed);
 
-            if (sensors.inAirTime > 0.5f && speed > 0.1f && sensors.closeToGround && sensors.distanceToGround < alignStart && Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f) {
+            if (sensors.inAirTime > 0.5f 
+                && speed > 0.1f
+                && sensors.closeToGround &&
+                sensors.distanceToGround < alignStart &&
+                sensors.closestGroundNormal.y > 0.1f &&
+                Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f) {
 
                 Quaternion groundAlign = Utils.TiltFromUpVector(sensors.closestGroundNormal);
                 Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);

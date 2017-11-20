@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class KCam : KobotoMono {
     private Camera _camera;
-    public Camera camera {
+    new public Camera camera {
         get {
             if (_camera == null) {
                 _camera = GetComponent<Camera>();
@@ -15,7 +15,6 @@ public class KCam : KobotoMono {
     }
 
     protected bool isActive;
-    AudioListener audioListener;
 
     public void OnEnable() {
        
@@ -24,9 +23,7 @@ public class KCam : KobotoMono {
 
     public virtual void SetActive(bool active) {
        
-        Debug.Log(gameObject.name + " set active: " + active);
-        enabled = active;
-       // camera.enabled = active;    
+        enabled = active; 
         isActive = active;
     }
 
