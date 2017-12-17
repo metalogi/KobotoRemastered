@@ -9,7 +9,7 @@ var select : boolean=false;
 
 function Awake()
 {
-	cam =GetComponent.<Camera>().main.GetComponent(CameraManager);
+	//cam =GetComponent.<Camera>().main.GetComponent(CameraManager);
 }
 
 function OnTriggerEnter (col : Collider) {
@@ -19,7 +19,7 @@ function OnTriggerEnter (col : Collider) {
 		//if (select) {cam.SetSimTarget(Guy.gameObject); cam.SetDragOffset(offset);}
 		//else
 		//if (overrideFinger || cam.dragOffset.magnitude < 1)
-		if (clearInterest) {cam.interest ==null;}
-		cam.MoveDragOffset(offset,speed);
+		//if (clearInterest) {cam.interest ==null;}
+	//	cam.MoveDragOffset(offset,speed);
 	}
 }

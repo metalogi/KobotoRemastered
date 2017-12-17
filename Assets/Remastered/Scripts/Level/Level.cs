@@ -36,10 +36,22 @@ public class Level : KobotoMono {
 
     IEnumerator Start() {
         if (GameManager.Instance == null) {
-            Instantiate(Resources.Load<GameObject>("Game"));      
+            Instantiate(Resources.Load<GameObject>("Game"));
         }
         while (GameManager.Instance == null) {
             yield return null;
+        }
+        if (introCam == null) {
+            introCam = FindTaggedInScene<IntroCam>("K_INTRO_CAM");
+        }
+        if (gameCam == null) {
+            gameCam = FindTaggedInScene<GameCam>("K_GAMECAM");
+        }
+        if (winCam == null) {
+            winCam = FindTaggedInScene<KCam>("K_WIN_CAM");
+        }
+        if (mapCam ==null) {
+            mapCam = FindTaggedInScene<DragCam>("K_MAP_CAM");
         }
         GameManager.Instance.currentLevel = this;
         cameraController.RegisterCamera("Game", gameCam);
@@ -47,6 +59,11 @@ public class Level : KobotoMono {
         cameraController.RegisterCamera ("Intro", introCam);
         cameraController.RegisterCamera ("Win", winCam);
         cameraController.SwitchToCamera("Game");
+    }
+
+    T FindTaggedInScene<T>(string tag) {
+        GameObject obj = GameObject.FindWithTag(tag);
+        return obj.GetComponent<T>();
     }
     protected override void Init(EGameState gameState) {
 

@@ -18,6 +18,7 @@ TagManager:
   - K_GAMECAM
   - K_MAP_CAM
   - K_INTRO_CAM
+  - K_WIN_CAM
   layers:
   - Default
   - TransparentFX
