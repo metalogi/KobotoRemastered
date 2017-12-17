@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 33799327072310644}
   - component: {fileID: 23660254790870026}
   - component: {fileID: 65457921487238846}
-  - component: {fileID: 114855795708508582}
   m_Layer: 0
   m_Name: house
   m_TagString: Untagged
@@ -123,9 +122,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4799134383082108}
   - component: {fileID: 95500533773053918}
+  - component: {fileID: 114975990736864886}
   m_Layer: 0
   m_Name: house
-  m_TagString: house
+  m_TagString: K_HOUSE1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -190,7 +190,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1859662101017016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -136.55948, z: 2790.472}
+  m_LocalPosition: {x: 0, y: -27.71261, z: 2082.234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4517499364147996}
@@ -262,7 +262,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!23 &23660254790870026
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -272,6 +271,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -287,6 +287,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -304,6 +305,7 @@ MeshRenderer:
   m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -319,6 +321,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -428,12 +431,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6e72cd52b28449cb26f5335d7f7de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114855795708508582
+--- !u!114 &114975990736864886
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1637307467382268}
+  m_GameObject: {fileID: 1859662101017016}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe961d994752b4a60bb3792de8371c42, type: 3}
