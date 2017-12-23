@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AttachmentSpring : AttachmentBase {
 
+    public float conserve = 0.8f;
+    public float preferredHeight = 10f;
+
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
         if (sensors.onGround) {
            

@@ -71,4 +71,11 @@ public class AttachmentPropeller : AttachmentBase {
 
         bladeTransform.Rotate(Vector3.up * bladeSpeed, Space.Self);
     }
+
+    public override void KobotoEnteredState(Koboto koboto, KobotoState state) {
+        base.KobotoEnteredState(koboto, state);
+        if (state != KobotoState.Alive) {
+            dustVFX.SetActive(false);
+        }
+    }
 }

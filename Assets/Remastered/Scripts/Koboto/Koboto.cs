@@ -308,6 +308,9 @@ public class Koboto : KobotoMonoRigidbody {
             rb.isKinematic = true;
             break;
         }
+        foreach (var attachment in currentAttachments.Values) {
+            attachment.KobotoEnteredState(this, newState);
+        }
     }
 
     public float TimeInCurrentState() {

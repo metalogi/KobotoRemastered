@@ -6278,6 +6278,10 @@ Prefab:
       propertyPath: reverbZoneMixCustomCurve.m_RotationOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 656cf26ff8d2444e2910200348259338, type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400000, guid: 656cf26ff8d2444e2910200348259338, type: 2}
     - {fileID: 11400010, guid: 656cf26ff8d2444e2910200348259338, type: 2}
@@ -6343,6 +6347,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f2358fff5804e47e3a2d5a35a62703ce, type: 2}
       propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: f2358fff5804e47e3a2d5a35a62703ce, type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -8180,7 +8188,7 @@ Prefab:
     - target: {fileID: 224198274415244522, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1013.1909
+      value: -1015.85095
       objectReference: {fileID: 0}
     - target: {fileID: 224083157641867814, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
@@ -8190,7 +8198,7 @@ Prefab:
     - target: {fileID: 224274932005871266, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1013.1909
+      value: -1015.85095
       objectReference: {fileID: 0}
     - target: {fileID: 224630937629179718, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
@@ -8215,12 +8223,12 @@ Prefab:
     - target: {fileID: 224237379561588272, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 379.5
+      value: 385.5
       objectReference: {fileID: 0}
     - target: {fileID: 224237379561588272, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 192
+      value: 195.5
       objectReference: {fileID: 0}
     - target: {fileID: 224640823427301506, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
@@ -8230,12 +8238,12 @@ Prefab:
     - target: {fileID: 224404419860483724, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1013.1909
+      value: -1015.85095
       objectReference: {fileID: 0}
     - target: {fileID: 224667311177591482, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1013.1909
+      value: -1015.85095
       objectReference: {fileID: 0}
     - target: {fileID: 224631041968948002, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
@@ -8245,7 +8253,7 @@ Prefab:
     - target: {fileID: 224694267115765072, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1013.1909
+      value: -1015.85095
       objectReference: {fileID: 0}
     - target: {fileID: 224232712995250802, guid: 42e6aabdc8c0b46d9b48274a22f37787,
         type: 2}
@@ -8584,7 +8592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trigger: {fileID: 0}
   mainCollider: {fileID: 0}
-  stateMask: 16
+  stateMask: 1424
   activeInEndgame: 1
   speed: 20
 --- !u!1 &1984106132

@@ -42,19 +42,13 @@ public class AttachmentWheels : AttachmentBase {
             moveForce.tiltStrength = 1f;
         } else {
 
-
-            // Debug.Log ("Off ground");
-
             const float alignToGroundStartDist = 6f;
             const float alignToGroundEndDist = 2f;
-            const float alignToGroundSpeedMultiplier = 1f;
 
             float speed = sensors.velocity.magnitude;
 
             float alignStart = alignToGroundStartDist;
             float alignEnd = alignToGroundEndDist;
-
-            Debug.Log("Speed " + speed);
 
             if (sensors.inAirTime > 0.5f 
                 && speed > 0.1f
@@ -73,15 +67,10 @@ public class AttachmentWheels : AttachmentBase {
                 moveForce.tiltStrength = Mathf.Clamp01(1f - 4f*t);
             } else {
 
-
                 moveForce.upRotation = airBaseRotation;
-
                 moveForce.tiltStrength = 1f;
-
                 float inputTiltAmount = 45f * Mathf.Clamp01(sensors.inAirTime - 0.5f);
-
                 moveForce.tiltAngle = inputTiltAmount * input.move;
-
             }
 
 
