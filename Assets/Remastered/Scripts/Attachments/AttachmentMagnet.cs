@@ -37,6 +37,8 @@ public class AttachmentMagnet : AttachmentBase {
             lineRenderer.enabled = false;
         }
 
+        moveForce.airForcesSet = true;
+
 
 
     }

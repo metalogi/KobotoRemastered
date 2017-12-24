@@ -50,7 +50,7 @@ public class MusicPlayer : MonoBehaviour {
         Debug.Log ("Play track " + track);
       
         if (currentSource != null && currentTrack == track) {
-            if (currentSource.isPlaying) {
+            if (!currentSource.isPlaying) {
                 currentSource.UnPause();
             }
             return;

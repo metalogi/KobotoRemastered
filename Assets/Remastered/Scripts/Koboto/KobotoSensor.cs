@@ -50,12 +50,15 @@ public class KobotoSensor {
     public bool landedThisFrame;
     public bool launchedThisFrame;
 
+    public Quaternion airBaseRotation;
+
     public float onGroundTime;
     public float onCeilingTime;
     public float inAirTime;
 
   
     public Vector3 upVector;
+    public Vector3 forwardVector;
     public Vector3 velocity;
     public List<Vector3> positionTrail = new List<Vector3>();
 
@@ -194,6 +197,7 @@ public class KobotoSensor {
         Reset();
 
         upVector = transform.up;
+        forwardVector = transform.forward;
 
         positionTrail.Insert(0, transform.position);
 
@@ -317,12 +321,16 @@ public class KobotoSensor {
         } else if ((!onGround && wasOnGround) || (!onCeiling && wasOnCeiling)) {
             launchedThisFrame = true;
             inAirTime = 0;
+            airBaseRotation = Utils.TiltFromUpVector(upVector);
         } else if (onGround) {
             onGroundTime += Time.fixedDeltaTime;
         } else if (onCeiling) {
             onCeilingTime += Time.fixedDeltaTime;
         } else {
             inAirTime += Time.fixedDeltaTime;
+            if (inAirTime > 0.5f) {
+                airBaseRotation = Quaternion.Lerp(airBaseRotation, Quaternion.identity, 4f * Time.fixedDeltaTime);
+            }
         }
 
         lastSampleTime = Time.time;

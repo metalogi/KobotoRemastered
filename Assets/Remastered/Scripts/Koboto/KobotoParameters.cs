@@ -11,6 +11,7 @@ public class KobotoParameters : MonoBehaviour {
     public float defaultDynamicFriction = 0.7f;
     public float defaultStaticFriction = 0.9f;
     public float defaultAirDrag = 0.1f;
+    public float maxAirTilt = 45f;
 
 
 }

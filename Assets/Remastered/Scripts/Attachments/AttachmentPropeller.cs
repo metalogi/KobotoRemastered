@@ -10,12 +10,16 @@ public class AttachmentPropeller : AttachmentBase {
     public float motorP = 5f;
     public float motorD = 0.5f;
 
+    public float lift = 1f;
+
     public float visualBladeSpeedMax = 50f;
     public float visualBladeSpeedMin = 20f;
     public float visualBladeSpeedSlowdown = 8f;
 
     public Transform bladeTransform;
     public GameObject dustVFX;
+
+    float motorForce;
 
     bool resetMotor;
     PDController motorControl;
@@ -48,26 +52,31 @@ public class AttachmentPropeller : AttachmentBase {
                 resetMotor = false;
             }
 
-            float motorForce = motorControl.Update(heightError, Time.fixedDeltaTime);
+            motorForce = motorControl.Update(heightError, Time.fixedDeltaTime);
 
             float propSpeed = Mathf.Clamp01(motorForce/100f);
             bladeSpeed = Mathf.Lerp(visualBladeSpeedMin, visualBladeSpeedMax, propSpeed);
 
-            //motorControl.AdjustPD(motorP, motorD);
-//            
-//            float t = Mathf.Clamp01(sensors.heightAboveGround / targetHeight);
-//            float force = forceCurve.Evaluate(t); 
-
-            Debug.Log("Propellor force: " + motorForce);
-
-            moveForce.airMove = motorForce * strength * sensors.upVector;
 
             moveForce.tiltAngle = 45f * input.move;
             moveForce.tiltStrength = 0.4f;
         } else {
+            motorForce *= 1f - 0.2f * visualBladeSpeedSlowdown * Time.fixedDeltaTime;
             bladeSpeed *= 1f - visualBladeSpeedSlowdown * Time.fixedDeltaTime;
             dustVFX.SetActive(false);
         }
+
+        moveForce.airMove = motorForce * strength * sensors.upVector;
+
+        float glide = Mathf.Abs(Vector3.Dot(sensors.velocity, sensors.forwardVector));
+
+        glide = Mathf.Clamp(glide, 0, 6f);
+
+        Vector3 liftForce = glide * lift * sensors.upVector;
+
+        moveForce.airMove += liftForce;
+
+        moveForce.airForcesSet = true;
 
         bladeTransform.Rotate(Vector3.up * bladeSpeed, Space.Self);
     }

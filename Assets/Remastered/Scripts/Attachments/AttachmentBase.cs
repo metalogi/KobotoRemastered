@@ -8,11 +8,8 @@ public class AttachmentBase : MonoBehaviour {
 
 
     public EAttachmentType attachmentType;
-    //public EAttachmentTarget attachmentTarget;
 
-    // size to add to koboto collider when attached
-   // public float kobotoColliderExtendUp;
-   // public float kobotoColliderExtendDown;
+    Quaternion airBaseRotation;
 
     public EColliderType colliderType;
 
@@ -32,6 +29,13 @@ public class AttachmentBase : MonoBehaviour {
     }
 
     public virtual void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
+    }
+
+    protected virtual void ApplyStandardModification(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
+
+       
+
+
     }
 
     protected Quaternion TiltFromUpVector(Vector3 upVector) {

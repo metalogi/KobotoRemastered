@@ -643,9 +643,10 @@ MonoBehaviour:
   colliderType: 0
   maxHeight: 20
   targetHeight: 18
-  strength: 1
-  motorP: 6
-  motorD: 2
+  strength: 8
+  motorP: 1
+  motorD: 0.1
+  lift: 3
   visualBladeSpeedMax: 50
   visualBladeSpeedMin: 20
   visualBladeSpeedSlowdown: 8

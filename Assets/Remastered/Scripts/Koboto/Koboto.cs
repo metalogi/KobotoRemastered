@@ -12,9 +12,17 @@ public class KobotoMoveForce {
     public Vector3 airMove;
     public float airDrag;
 
+    public float airMoveResponse;
+    public float airTiltResponse;
+
     public Quaternion upRotation;
     public float tiltAngle;
     public float tiltStrength;
+
+    public ForceMode forceMode;
+
+    public bool airForcesSet;
+    public bool groundForcesSet;
 
     public void Clear(KobotoParameters parameters) {
         groundMove.Set(0,0,0);
@@ -24,10 +32,15 @@ public class KobotoMoveForce {
         dynamicFriction = parameters.defaultDynamicFriction;
         staticFriction = parameters.defaultStaticFriction;
         airDrag = parameters.defaultAirDrag;
+        forceMode = ForceMode.Force;
+        airForcesSet = false;
+        groundForcesSet = false;
+        airMoveResponse = 0f;
+        airTiltResponse = 0f;
     }
 
     public Vector3 TotalForce() {
-       // Debug.Log("Ground: " + groundMove + " Air: " + airMove);
+        Debug.Log("Ground: " + groundMove + " Air: " + airMove);
         return groundMove + airMove;
     }
 }
@@ -359,25 +372,28 @@ public class Koboto : KobotoMonoRigidbody {
 
         sensors.UpdateAll(transform, activeCollider);
 
-        NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
-        if (currentAttachments.Count == 0) {
-           // NoAttachmentsMoveForce(moveForce, inputData, sensors, parameters);
-        } else {
+       
+        
 
-            foreach (var attachmentType in attachmentOrder) {
-                if (currentAttachments.ContainsKey(attachmentType)) {
-                    AttachmentBase attachment = currentAttachments[attachmentType];
-                    attachment.ModifyMoveForce(moveForce, inputData, sensors, parameters);
-                }
-
+        foreach (var attachmentType in attachmentOrder) {
+            if (currentAttachments.ContainsKey(attachmentType)) {
+                AttachmentBase attachment = currentAttachments[attachmentType];
+                attachment.ModifyMoveForce(moveForce, inputData, sensors, parameters);
             }
+
         }
+        
+        ProcessMoveForce(moveForce, inputData, sensors, parameters);
 
         physMat.dynamicFriction = moveForce.dynamicFriction;
         physMat.staticFriction = moveForce.staticFriction;
         rb.drag = moveForce.airDrag;
 
-        rb.AddForce(moveForce.TotalForce());
+
+
+
+        rb.AddForce(moveForce.TotalForce(), moveForce.forceMode);
+        
 
         upRotation = Quaternion.Lerp(upRotation, moveForce.upRotation, 0.5f);
         tiltAngle = Mathf.Lerp(tiltAngle, moveForce.tiltAngle, moveForce.tiltStrength);
@@ -393,20 +409,63 @@ public class Koboto : KobotoMonoRigidbody {
 
     }
 
-    public void NoAttachmentsMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
+    public void ProcessMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
         if (sensors.onGround) {
-            moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
-            moveForce.tiltAngle = 0f;
-            moveForce.tiltStrength = 1f;
-        } else {
-            moveForce.upRotation = Quaternion.identity;
-            moveForce.tiltAngle = 0f;
-            moveForce.tiltStrength = 0.5f;
 
-            moveForce.airMove = input.move * Vector3.forward * parameters.airMoveStrength;
+            if (!moveForce.groundForcesSet) {
+                moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
+                moveForce.tiltAngle = 0f;
+                moveForce.tiltStrength = 1f;
+            }
+            
+
+
+        } else {
+
+            if (!moveForce.airForcesSet) {
+                const float alignToGroundStartDist = 6f;
+                const float alignToGroundEndDist = 2f;
+
+                float speed = sensors.velocity.magnitude;
+
+                float alignStart = alignToGroundStartDist;
+                float alignEnd = alignToGroundEndDist;
+
+                //align to ground if headed towards it
+                if (sensors.inAirTime > 0.5f
+                    && speed > 0.1f
+                    && sensors.closeToGround &&
+                    sensors.distanceToGround < alignStart &&
+                    sensors.closestGroundNormal.y > 0.1f &&
+                    Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f) {
+
+                    Quaternion groundAlign = Utils.TiltFromUpVector(sensors.closestGroundNormal);
+                    Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);
+                    if (sensors.distanceToGround > alignEnd) {
+                        groundAlign = Quaternion.Lerp(currentRot, groundAlign, 8f * Time.fixedDeltaTime);
+                    }
+                    float t = Mathf.Clamp01((alignStart - sensors.distanceToGround) / (alignStart - alignEnd));
+                    moveForce.upRotation = Quaternion.Lerp(sensors.airBaseRotation, groundAlign, t);
+                    moveForce.tiltStrength = Mathf.Clamp01(1f - 4f * t);
+                } else {
+                    // apply air move + tilt
+                    moveForce.upRotation = sensors.airBaseRotation;
+                    moveForce.tiltStrength = 1f;
+                    moveForce.tiltAngle = moveForce.airTiltResponse * input.move * parameters.maxAirTilt ;
+
+                    moveForce.airMove = input.move * Vector3.forward * parameters.airMoveStrength * moveForce.airMoveResponse;
+                    //float inputTiltAmount = 45f * Mathf.Clamp01(sensors.inAirTime - 0.5f);
+                   // moveForce.tiltAngle = inputTiltAmount * input.move;
+
+                   // moveForce.airMove = input.move * Vector3.forward * parameters.airMoveStrength;
+                }
+            } 
         }
     }
 
-   
+    public static void ApplyAirForces(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
+    }
 
-}
+
+
+    }
