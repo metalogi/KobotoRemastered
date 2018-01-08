@@ -8,7 +8,8 @@ public enum EAttachmentType {
     Spring,
     Magnet,
     Propellor,
-    Parachute
+    Parachute,
+    Hammer
 }
 
 public enum EAttachmentTarget {
@@ -51,7 +52,11 @@ public static class Attachments  {
 
         case EAttachmentType.Spring:
             return EAttachmentTarget.Bottom;
+
+        case EAttachmentType.Hammer:
+            return EAttachmentTarget.Front;
         }
+        
         return EAttachmentTarget.Top;
     }
 
