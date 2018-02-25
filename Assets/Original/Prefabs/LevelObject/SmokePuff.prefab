@@ -257,15 +257,15 @@ EllipsoidParticleEmitter:
   serializedVersion: 2
   m_Enabled: 1
   m_Emit: 1
-  minSize: 20
-  maxSize: 22
+  minSize: 2
+  maxSize: 2.2
   minEnergy: 0
   maxEnergy: 1
   minEmission: 10
   maxEmission: 10
   worldVelocity: {x: 0, y: -50, z: 0}
   localVelocity: {x: 0, y: 0, z: 0}
-  rndVelocity: {x: 40, y: 80, z: 40}
+  rndVelocity: {x: 4, y: 8, z: 1}
   emitterVelocityScale: 0.05
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
@@ -273,7 +273,7 @@ EllipsoidParticleEmitter:
   rndRotation: 0
   Simulate in Worldspace?: 1
   m_OneShot: 1
-  m_Ellipsoid: {x: 50, y: 70, z: 10}
+  m_Ellipsoid: {x: 5, y: 7, z: 1}
   m_MinEmitterRange: 0
 --- !u!1002 &1500001
 EditorExtensionImpl:
@@ -287,15 +287,15 @@ EllipsoidParticleEmitter:
   serializedVersion: 2
   m_Enabled: 1
   m_Emit: 1
-  minSize: 16
-  maxSize: 30
+  minSize: 1.6
+  maxSize: 3
   minEnergy: 1
   maxEnergy: 2
   minEmission: 8
   maxEmission: 8
   worldVelocity: {x: 0, y: -40, z: 0}
   localVelocity: {x: 0, y: 0, z: 0}
-  rndVelocity: {x: 40, y: 80, z: 40}
+  rndVelocity: {x: 4, y: 8, z: 1}
   emitterVelocityScale: 0.05
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
@@ -303,7 +303,7 @@ EllipsoidParticleEmitter:
   rndRotation: 0
   Simulate in Worldspace?: 1
   m_OneShot: 1
-  m_Ellipsoid: {x: 100, y: 100, z: 10}
+  m_Ellipsoid: {x: 10, y: 10, z: 1}
   m_MinEmitterRange: 0
 --- !u!1002 &1500003
 EditorExtensionImpl:
@@ -318,14 +318,14 @@ EllipsoidParticleEmitter:
   m_Enabled: 1
   m_Emit: 0
   minSize: 0
-  maxSize: 10
+  maxSize: 1
   minEnergy: 0
   maxEnergy: 1
   minEmission: 50
   maxEmission: 80
   worldVelocity: {x: 0, y: 0, z: 0}
   localVelocity: {x: 0, y: 0, z: 0}
-  rndVelocity: {x: 30, y: 30, z: 30}
+  rndVelocity: {x: 3, y: 3, z: 3}
   emitterVelocityScale: 0.05
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
@@ -333,7 +333,7 @@ EllipsoidParticleEmitter:
   rndRotation: 0
   Simulate in Worldspace?: 1
   m_OneShot: 1
-  m_Ellipsoid: {x: 50, y: 50, z: 50}
+  m_Ellipsoid: {x: 5, y: 5, z: 5}
   m_MinEmitterRange: 0
 --- !u!1002 &1500005
 EditorExtensionImpl:
@@ -347,6 +347,7 @@ ParticleRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -362,6 +363,7 @@ ParticleRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -392,6 +394,7 @@ ParticleRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -407,6 +410,7 @@ ParticleRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -437,6 +441,7 @@ ParticleRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -452,6 +457,7 @@ ParticleRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

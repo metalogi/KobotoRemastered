@@ -26,14 +26,14 @@ AnimationClip:
         outSlope: -3.5824182
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.41666666
-        value: -0.49000853
+        time: 0.16666667
+        value: -0.45495462
         inSlope: 0
-        outSlope: 38.342308
+        outSlope: 11.506253
         tangentMode: 1
       - serializedVersion: 2
-        time: 0.45
-        value: 1
+        time: 0.33333334
+        value: 0.9956207
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -97,14 +97,14 @@ AnimationClip:
         outSlope: -3.5824182
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.41666666
-        value: -0.49000853
+        time: 0.16666667
+        value: -0.45495462
         inSlope: 0
-        outSlope: 38.342308
+        outSlope: 11.506253
         tangentMode: 1
       - serializedVersion: 2
-        time: 0.45
-        value: 1
+        time: 0.33333334
+        value: 0.9956207
         inSlope: 0
         outSlope: 0
         tangentMode: 136

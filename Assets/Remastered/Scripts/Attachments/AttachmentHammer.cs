@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttachmentHammer : AttachmentBase {
+public class AttachmentHammer : AttachmentBase, IBreaker {
 
-    public CollisionEventSource hammerCollider;
+    //public CollisionEventSource hammerCollider;
 
     public float swing;
+
+    public float breakStart = 0.1f;
+    public float breakEnd = 0.25f;
+
+    float breakTimer;
     Rigidbody hammerBody;
     ConfigurableJoint hammerJoint;
 
-    bool hitReady;
+    bool breakActive;
 
     public override void OnAttachToKoboto(Koboto koboto) {
         base.OnAttachToKoboto(koboto);
@@ -19,6 +24,9 @@ public class AttachmentHammer : AttachmentBase {
 
         hammerJoint.connectedBody = koboto.GetComponent<Rigidbody>();
         hammerJoint.connectedAnchor = koboto.transform.InverseTransformPoint(transform.position);
+
+        breakTimer = 0f ;
+        
  
     }
 
@@ -26,31 +34,18 @@ public class AttachmentHammer : AttachmentBase {
         if (hammerJoint == null) {
             return;
         }
-        hammerJoint.targetRotation = Quaternion.Euler(-swing * 90, 0, 0);
-    }
-
-    public void OnEnable() {
-        hammerCollider.enabled = true;
-        hammerCollider.onCollisionEnter += HammerDidHit;
-
         
-       
+        hammerJoint.targetRotation = Quaternion.Euler(-swing * 90, 0, 0);
+        breakTimer += Time.fixedDeltaTime;
     }
 
-    public void OnDisable() {
-        hammerCollider.onCollisionEnter -= HammerDidHit;
-    
-        hammerCollider.enabled = false;
+
+    public bool IBreakerActive()
+    {
+        return breakTimer > breakStart && breakTimer <= breakEnd;
     }
 
-    public void HammerDidHit(CollisionEventSource source, Collider collider, Collision collision) {
-        if (hitReady) {
-            var target = collision.gameObject.GetComponent<Hammerable>();
-            if (target != null) {
-                hitReady = !target.HitByHammer(this);
-            }
-        }
-    }
+
 
 
 }
