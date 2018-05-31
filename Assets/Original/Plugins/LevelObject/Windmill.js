@@ -67,21 +67,3 @@ function TestZone( target : Vector3 ) : Vector3
 	return result;
 }
 
-function OnDrawGizmos()
-{
-	var ForceDir = transform.right;
-	var orth1 = transform.forward;
-	var orth2 = transform.up;
-	var stp = Mathf.PI/5.05;
-	
-	if( JetForce )
-	for( var l: float =0.0;l<Mathf.PI*2;l+=stp)
-	{
-		var st = transform.position + orth1*Mathf.Cos(l)*wdth + orth2*Mathf.Sin(l)*wdth;
-		var lst = transform.position + orth1*Mathf.Cos(l-stp)*wdth + orth2*Mathf.Sin(l-stp)*wdth;
-		var rise = ForceDir*lngth;
-		Gizmos.DrawLine( st, lst );
-		Gizmos.DrawLine( st, st+rise );
-		Gizmos.DrawLine( st+rise, lst+rise );
-	}
-}

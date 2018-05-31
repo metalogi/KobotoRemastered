@@ -56,17 +56,15 @@ public class KobotoSensor {
     public float onCeilingTime;
     public float inAirTime;
 
+
   
     public Vector3 upVector;
     public Vector3 forwardVector;
     public Vector3 velocity;
     public List<Vector3> positionTrail = new List<Vector3>();
 
-
-
-    Transform transform;
-    BoxCollider boxCollider;
-
+    public Vector3 windSpeed;
+    public float cameraPushOut;
 
     const float onGroundTestDist = 0.3f;
     const float onGroundTestAngle = 115f;
@@ -184,6 +182,8 @@ public class KobotoSensor {
         onCeiling = false;
         landedThisFrame = false;
         launchedThisFrame = false;
+        cameraPushOut = 0f;
+        windSpeed = Vector3.zero;
     }
 
 
@@ -337,7 +337,13 @@ public class KobotoSensor {
 
     }
 
-
+    public void UpdateZones(List<LevelZone> zones)
+    {
+        foreach (var zone in zones)
+        {
+            zone.AffectKobotoSenses(this, positionTrail[0]);
+        }
+    }
 
 
 }

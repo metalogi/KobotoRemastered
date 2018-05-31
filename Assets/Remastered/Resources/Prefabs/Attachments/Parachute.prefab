@@ -10,8 +10,6 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
-  - component: {fileID: 11400000}
-  - component: {fileID: 11400004}
   - component: {fileID: 8200000}
   m_Layer: 0
   m_Name: Chute
@@ -31,8 +29,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 400002}
-  - component: {fileID: 11400002}
-  - component: {fileID: 8200002}
+  - component: {fileID: 114458098318133278}
   m_Layer: 0
   m_Name: Parachute
   m_TagString: Untagged
@@ -53,7 +50,6 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 3300002}
   - component: {fileID: 2300002}
-  - component: {fileID: 11400006}
   - component: {fileID: 8200004}
   m_Layer: 0
   m_Name: Cube
@@ -71,9 +67,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: -1}
+  m_LocalPosition: {x: 0, y: -0.012, z: 0}
+  m_LocalScale: {x: 0.40000013, y: 0.40000013, z: 0.4}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 1
@@ -87,8 +83,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.418182, y: -93.69272, z: 436.52856}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -105,9 +101,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 5, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.058, z: 0}
+  m_LocalScale: {x: 0.10000006, y: 0.50000024, z: 0.5}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 0
@@ -121,9 +117,10 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -140,6 +137,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -160,11 +158,12 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: c34614ec9119c3548aeaac6537e02b05, type: 2}
+  - {fileID: 2100000, guid: 62faf63c765ddcb4bad5cf41fe7cc4dc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,6 +174,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -339,7 +339,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -351,7 +351,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -363,168 +363,10 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!1002 &8200001
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!82 &8200002
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 454fefb1540df40cbad1cb0b0286b636, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.2
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.4
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.8
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1.6
-      value: 0.9433963
-      inSlope: -0.09036325
-      outSlope: -0.0876762
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 3.2
-      value: 0.8196721
-      inSlope: -0.0689961
-      outSlope: -0.06546881
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 6.4
-      value: 0.64935064
-      inSlope: -0.04399391
-      outSlope: -0.04048329
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 12.8
-      value: 0.4587156
-      inSlope: -0.02235456
-      outSlope: -0.01987503
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 25.6
-      value: 0.28901735
-      inSlope: -0.0090205
-      outSlope: -0.0077776494
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 51.2
-      value: 0.16611296
-      inSlope: -0.0030158467
-      outSlope: -0.0025430636
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 102.4
-      value: 0.08976661
-      inSlope: -0.0008873722
-      outSlope: -0.0007379698
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 204.8
-      value: 0.04677268
-      inSlope: -0.00024194451
-      outSlope: -0.0001996441
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 409.6
-      value: 0.023889154
-      inSlope: -0.000063258994
-      outSlope: -0.00005198267
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 500
-      value: 0.019646365
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!1002 &8200003
 EditorExtensionImpl:
   serializedVersion: 6
@@ -661,7 +503,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -673,7 +515,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -685,82 +527,19 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!1002 &8200005
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5bb5e176207243e4b969d1a04726815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addonRoot: {fileID: 11400002}
 --- !u!1002 &11400001
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 129a5f56bd85449e6ac62a56d0203234, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disabled: 0
-  cfg:
-    ProperName: Parachute
-    tex: {fileID: 2800000, guid: 787678eead8bc45c1b459f966d0a6551, type: 3}
-    desc: When this critter goes over a cliff, if will
-    desc2: go much farther before touching ground.
-    desc3: 
-    fingerAvoidance: {x: -10, y: 10, z: 0}
-  disposable: 0
-  defaultMaterial: {fileID: 2100000, guid: 53d9f3b1a38834310aa313c824f3246a, type: 2}
-  muscleName: ParaMuscle
-  wheels: 0
-  wheelObjects: []
-  mirrorSideVec: {x: 1, y: 1, z: 1}
-  hostMountType: t
 --- !u!1002 &11400003
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0367d22a7e963457bb861e92725d76cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  on: 0
-  closeAudio: {fileID: 8200004}
 --- !u!1002 &11400005
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5bb5e176207243e4b969d1a04726815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addonRoot: {fileID: 11400002}
 --- !u!1002 &11400007
 EditorExtensionImpl:
   serializedVersion: 6
@@ -778,3 +557,18 @@ Prefab:
 --- !u!1002 &100100001
 EditorExtensionImpl:
   serializedVersion: 6
+--- !u!114 &114458098318133278
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2ad326f59475ad469ba2fb6c7b23694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attachmentType: 5
+  colliderType: 1
+  chute: {fileID: 100000}
+  pack: {fileID: 100004}

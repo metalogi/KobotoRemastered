@@ -21,6 +21,11 @@ public class AttachmentBase : MonoBehaviour {
         
     }
 
+    public virtual void OnRemoveFromKoboto(Koboto koboto)
+    {
+
+    }
+
     public virtual void UpdateKoboto(Koboto koboto, KobotoSensor sensor) {
     }
 

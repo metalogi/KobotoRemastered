@@ -27,6 +27,7 @@ public class Level : KobotoMono {
     public List<Koboto> kobotos;
     [HideInInspector]
     public List<LevelObjectBase> levelObjects;
+    public List<LevelZone> levelZones;
 
     Koboto selectedKoboto;
 
@@ -71,7 +72,7 @@ public class Level : KobotoMono {
        
         Destroy(levelBoundsObject.gameObject);
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
-        //levelObjects.ForEach((LevelObjectBase l)=>l.Init());
+        levelZones = new List<LevelZone>(GetComponentsInChildren<LevelZone>());
     }
 
 
@@ -115,6 +116,7 @@ public class Level : KobotoMono {
         foreach (KobotoSpawnInfo spawnInfo in kobotoSpawnInfo) {
             Koboto koboto = KobotoFactory.SpawnKoboto(spawnInfo.kobotoType, spawnInfo.spawnPoint.position, kobotoParent);
             koboto.SetLevelBounds(levelBounds);
+            koboto.SetLevelZones(levelZones);
             kobotos.Add(koboto);
             koboto.SetState(KobotoState.Alive);
 

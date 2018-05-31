@@ -17,6 +17,8 @@ public class GameCam : KCam {
     float outDist;
     float targetOutDist;
 
+    float outDistModifier = 0;
+
     Koboto targetK;
 
     PStack posStack;
@@ -51,13 +53,19 @@ public class GameCam : KCam {
 	void FixedUpdate () {
         
         if (target != null) {
-            posStack.Record(target.position + aimYOffset * Vector3.up);
-
-            Vector3 aimAt = posStack.Read();
+           
 
             float targetSpeed = targetK.GetSpeed();
+            Vector3 targetPos;
+            float pushOut = 0;
 
-            targetOutDist = Mathf.Min(maxOutDist, baseOutDist + targetSpeed * speedOutDistMultilpier);
+            targetK.GetCameraInfo(out targetPos, out pushOut);
+
+            if (pushOut > 0) Debug.Log("push out  " + pushOut);
+
+            posStack.Record(targetPos + aimYOffset * Vector3.up);
+            Vector3 aimAt = posStack.Read();
+            targetOutDist = Mathf.Min(maxOutDist, baseOutDist + targetSpeed * speedOutDistMultilpier) + pushOut;
 
             if (targetOutDist > outDist) {
                 outDist = Mathf.Lerp(outDist, targetOutDist, zoomOutSpeed * Time.fixedDeltaTime);

@@ -40,7 +40,7 @@ public class KobotoMoveForce {
     }
 
     public Vector3 TotalForce() {
-        Debug.Log("Ground: " + groundMove + " Air: " + airMove);
+      //  Debug.Log("Ground: " + groundMove + " Air: " + airMove);
         return groundMove + airMove;
     }
 }
@@ -113,10 +113,13 @@ public class Koboto : KobotoMonoRigidbody {
 
     bool levelBoundsSet;
     Bounds levelBounds;
+    List<LevelZone> levelZones;
 
     Transform defaultParent;
 
     bool doFixedUpdate;
+
+    Vector3 defaultCom;
 
 	
 
@@ -138,6 +141,8 @@ public class Koboto : KobotoMonoRigidbody {
 
         upRotation = Quaternion.identity;
         tiltAngle = 0f;
+
+        defaultCom = rb.centerOfMass;
 
 
         attachmentTargetContents = new Dictionary<EAttachmentTarget, AttachmentBase>();
@@ -187,9 +192,6 @@ public class Koboto : KobotoMonoRigidbody {
 
         RemoveAttachmentFromTarget(target);
 
-       
-
-      
         Transform attachToTransform = GetAttachmentTargetTransform(target);
         attachment.transform.SetParent(attachToTransform, false);
         attachmentTargetContents[target] = attachment;
@@ -205,9 +207,9 @@ public class Koboto : KobotoMonoRigidbody {
     public void RemoveAttachmentFromTarget(EAttachmentTarget target) {
         AttachmentBase attachment = null;
 
-
         if (attachmentTargetContents.TryGetValue(target, out attachment)) {
-           
+
+            attachment.OnRemoveFromKoboto(this);
             attachment.Remove();
             EAttachmentType type = attachment.attachmentType;
             currentAttachments.Remove(type);
@@ -243,6 +245,11 @@ public class Koboto : KobotoMonoRigidbody {
         levelBoundsSet = true;
     }
 
+    public void SetLevelZones(List<LevelZone> zones)
+    {
+        levelZones = zones;
+    }
+
     void SetupCollider() {
      
         var attachments = new List<AttachmentBase>(currentAttachments.Values);
@@ -275,6 +282,16 @@ public class Koboto : KobotoMonoRigidbody {
             StartCoroutine(ImpaleAnim(killer));
             break;
         }
+    }
+
+    public void SetCenterOfMassOffset(Vector3 offset)
+    {
+        rb.centerOfMass = offset;
+    }
+
+    public void ResetCenterOfMass()
+    {
+        rb.centerOfMass = defaultCom;
     }
 
     IEnumerator ImpaleAnim(Transform impaler) {
@@ -334,6 +351,13 @@ public class Koboto : KobotoMonoRigidbody {
         return sensors.velocity.magnitude;
     }
 
+    public void GetCameraInfo(out Vector3 focus, out float dist)
+    {
+        focus = transform.position;
+        dist = sensors.cameraPushOut;
+
+    }
+
     public void Update() {
         if (currentGameState == EGameState.Play) {
             foreach (AttachmentBase attachment in currentAttachments.Values) {
@@ -371,9 +395,8 @@ public class Koboto : KobotoMonoRigidbody {
 
 
         sensors.UpdateAll(transform, activeCollider);
+        sensors.UpdateZones(levelZones);
 
-       
-        
 
         foreach (var attachmentType in attachmentOrder) {
             if (currentAttachments.ContainsKey(attachmentType)) {
