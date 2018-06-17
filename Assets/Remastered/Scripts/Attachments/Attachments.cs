@@ -48,13 +48,15 @@ public static class Attachments  {
     public static EAttachmentTarget AttachmentTarget(EAttachmentType type) {
         switch (type) {
         case EAttachmentType.Wheels:
-            return EAttachmentTarget.Wheels;
+        case EAttachmentType.DoubleWheels:
+                return EAttachmentTarget.Wheels;
 
         case EAttachmentType.Spring:
             return EAttachmentTarget.Bottom;
 
         case EAttachmentType.Hammer:
             return EAttachmentTarget.Front;
+            
         }
         
         return EAttachmentTarget.Top;

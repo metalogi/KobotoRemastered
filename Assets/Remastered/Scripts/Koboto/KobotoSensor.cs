@@ -15,6 +15,10 @@ public class KobotoSensor {
     public Vector3 forwardWheelForward;
     public Vector3 forwardWheelNormal;
 
+    public bool topForwardWheelOnCeiling;
+    public Vector3 topForwardWheelForward;
+    public Vector3 topForwardWheelNormal;
+
 
     public bool onCeiling;
     public Vector3 ceilingForward;
@@ -31,6 +35,11 @@ public class KobotoSensor {
     public Vector3 closestGroundNormal;
     public Collider closestGroundCollider;
 
+    public bool closeToCeiling;
+    public float distanceToCeiling;
+    public Vector3 closestCeilingPoint;
+    public Vector3 closestCeilingNormal;
+    public Collider closestCeilingCollider;
 
 
     public bool localAboveGround;
@@ -87,6 +96,9 @@ public class KobotoSensor {
     Probe frontWheelProbe;
     Probe backWheelProbe;
 
+    Probe frontTopWheelProbe;
+    Probe backTopWheelProbe;
+
     Probe[] airProbes;
     const int airProbesPerQuadrant = 6;
 
@@ -130,8 +142,19 @@ public class KobotoSensor {
         Vector3 backWheelStartOut =  -4f*Vector3.forward;
         Vector3 backWheelDown = Vector3.down;
 
+        Vector3 frontTopWheelStart = 0.2f * Vector3.up + 0.9f * Vector3.forward;
+        Vector3 frontTopWheelStartOut = 4f * Vector3.forward;
+        Vector3 frontTopWheelUp = Vector3.up;
+
+        Vector3 backTopWheelStart = 0.2f * Vector3.up - 0.9f * Vector3.forward;
+        Vector3 backTopWheelStartOut = -4f * Vector3.forward;
+        Vector3 backTopWheelUp = Vector3.up;
+
         frontWheelProbe = new Probe(false, frontWheelStart, frontWheelDown, "wheel front");
         backWheelProbe = new Probe(false, backWheelStart, backWheelDown, "wheel back");
+
+        frontTopWheelProbe = new Probe(false, frontTopWheelStart, frontTopWheelUp, "wheel top front");
+        backTopWheelProbe = new Probe(false, frontTopWheelStart, frontTopWheelUp, "wheel top back");
 
         frontWheelProbe.SetPeturbedStartPoint(frontWheelStartOut);
         backWheelProbe.SetPeturbedStartPoint(backWheelStartOut);
@@ -175,6 +198,8 @@ public class KobotoSensor {
         yield return localBackProbe;
         yield return frontWheelProbe;
         yield return backWheelProbe;
+        yield return frontTopWheelProbe;
+        yield return backTopWheelProbe;
     }
 
     public void Reset() {
@@ -232,11 +257,23 @@ public class KobotoSensor {
                 forwardWheelNormal = frontWheelProbe.hit.normal;
                 forwardWheelForward = Vector3.Cross (Vector3.right, forwardWheelNormal);
             }
+            topForwardWheelOnCeiling = frontTopWheelProbe.didHit;
+            if (topForwardWheelOnCeiling)
+            {
+                topForwardWheelNormal = frontTopWheelProbe.hit.normal;
+                topForwardWheelForward = Vector3.Cross(Vector3.left, topForwardWheelNormal);
+            }
         } else {
             forwardWheelOnGround = backWheelProbe.didHit;
             if (forwardWheelOnGround) {
                 forwardWheelNormal = backWheelProbe.hit.normal;
                 forwardWheelForward = Vector3.Cross (Vector3.right, forwardWheelNormal);
+            }
+            topForwardWheelOnCeiling = backTopWheelProbe.didHit;
+            if (topForwardWheelOnCeiling)
+            {
+                topForwardWheelNormal = backTopWheelProbe.hit.normal;
+                topForwardWheelForward = Vector3.Cross(Vector3.left, topForwardWheelNormal);
             }
         }
 
@@ -273,29 +310,53 @@ public class KobotoSensor {
             }
         }
         closeToGround = false;
+        closeToCeiling = false;
 
         if (!onGround && !onCeiling) { // in air
-            // Find closest ground point
+            // Find closest ground and ceiling points
             bool foundGround = false;
-            float closestDist = float.MaxValue;
-            int closestHitIndex = 0;
+            bool foundCeiling = false;
+
+            float closestGroundDist = float.MaxValue;
+            float closestCeilingDist = float.MaxValue;
+            int closestGroundHitIndex = 0;
+            int closestCeilingHitIndex = 0;
             for (int i=0; i<airProbes.Length; i++) {
                 var probe = airProbes[i];
                 if (!probe.didHit) {
                     continue;
                 }
-                if (probe.hit.distance < closestDist) {
-                    closestHitIndex = i;
+                bool ceilingHit = probe.hit.normal.y < 0;
+
+                if (!ceilingHit && probe.hit.distance < closestGroundDist) {
+                    closestGroundHitIndex = i;
+                    closestGroundDist = probe.hit.distance;
                     foundGround = true;
+                }
+
+                if (ceilingHit  && probe.hit.distance < closestCeilingDist)
+                {
+                    closestCeilingHitIndex = i;
+                    closestCeilingDist = probe.hit.distance;
+                    foundCeiling = true;
                 }
             }
             if (foundGround) {
-                RaycastHit closestHit = airProbes[closestHitIndex].hit;
+                RaycastHit closestHit = airProbes[closestGroundHitIndex].hit;
                 closeToGround = true;
                 closestGroundPoint = closestHit.point;
                 closestGroundNormal = closestHit.normal;
                 closestGroundCollider = closestHit.collider;
                 distanceToGround = closestHit.distance;
+            }
+            if (foundCeiling)
+            {
+                RaycastHit closestHit = airProbes[closestCeilingHitIndex].hit;
+                closeToCeiling = true;
+                closestCeilingPoint = closestHit.point;
+                closestCeilingNormal = closestHit.normal;
+                closestCeilingCollider = closestHit.collider;
+                distanceToCeiling = closestHit.distance;
             }
         }
 

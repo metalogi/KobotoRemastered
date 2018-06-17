@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour {
     #region UI callbacks
     public void RestartCurrentLevel() {
         currentLevel.ResetKobotos();
+        currentLevel.ResetCamera();
         RequestState(EGameState.Play);
     }
 

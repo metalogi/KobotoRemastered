@@ -128,8 +128,12 @@ public class Level : KobotoMono {
         for (int i=kobotos.Count-1; i>=0; i--) {
             Destroy(kobotos[i].gameObject);
         }
-        SpawnKobotos();
+        SpawnKobotos(); 
+    }
 
+    public void ResetCamera()
+    {
+        gameCam.Reset();
     }
 
     void SelectKoboto(Koboto koboto) {

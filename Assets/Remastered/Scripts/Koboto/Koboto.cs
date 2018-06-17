@@ -23,6 +23,9 @@ public class KobotoMoveForce {
 
     public bool airForcesSet;
     public bool groundForcesSet;
+    public bool alignToCeiling;
+
+    public bool useGravity;
 
     public void Clear(KobotoParameters parameters) {
         groundMove.Set(0,0,0);
@@ -35,8 +38,10 @@ public class KobotoMoveForce {
         forceMode = ForceMode.Force;
         airForcesSet = false;
         groundForcesSet = false;
+        alignToCeiling = false;
         airMoveResponse = 0f;
         airTiltResponse = 0f;
+        useGravity = true;
     }
 
     public Vector3 TotalForce() {
@@ -351,11 +356,12 @@ public class Koboto : KobotoMonoRigidbody {
         return sensors.velocity.magnitude;
     }
 
-    public void GetCameraInfo(out Vector3 focus, out float dist)
+    public void GetCameraInfo(out Vector3 focus, out float dist, out float tilt)
     {
         focus = transform.position;
         dist = sensors.cameraPushOut;
-
+        bool nearCeiling = sensors.onCeiling ||( sensors.closeToCeiling && sensors.distanceToCeiling < 1.5f);
+        tilt = nearCeiling ? -18f : 0f;
     }
 
     public void Update() {
@@ -412,7 +418,7 @@ public class Koboto : KobotoMonoRigidbody {
         physMat.staticFriction = moveForce.staticFriction;
         rb.drag = moveForce.airDrag;
 
-
+        rb.useGravity = moveForce.useGravity;
 
 
         rb.AddForce(moveForce.TotalForce(), moveForce.forceMode);
@@ -433,44 +439,69 @@ public class Koboto : KobotoMonoRigidbody {
     }
 
     public void ProcessMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
-        if (sensors.onGround) {
-
-            if (!moveForce.groundForcesSet) {
+        if (sensors.onGround)
+        {
+            if (!moveForce.groundForcesSet)
+            {
                 moveForce.upRotation = Utils.TiltFromUpVector(sensors.groundNormal);
                 moveForce.tiltAngle = 0f;
                 moveForce.tiltStrength = 1f;
             }
-            
+        } else
+        {
+            if (!moveForce.airForcesSet)
+            {
+                const float alignToGroundStartDist = 4f;
+                const float alignToGroundEndDist = 1f;
 
-
-        } else {
-
-            if (!moveForce.airForcesSet) {
-                const float alignToGroundStartDist = 6f;
-                const float alignToGroundEndDist = 2f;
+                const float alignToCeilingStartDist = 5f;
+                const float alignToCeilingEndDist = 2f;
 
                 float speed = sensors.velocity.magnitude;
 
-                float alignStart = alignToGroundStartDist;
-                float alignEnd = alignToGroundEndDist;
+               // float alignStart = alignToGroundStartDist;
+               // float alignEnd = alignToGroundEndDist;
+
+                if (moveForce.alignToCeiling && sensors.inAirTime > 0f && speed > 0.1f
+                 && sensors.closeToCeiling
+                 && sensors.distanceToCeiling < alignToCeilingStartDist
+                 && Vector3.Dot(sensors.velocity.normalized, sensors.closestCeilingNormal) < 0f)
+                {
+
+                    Quaternion ceilingAlign = Utils.TiltFromUpVector(-sensors.closestCeilingNormal);
+                    Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);
+                    if (sensors.distanceToCeiling > alignToCeilingEndDist)
+                    {
+                        ceilingAlign = Quaternion.Lerp(currentRot, ceilingAlign, 24f * Time.fixedDeltaTime);
+                    }
+                    float t = Mathf.Clamp01((alignToCeilingStartDist - sensors.distanceToCeiling) / (alignToCeilingStartDist - alignToCeilingEndDist));
+                    moveForce.upRotation = Quaternion.Lerp(sensors.airBaseRotation, ceilingAlign, t);
+                    moveForce.tiltStrength = Mathf.Clamp01(1f - 8f * t);
+                    moveForce.useGravity = false;
+                    moveForce.airMove += 20.0f *  t * -sensors.closestCeilingNormal;
+
+                    Debug.DrawRay(sensors.closestCeilingPoint, -3.0f * sensors.closestCeilingNormal, Color.yellow);
+                }
 
                 //align to ground if headed towards it
-                if (sensors.inAirTime > 0.5f
+                else if (sensors.inAirTime > 0.5f
                     && speed > 0.1f
-                    && sensors.closeToGround &&
-                    sensors.distanceToGround < alignStart &&
-                    sensors.closestGroundNormal.y > 0.1f &&
-                    Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f) {
+                    && sensors.closeToGround
+                    && sensors.distanceToGround < alignToGroundStartDist
+                    && Vector3.Dot(sensors.velocity.normalized, sensors.closestGroundNormal) < 0.1f)
+                {
 
                     Quaternion groundAlign = Utils.TiltFromUpVector(sensors.closestGroundNormal);
                     Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);
-                    if (sensors.distanceToGround > alignEnd) {
-                        groundAlign = Quaternion.Lerp(currentRot, groundAlign, 8f * Time.fixedDeltaTime);
+                    if (sensors.distanceToGround > alignToGroundEndDist) {
+                        groundAlign = Quaternion.Lerp(currentRot, groundAlign, 6f * Time.fixedDeltaTime);
                     }
-                    float t = Mathf.Clamp01((alignStart - sensors.distanceToGround) / (alignStart - alignEnd));
+                    float t = Mathf.Clamp01((alignToGroundStartDist - sensors.distanceToGround) / (alignToGroundStartDist - alignToGroundEndDist));
                     moveForce.upRotation = Quaternion.Lerp(sensors.airBaseRotation, groundAlign, t);
                     moveForce.tiltStrength = Mathf.Clamp01(1f - 4f * t);
-                } else {
+                }
+                else
+                {
                     // apply air move + tilt
                     moveForce.upRotation = sensors.airBaseRotation;
                     moveForce.tiltStrength = 1f;

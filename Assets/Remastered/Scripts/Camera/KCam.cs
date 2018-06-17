@@ -16,8 +16,9 @@ public class KCam : KobotoMono {
 
     protected bool isActive;
 
-    public void OnEnable() {
-       
+    public override void OnEnable()
+    {
+        base.OnEnable();
         ListenToPointerEvents();
     }
 

@@ -7,14 +7,14 @@ public class KobotoMono : MonoBehaviour {
 
     protected EGameState currentGameState;
 
-    void OnEnable() {
+    public virtual void OnEnable() {
         GameEvents.AddGameStateEnteredListener(SetGameState);
         GameEvents.AddGameStateEnteredListener(DidEnterGameState);
         GameEvents.AddGameStateExitListener(WillExitGameState);
 
     }
 
-    void OnDisable() {
+    public virtual void OnDisable() {
         GameEvents.RemoveGameStateEnteredListener(DidEnterGameState);
         GameEvents.RemoveGameStateExitListener(WillExitGameState);
 

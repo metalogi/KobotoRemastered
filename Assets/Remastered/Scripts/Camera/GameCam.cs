@@ -8,16 +8,23 @@ public class GameCam : KCam {
     public int stackSize = 20;
     public float aimYOffset = 0.1f;
     public float baseOutDist = 10f;
+    public float baseTilt = 11f;
 
     public float speedOutDistMultilpier = 1f;
     public float maxOutDist = 20f;
     public float zoomOutSpeed = 4f;
     public float zoomInSpeed =1f;
 
+   
+
     float outDist;
     float targetOutDist;
+    float tilt;
 
-    float outDistModifier = 0;
+    bool triggerReset;
+
+
+    Vector3 baseOutVector;
 
     Koboto targetK;
 
@@ -34,7 +41,8 @@ public class GameCam : KCam {
         posStack = new PStack(stackSize);
         outDist = baseOutDist;
         targetOutDist = baseOutDist;
-	}
+        baseOutVector = Quaternion.Euler(baseTilt, 270f, 0) * Vector3.forward;
+    }
 
     public void SetTarget(Transform t) {
         posStack.SetAll(t.position);
@@ -52,34 +60,71 @@ public class GameCam : KCam {
 	// Update is called once per frame
 	void FixedUpdate () {
         
+        if (currentGameState != EGameState.Play)
+        {
+            return;
+        }
         if (target != null) {
-           
 
-            float targetSpeed = targetK.GetSpeed();
+          
             Vector3 targetPos;
             float pushOut = 0;
+            float targetTilt = 0;
 
-            targetK.GetCameraInfo(out targetPos, out pushOut);
+            targetK.GetCameraInfo(out targetPos, out pushOut, out targetTilt);
 
-            if (pushOut > 0) Debug.Log("push out  " + pushOut);
+            if (triggerReset)
+            {
+                tilt = 0;
+                targetOutDist = baseOutDist;
+                outDist = targetOutDist;
+                transform.position = targetPos - baseOutVector * outDist;
+                transform.LookAt(targetPos);
+                posStack.SetAll(targetPos + aimYOffset * Vector3.up);
+                triggerReset = false;
+            } 
+            else
+            {
+                float targetSpeed = targetK.GetSpeed();
+                if (pushOut > 0) Debug.Log("push out  " + pushOut);
 
-            posStack.Record(targetPos + aimYOffset * Vector3.up);
-            Vector3 aimAt = posStack.Read();
-            targetOutDist = Mathf.Min(maxOutDist, baseOutDist + targetSpeed * speedOutDistMultilpier) + pushOut;
+                posStack.Record(targetPos + aimYOffset * Vector3.up);
+                Vector3 aimAt = posStack.Read();
+                targetOutDist = Mathf.Min(maxOutDist, baseOutDist + targetSpeed * speedOutDistMultilpier) + pushOut;
 
-            if (targetOutDist > outDist) {
-                outDist = Mathf.Lerp(outDist, targetOutDist, zoomOutSpeed * Time.fixedDeltaTime);
-            } else {
-                outDist = Mathf.Lerp(outDist, targetOutDist, zoomInSpeed * Time.fixedDeltaTime);
+                if (targetOutDist > outDist)
+                {
+                    outDist = Mathf.Lerp(outDist, targetOutDist, zoomOutSpeed * Time.fixedDeltaTime);
+                }
+                else
+                {
+                    outDist = Mathf.Lerp(outDist, targetOutDist, zoomInSpeed * Time.fixedDeltaTime);
+                }
+
+                float snap = 12f;
+                float rotateSnap = 12f;
+                float tiltSnap = 4f;
+                tilt = Mathf.Lerp(tilt, targetTilt, tiltSnap * Time.fixedDeltaTime);
+
+
+                Vector3 camOut = Quaternion.AngleAxis(tilt, Vector3.forward) * baseOutVector;
+                Vector3 moveTo = aimAt - camOut * outDist;
+
+
+                transform.position = Vector3.Lerp(transform.position, moveTo, snap * Time.fixedDeltaTime);
+                Quaternion rotateTo = Quaternion.LookRotation(aimAt - transform.position);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotateTo, rotateSnap * Time.fixedDeltaTime);
+                transform.LookAt(aimAt, Vector3.up);
             }
-
-            Vector3 moveTo = aimAt - transform.forward * outDist;
-
-            float snap = 12f;
-
-            transform.position = Vector3.Lerp (transform.position, moveTo, snap * Time.fixedDeltaTime);
         }
 	}
+
+    public void Reset()
+    {
+        triggerReset = true;
+    }
+
 }
 
 public class PStack {//class for averageing out position info over n frames
