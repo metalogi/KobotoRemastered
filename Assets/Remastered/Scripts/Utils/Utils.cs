@@ -23,4 +23,9 @@ public static class Utils {
         Vector3 newUp = Quaternion.AngleAxis(input * maxAngle, Vector3.right) * upVector;
         return Quaternion.FromToRotation(Vector3.up, newUp);
     }
+
+    public static Vector2 GamePlaneVector(Vector3 v)
+    {
+        return new Vector2(v.z, v.y);
+    }
 }

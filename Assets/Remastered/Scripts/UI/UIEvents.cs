@@ -20,7 +20,8 @@ public static class UIEvents  {
     static Dictionary<EPointerEvent, KPointerEvent> events = new Dictionary<EPointerEvent, KPointerEvent> {
         {EPointerEvent.PointerDown, new KPointerEvent()},
         {EPointerEvent.DragStart, new KPointerEvent()},
-        {EPointerEvent.Drag, new KPointerEvent()}
+        {EPointerEvent.Drag, new KPointerEvent()},
+        {EPointerEvent.DragEnd, new KPointerEvent()}
     };
 
     public static void AddListener(EPointerEvent eventType, PointerEventHandler listener) {
@@ -40,7 +41,6 @@ public static class UIEvents  {
     public static void Trigger(EPointerEvent eventType, PointerEventData pointerData) {
         KPointerEvent e;
         if (events.TryGetValue(eventType, out e)) {
-            Debug.Log("Pointer event " + eventType);
             e.Trigger(pointerData);
         }
     }

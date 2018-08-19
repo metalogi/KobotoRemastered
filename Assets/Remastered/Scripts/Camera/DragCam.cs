@@ -14,6 +14,10 @@ public class DragCam : KCam {
     Vector3 dragPlaneUp;
     Vector3 dragPlaneRight;
 
+    Vector2 dragPos;
+
+    bool dragging;
+
     bool cancelled;
 
 
@@ -42,11 +46,15 @@ public class DragCam : KCam {
             return;
         }
 
+        dragging = true;
+
         Debug.Log("Drag cam start");
 
         cancelled = false;
         dragStartPos =  eventData.position;
         camDragStartPos = transform.position;
+
+        dragPos = dragStartPos;
 
         Vector3 topLeftW = GetWorldSpaceDragPos (Vector2.zero);
         Vector3 bottomRightW = GetWorldSpaceDragPos(new Vector2(Screen.width, Screen.height));
@@ -64,12 +72,37 @@ public class DragCam : KCam {
         dragPlaneUp = (topLeftW.y - bottomRightW.y) * Vector3.up;
         dragPlaneRight = (topLeftW.z - bottomRightW.z) * Vector3.forward;
 
-        Vector2 dragDelta = eventData.position - dragStartPos;
-        transform.position = camDragStartPos + dragPlaneRight * dragDelta.x / Screen.width + dragPlaneUp * dragDelta.y / Screen.height;
-        Debug.Log("Drag set pos: " + transform.position);
+        Vector2 dragDelta = eventData.delta;
 
+        Vector3 dragDeltaWorld = new Vector3(0, -eventData.delta.y, -eventData.delta.x);
+
+        if (eventData.delta.sqrMagnitude > 0f && inForbiddenZone && Vector3.Dot(dragDeltaWorld, forbiddenDirection) > 0)
+        {
+
+            dragDelta = Vector2.Lerp(dragDelta, Vector2.zero, forbiddenStrength);
+        }
+
+        dragPos += dragDelta;
+
+        Vector2 dragTotalDelta = dragPos - dragStartPos;
+
+        Vector3 pos = camDragStartPos + dragPlaneRight * dragTotalDelta.x / Screen.width + dragPlaneUp * dragTotalDelta.y / Screen.height;
+
+        transform.position = pos;
     }
 
+    protected override void OnDragStop(PointerEventData eventData)
+    {
+        dragging = false;
+    }
+
+    public void LateUpdate()
+    {
+        if (!dragging && inForbiddenZone)
+        {
+            transform.position = Vector3.Lerp(transform.position, forbiddenExit, 3f * Time.fixedDeltaTime);
+        }
+    }
 
 
     Vector3 GetWorldSpaceDragPos(Vector2 screenSpacePos) {

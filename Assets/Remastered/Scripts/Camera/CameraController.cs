@@ -11,6 +11,9 @@ public class CameraController : MonoBehaviour {
     AudioListener audioListener;
     bool inTransition;
 
+    LevelZoneWorld worldZone;
+    List<LevelZoneCameraForbidden> cameraForbiddenZones;
+
     void OnEnable() {
         audioListener = mainCamera.GetComponent<AudioListener> ();
     }
@@ -124,6 +127,39 @@ public class CameraController : MonoBehaviour {
             fromCam.SetActive(false);
         }
         inTransition = false;
+    }
+
+    public void SetCameraForbiddenZones(LevelZoneWorld worldZone, List<LevelZoneCameraForbidden> zones)
+    {
+        this.worldZone = worldZone;
+        cameraForbiddenZones = zones;
+    }
+
+    public void CheckLevelZones()
+    {
+        foreach (KCam cam in cameras.Values)
+        {
+            cam.inForbiddenZone = false;
+            cam.forbiddenExit = cam.camera.transform.position;
+            cam.forbiddenStrength = 0;
+            cam.forbiddenDirection = Vector3.zero;
+
+            if (cam.isActiveAndEnabled)
+            {
+                
+                worldZone.UpdateCamera(cam);
+
+                if (cam.inForbiddenZone)
+                    continue;
+                
+                foreach (var zone in cameraForbiddenZones)
+                {
+                    zone.UpdateCamera(cam);
+                    if (cam.inForbiddenZone)
+                        continue;
+                }
+            }
+        }
     }
         
 

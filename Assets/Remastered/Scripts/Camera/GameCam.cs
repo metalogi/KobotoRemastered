@@ -110,6 +110,10 @@ public class GameCam : KCam {
                 Vector3 camOut = Quaternion.AngleAxis(tilt, Vector3.forward) * baseOutVector;
                 Vector3 moveTo = aimAt - camOut * outDist;
 
+                if (inForbiddenZone)
+                {
+                    moveTo = Vector3.Lerp(moveTo, forbiddenExit, forbiddenStrength);
+                }
 
                 transform.position = Vector3.Lerp(transform.position, moveTo, snap * Time.fixedDeltaTime);
                 Quaternion rotateTo = Quaternion.LookRotation(aimAt - transform.position);

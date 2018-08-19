@@ -57,7 +57,7 @@ var speedModifier : float = 1.0;
 var sound :AudioSource;
 function Start()
 {
-		
+		return;
 	sound = GetComponent(AudioSource);
 	 speedModifier= 1.0;
 	baseRot = transform.rotation;

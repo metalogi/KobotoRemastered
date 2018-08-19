@@ -86,12 +86,12 @@ public class AttachmentParachute : AttachmentBase {
       //  float upDragForce = 15f;
       //  Debug.Log("Up force " + upDragForce);
 
-        moveForce.tiltAngle = -25f * input.move;
+        moveForce.tiltAngle = 25f * input.move;
         moveForce.tiltStrength = 0.2f;
         moveForce.airDrag = 1f;
 
 
-        moveForce.airMove += Vector3.up * upDragForce + sensors.forwardVector * input.move * 80f;
+        moveForce.airMove += Vector3.up * upDragForce + sensors.forwardVector * input.move * 120f;
         moveForce.airMove += sensors.windSpeed;
         moveForce.airForcesSet = true;
 

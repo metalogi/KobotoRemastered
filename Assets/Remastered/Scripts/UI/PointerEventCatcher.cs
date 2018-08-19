@@ -16,9 +16,6 @@ public class PointerEventCatcher  : MonoBehaviour, IBeginDragHandler, IEndDragHa
 
     public void OnDrag (PointerEventData eventData) {
         UIEvents.Trigger(EPointerEvent.Drag, eventData);
-
-
-
     }
 
 

@@ -13,7 +13,9 @@ public class LevelZone : KobotoMono {
 
     protected bool Test(Vector3 point, ref Vector2 relativePosition)
     {
-        Vector3 localPoint = transform.InverseTransformPoint(point);
+        // Vector3 localPoint = transform.InverseTransformPoint(point);
+        Vector3 offset = point - transform.position;
+        Vector3 localPoint = transform.InverseTransformDirection(offset).normalized * offset.magnitude;
         float x, y;
         if (localPoint.z > 0)
         {
@@ -56,13 +58,17 @@ public class LevelZone : KobotoMono {
 
     }
 
+
     public void OnDrawGizmos()
     {
+        float sizeH = extentHPos + extentHNeg;
+        float sizeV = extentVPos + extentVNeg;
         Color c = didTestTrue ? Color.red : Color.white;
-        Vector3 up = transform.TransformVector(0, extentVPos + extentVNeg, 0);
-        Vector3 across = transform.TransformVector(0, 0, extentHPos + extentHNeg);
+        Vector3 up = transform.up * sizeV;
+        Vector3 across = transform.forward * sizeH;
 
-        Vector3 v = transform.position + transform.TransformVector(0, extentVPos, -extentHNeg);
+        Vector2 start = new Vector2(extentVPos, extentHNeg);
+        Vector3 v = transform.position + transform.up * extentVPos - transform.forward * extentHNeg;
         Vector3 v1 = v + across;
         Vector3 v2 = v1 - up;
         Vector3 v3 = v2 - across;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class KobotoSpawnInfo{
@@ -62,6 +63,14 @@ public class Level : KobotoMono {
         cameraController.SwitchToCamera("Game");
     }
 
+    public void Update()
+    {
+        if (currentGameState == EGameState.Play || currentGameState == EGameState.Map)
+        {
+            cameraController.CheckLevelZones();
+        }
+    }
+
     T FindTaggedInScene<T>(string tag) {
         GameObject obj = GameObject.FindWithTag(tag);
         return obj.GetComponent<T>();
@@ -72,7 +81,30 @@ public class Level : KobotoMono {
        
         Destroy(levelBoundsObject.gameObject);
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
-        levelZones = new List<LevelZone>(GetComponentsInChildren<LevelZone>());
+
+        levelZones = new List<LevelZone>();
+        var cameraZones = new List<LevelZoneCameraForbidden>();
+
+        LevelZoneWorld worldZone = null;
+
+
+        foreach (var zone in GetComponentsInChildren<LevelZone>())
+        {
+            if (zone is LevelZoneWorld)
+            {
+                worldZone = zone as LevelZoneWorld;
+            }
+            else if (zone is LevelZoneCameraForbidden)
+            {
+                cameraZones.Add(zone as LevelZoneCameraForbidden);
+            }
+            else
+            {
+                levelZones.Add(zone);
+            }
+        }
+        levelBounds = worldZone.GetBounds();
+        cameraController.SetCameraForbiddenZones(worldZone, cameraZones);
     }
 
 

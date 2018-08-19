@@ -21,6 +21,7 @@ public class KobotoMono : MonoBehaviour {
         UIEvents.RemoveListener(EPointerEvent.PointerDown, OnPointerDown);
         UIEvents.RemoveListener(EPointerEvent.DragStart, OnDragStart);
         UIEvents.RemoveListener(EPointerEvent.Drag, OnDrag);
+        UIEvents.RemoveListener(EPointerEvent.DragEnd, OnDragStop);
     }
 
 
@@ -30,10 +31,12 @@ public class KobotoMono : MonoBehaviour {
         currentGameState = GameEvents.gameState;
     }
 
+
     protected void ListenToPointerEvents() {
         UIEvents.AddListener(EPointerEvent.PointerDown, OnPointerDown);
         UIEvents.AddListener(EPointerEvent.DragStart, OnDragStart);
         UIEvents.AddListener(EPointerEvent.Drag, OnDrag);
+        UIEvents.AddListener(EPointerEvent.DragEnd, OnDragStop);
     }
 
     private void SetGameState(EGameState gameState, EGameState fromState) {
@@ -49,6 +52,7 @@ public class KobotoMono : MonoBehaviour {
 
     protected virtual void Init(EGameState gameState) {
     }
+
 
     protected virtual void OnPointerDown(PointerEventData eventData) {
     }
