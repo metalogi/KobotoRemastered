@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed4ea1050228ec341a286802a72582f2, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  worldData:
+  - worldUID: Grass
+    displayName: 
+    live: 1
+    levelData:
+    - levelUID: w1l1
+      displayName: 
+      scenePath: World1/Level01
+      live: 1
+    - levelUID: w1l2
+      displayName: 
+      scenePath: World1/Level02
+      live: 1
+    - levelUID: w1l3
+      displayName: 
+      scenePath: World1/Level03
+      live: 1
+    - levelUID: w1l4
+      displayName: 
+      scenePath: World1/Level04
+      live: 1

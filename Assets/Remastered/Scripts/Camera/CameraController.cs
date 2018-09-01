@@ -103,6 +103,15 @@ public class CameraController : MonoBehaviour {
         StartCoroutine(CameraLerp(activeCam, toCam, time));
     }
 
+    public void CopyPositionFromActive(KCam cam)
+    {
+        if (cam == activeCam || activeCam == null)
+            return;
+
+        cam.transform.position = activeCam.transform.position;
+        cam.transform.rotation = activeCam.transform.rotation;
+    }
+
     IEnumerator CameraLerp(KCam fromCam, KCam toCam, float time) {
 
         inTransition = true;

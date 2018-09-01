@@ -12,26 +12,27 @@ public class ProgressManager : MonoBehaviour {
     static string saveDirectory;
     static string savePath;
 
-    // constants
-    public static int worldCount = 3;
-    public static int[] levelCounts = new int[3]{10,10,10};
+    public static int worldCount {
+        get { return instance.gameProgress.Count; }
+    }
+    public static int[] levelCounts;
     public static int bonusTokensPerLevel = 3;
+
+    public static GameData gameData;
+
+
 
     // current level
     int currentWorldIndex;
     int currentLevelIndex;
 
+    List<List<LevelProgress>> gameProgress;
+
     #region saveFileContents
     [SerializeField]
     bool[] worldsUnlocked;
     [SerializeField]
-    List<List<LevelProgress>> gameProgress;
-    [SerializeField]
-    List<LevelProgress> world1Progress;
-    [SerializeField]
-    List<LevelProgress> world2Progress;
-    [SerializeField]
-    List<LevelProgress> world3Progress;
+    SavedLevelDictionary savedLevelsData;
 
     [SerializeField]
     SerializableDictionaryOfStringAndInt playerStats;
@@ -41,7 +42,7 @@ public class ProgressManager : MonoBehaviour {
 
     #endregion
 
-    public static void Init() {
+    public static void Init(bool forceNewGame) {
         if (instance != null) {
             return;
         }
@@ -51,16 +52,64 @@ public class ProgressManager : MonoBehaviour {
 
        
         saveDirectory = Path.Combine(Application.persistentDataPath, "Koboto");
-        savePath = Path.Combine(saveDirectory, "kSave.json");
-    
+        savePath = Path.Combine(saveDirectory, "kSave_v1_0.json");
 
-        if (!instance.InitFromSaveFile()) {
+        if (!instance.ProcessGameData())
+        {
+            Debug.LogAssertion("Failed to read static game data");
+            return;
+        }
+       
+
+        if (forceNewGame || !instance.InitFromSaveFile()) {
             instance.InitAsNewPlayer();
         }
         instance.SetCurrentLevelToLastUnlocked();
-       
-
     }
+
+    bool ProcessGameData()
+    {
+        string path = "GameData/GameData";
+        gameData = Resources.Load<GameData>(path);
+
+        if (gameData == null)
+        {
+            return false;
+        }
+
+        gameProgress = new List<List<LevelProgress>>();
+        //savedLevelsProgress = new List<LevelProgress>();
+        
+        foreach(var world in gameData.worldData)
+        {
+            if (!world.live) continue;
+
+            var worldProgress = new List<LevelProgress>();
+            gameProgress.Add(worldProgress);
+
+            foreach (var level in world.levelData)
+            {
+                if (!level.live) continue;
+
+                var levelProgress = new LevelProgress();
+                levelProgress.levelUID = level.levelUID;
+                levelProgress.bonusTokens = new bool[3];
+
+                worldProgress.Add(levelProgress);
+               // savedLevelsProgress.Add(levelProgress);
+            }
+
+        }
+
+        levelCounts = new int[gameProgress.Count];
+        for (int i=0; i< gameProgress.Count; i++)
+        {
+            levelCounts[i] = gameProgress[i].Count;
+        }
+
+        return true;
+    }
+
 
     public static int CurrentWorldNumber {
         get { return instance == null? 1 : instance.currentWorldIndex + 1;}
@@ -74,23 +123,22 @@ public class ProgressManager : MonoBehaviour {
 
     public bool IsLevelUnlocked(int worldNumber, int levelNumber) {
         int levelIndex = levelNumber - 1;
-
-        if (worldNumber == 1 && levelIndex < world1Progress.Count) { 
-            return world1Progress [levelIndex].unlocked;
-
-        } else if (worldNumber == 2 && levelIndex < world2Progress.Count) { 
-            return world2Progress [levelIndex].unlocked;
-
-        } else if (worldNumber == 3 && levelIndex < world3Progress.Count) { 
-            return world3Progress [levelIndex].unlocked;
+        int worldIndex = worldNumber - 1;
+        if (WorldExists(worldIndex, levelIndex))
+        {
+            return gameProgress[worldIndex][levelIndex].unlocked;
         }
 
         return false;
     }
 
     public void MarkCurrentLevelComplete() {
+
         LevelProgress levelProgress = gameProgress[currentWorldIndex][currentLevelIndex];
         levelProgress.passed = true;
+        WriteToSaveData(levelProgress.levelUID, (s) => s.passed = true);
+       
+
 
         // unlock next level
         if (currentLevelIndex == levelCounts[currentWorldIndex] -1) { // final level in world, unlock next world
@@ -100,19 +148,32 @@ public class ProgressManager : MonoBehaviour {
                 worldsUnlocked[currentWorldIndex + 1] = true;
                 LevelProgress firstLevelNextWorldProgress = gameProgress[currentWorldIndex + 1][1];
                 firstLevelNextWorldProgress.unlocked = true;
+
+                WriteToSaveData(firstLevelNextWorldProgress.levelUID, (s) => s.unlocked = true);
             }
-            
         }
 
         LevelProgress nextLevelProgress = gameProgress[currentWorldIndex][currentLevelIndex + 1];
         nextLevelProgress.unlocked = true;
+        WriteToSaveData(nextLevelProgress.levelUID, (s) => s.unlocked = true);
         SaveToFile();
 
     }
 
+    void WriteToSaveData(string uid, Action<LevelSaveData> saveAction)
+    {
+        LevelSaveData saveData = null;
+        if (!savedLevelsData.TryGetValue(uid, out saveData))
+        {
+            saveData = new LevelSaveData();
+            savedLevelsData.Add(uid, saveData);
+        }
+        saveAction(saveData);
+    }
+
+  
+
     public void AdvanceToNextLevel() {
-
-
         if (currentLevelIndex >= levelCounts[currentWorldIndex]-1) { 
             if (currentWorldIndex < worldCount - 1) {
            
@@ -123,7 +184,32 @@ public class ProgressManager : MonoBehaviour {
         } else {
             currentLevelIndex++;
         }
+    }
 
+    public string GetScenePath(int worldNumber, int levelNumber)
+    {
+        int worldIndex = worldNumber - 1;
+        int levelIndex = levelNumber - 1;
+
+        if (WorldExists(worldIndex, levelIndex))
+        {
+            return gameData.worldData[worldIndex].levelData[levelIndex].scenePath;
+        }
+
+        return null;
+    }
+
+    bool WorldExists(int worldIndex, int levelIndex)
+    {
+
+        if (worldIndex >= 0 && worldIndex < gameData.worldData.Count)
+        {
+            if (levelIndex >= 0 && levelIndex < gameData.worldData[worldIndex].levelData.Count)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void SetCurrentLevel(int worldNumber, int levelNumber) {
@@ -164,22 +250,8 @@ public class ProgressManager : MonoBehaviour {
     }
 
     void InitAsNewPlayer() {
-       
-        gameProgress = new List<List<LevelProgress>>();
-        for (int i=0; i<worldCount; i++) {
-            List<LevelProgress> progressForWorld = new List<LevelProgress>();
 
-            for (int j=0; j<levelCounts[i]; j++) {
-                LevelProgress levelProgress = new LevelProgress();
-                levelProgress.bonusTokens = new bool[3];
-                progressForWorld.Add(levelProgress);
-            }
-            if (i==0) {
-                world1Progress = progressForWorld;
-            }
-            gameProgress.Add(progressForWorld);
-        }
-
+        savedLevelsData = new SavedLevelDictionary();
         worldsUnlocked = new bool[worldCount];
 
         playerStats = new SerializableDictionaryOfStringAndInt();
@@ -188,23 +260,33 @@ public class ProgressManager : MonoBehaviour {
         currentWorldIndex = 0;
         currentLevelIndex = 0;
 
-        worldsUnlocked [0] = true;
-        world1Progress [0].unlocked = true;
+        worldsUnlocked[0] = true;
+        gameProgress[0][0].unlocked = true;
+        WriteToSaveData(gameProgress[0][0].levelUID, (s) => s.unlocked = true);
 
         SaveToFile();
-       
-
     }
 
     bool InitFromSaveFile() {
         if (File.Exists(savePath)) {
             Debug.Log ("Loading save from : " + savePath);
             string jsonStr = File.ReadAllText(savePath);
+
+            Debug.Log("Reading save file: " + jsonStr);
             JsonUtility.FromJsonOverwrite(jsonStr, this);
-            gameProgress = new List<List<LevelProgress>>();
-            gameProgress.Add(world1Progress);
-            gameProgress.Add(world2Progress);
-            gameProgress.Add(world3Progress);
+
+            foreach (var kvp in savedLevelsData)
+            {
+                string id = kvp.Key;
+                LevelSaveData saveData = kvp.Value;
+                
+                var levelProgress = FindLevelProgress(id);
+                if (levelProgress != null)
+                {
+                    levelProgress.LoadFromSave(saveData);
+                }
+            }
+
             return true;
                 
         }
@@ -212,7 +294,24 @@ public class ProgressManager : MonoBehaviour {
         
     }
 
+    LevelProgress FindLevelProgress(string levelUID)
+    {
+        foreach (var world in gameProgress)
+        {
+            foreach (var level in world)
+            {
+                if (level.levelUID == levelUID)
+                {
+                    return level;
+                }
+            }
+        }
+        
+        return null;
+    }
+
     void SaveToFile() {
+        
         string jsonStr = JsonUtility.ToJson(this);
 
         if (!Directory.Exists(saveDirectory)) {
@@ -223,6 +322,7 @@ public class ProgressManager : MonoBehaviour {
             File.Create(savePath).Dispose();
         }
         File.WriteAllText(savePath, jsonStr);
+        Debug.Log("Writing save file: " + jsonStr);
         Debug.Log("Wrote save file to " + savePath);
     }
 
@@ -230,9 +330,30 @@ public class ProgressManager : MonoBehaviour {
 
 }
 
-[System.Serializable]
 public class LevelProgress {
+    public string levelUID;
     public bool unlocked;
     public bool passed;
     public bool[] bonusTokens;
+
+    public void LoadFromSave(LevelSaveData from)
+    {
+        unlocked = from.unlocked;
+        passed = from.passed;
+        if (from.bonusTokens != null)
+        {
+            for (int i=0; i<Math.Min(from.bonusTokens.Length, bonusTokens.Length); i++)
+            {
+                bonusTokens[i] = from.bonusTokens[i];
+            }
+        }
+    }
+}
+
+[System.Serializable]
+public class LevelSaveData
+{
+    public bool unlocked;
+    public bool passed;
+    public bool[] bonusTokens = new bool[3];
 }

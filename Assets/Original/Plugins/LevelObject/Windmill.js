@@ -36,7 +36,7 @@ private var rotAngle = 0.0;
 function Update () 
 {
 
-	
+	return;
 	if( on ) onStrength += Time.deltaTime;
 	else onStrength -= Time.deltaTime;
 	if( onStrength > 1.0 ) onStrength = 1.0;

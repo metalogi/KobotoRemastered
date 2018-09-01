@@ -17,12 +17,11 @@ public class AppController : MonoBehaviour {
 	
 	void Awake() {
         instance = this;
-        ProgressManager.Init();
-        
+        ProgressManager.Init(forceNewGame);
 	}
 
     public Animator splashScreenAnimator;
-	
+    public bool forceNewGame = false;
     const string sceneRoot = "Remastered/Scenes/";
 
     Scene currentLevelScene;
@@ -48,8 +47,14 @@ public class AppController : MonoBehaviour {
     }
 
     public void LoadLevel(int world, int level) {
-        string scenePath = sceneRoot + "World" + world.ToString("0") + "/Level" + level.ToString("00");
-        StartCoroutine(TransitionToScene(scenePath, EGameState.Intro));
+
+        string scenePath = ProgressManager.instance.GetScenePath(world, level);
+        if (string.IsNullOrEmpty(scenePath))
+        {
+            Debug.LogError("couldn't load world " + world + " level " + level);
+            return;
+        }
+        StartCoroutine(TransitionToScene(sceneRoot + scenePath, EGameState.Intro));
     }
 
     void GameStateEnteredListener(EGameState state, EGameState fromState) {

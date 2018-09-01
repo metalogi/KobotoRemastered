@@ -286,6 +286,9 @@ public class Koboto : KobotoMonoRigidbody {
         case KobotoDeath.Imapaled:
             StartCoroutine(ImpaleAnim(killer));
             break;
+        case KobotoDeath.Drowned:
+            StartCoroutine(DrownAnim());
+            break;
         }
     }
 
@@ -312,6 +315,34 @@ public class Koboto : KobotoMonoRigidbody {
             sink *= 0.98f;
             rb.MovePosition(pos);
             yield return null;
+        }
+        yield break;
+    }
+
+    IEnumerator DrownAnim()
+    {
+        RemoveAttachmentOfType(EAttachmentType.Parachute);
+        float drownStart = transform.position.y;
+        rb.useGravity = false;
+        rb.drag = 3f;
+      
+
+        rb.centerOfMass += transform.up;
+
+        rb.angularVelocity *= 5f;
+
+        const float bouyency = 10f;
+
+        while (currentState == KobotoState.Dead)
+        {
+            float depth = drownStart - transform.position.y;
+            if (depth < 0)
+                depth = 0;
+
+            rb.AddForce(bouyency * depth * Vector3.up);
+
+            yield return null;
+
         }
         yield break;
     }

@@ -5,8 +5,10 @@ using UnityEngine;
 public class LevelObjectRotator : LevelObjectBase {
     public float speed = 20f;
 
+    public Vector3 axis = Vector3.right;
+
 
     protected override void FixedUpdatePlay(){
-        transform.Rotate (Vector3.right * speed * Time.fixedDeltaTime, Space.World);
+        transform.Rotate (axis.normalized * speed * Time.fixedDeltaTime, Space.World);
     }
 }

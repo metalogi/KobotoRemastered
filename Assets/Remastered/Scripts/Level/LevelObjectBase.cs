@@ -31,7 +31,7 @@ public class LevelObjectBase : KobotoMono {
     }
 
     void SetActive(bool active) {
-        Debug.Log("Setting level object active: " + active);
+       // Debug.Log("Setting level object active: " + active);
         isActive = active;
        
     }

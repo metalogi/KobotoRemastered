@@ -14,7 +14,8 @@ public class GameStateVisibilty : KobotoMono {
     CanvasGroup canvasGroup;
 
 
-    void Awake() {
+    public override void Awake() {
+        base.Awake();
         canvasGroup = GetComponent<CanvasGroup>();
     }
 

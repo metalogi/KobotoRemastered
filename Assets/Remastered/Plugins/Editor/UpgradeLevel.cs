@@ -25,12 +25,15 @@ public class UpgradeLevel : MonoBehaviour {
         root.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         Level level = root.AddComponent<Level> ();
 
-        GameObject bounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
-        bounds.name = "LevelBounds";
-        bounds.transform.parent = root.transform;
-        DestroyImmediate(bounds.GetComponent<Collider> ());
+        //GameObject bounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
+        //bounds.name = "LevelBounds";
+        //bounds.transform.parent = root.transform;
+        //DestroyImmediate(bounds.GetComponent<Collider> ());
 
-        level.levelBoundsObject = bounds.GetComponent<MeshRenderer> ();
+      //  GameObject levelBounds = new GameObject("WorldBounds");
+      //  levelBounds.AddComponent<LevelZoneWorld>();
+
+        //level.levelBoundsObject = bounds.GetComponent<MeshRenderer> ();
 
         var oldSpawnPoints = root.GetComponentsInChildren<SpawnPoint> ();
         level.kobotoSpawnInfo = new KobotoSpawnInfo[oldSpawnPoints.Length];

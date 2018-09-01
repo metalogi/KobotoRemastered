@@ -16,9 +16,13 @@ public class KCam : KobotoMono {
 
     protected bool isActive;
 
+    [HideInInspector]
     public bool inForbiddenZone;
+    [HideInInspector]
     public Vector3 forbiddenExit;
+    [HideInInspector]
     public Vector3 forbiddenDirection;
+    [HideInInspector]
     public float forbiddenStrength;
 
     public override void OnEnable()

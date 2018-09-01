@@ -14,7 +14,6 @@ public class Level : KobotoMono {
 
     public KobotoSpawnInfo[] kobotoSpawnInfo;
     public List<EAttachmentType> availableAttachments;
-    public MeshRenderer levelBoundsObject;
 
     public CameraController cameraController;
     public GameCam gameCam;
@@ -77,9 +76,6 @@ public class Level : KobotoMono {
     }
     protected override void Init(EGameState gameState) {
 
-        levelBounds = levelBoundsObject.bounds;
-       
-        Destroy(levelBoundsObject.gameObject);
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
 
         levelZones = new List<LevelZone>();
@@ -115,12 +111,13 @@ public class Level : KobotoMono {
         switch (gameState) {
 
         case EGameState.Intro:
-            cameraController.SwitchToCamera ("Intro");
+            cameraController.SwitchToCamera("Intro");
             break;
 
         case EGameState.Play:
+            cameraController.CopyPositionFromActive(gameCam);
             float camLerpTime = fromState == EGameState.Intro ? 2f : 0.5f;
-            cameraController.LerpToCamera ("Game", camLerpTime);
+            cameraController.LerpToCamera("Game", camLerpTime);
             if (fromState != EGameState.Paused && fromState != EGameState.Map) {
                 ResetKobotos ();
             }
@@ -139,7 +136,6 @@ public class Level : KobotoMono {
             break;
         }
 
-        
     }
 
     public void SpawnKobotos() {

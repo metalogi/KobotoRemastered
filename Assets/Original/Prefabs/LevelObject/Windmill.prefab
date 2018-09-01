@@ -49,9 +49,8 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 3300002}
   - component: {fileID: 2300002}
-  - component: {fileID: 11400000}
-  - component: {fileID: 11400002}
   - component: {fileID: 8200000}
+  - component: {fileID: 114961932478241460}
   m_Layer: 0
   m_Name: windmill_propeller
   m_TagString: Untagged
@@ -68,9 +67,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0.70710677, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.00000004708083, y: 2.4134803, z: -0.096736304}
-  m_LocalScale: {x: 0.025911905, y: 0.025911905, z: 0.025911905}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
+  m_LocalPosition: {x: 0.00000004708083, y: 2.237847, z: -0.0967363}
+  m_LocalScale: {x: 0.0259119, y: 0.0259119, z: 0.0259119}
   m_Children:
   - {fileID: 400002}
   - {fileID: 400004}
@@ -384,42 +383,9 @@ Animation:
 --- !u!1002 &11100001
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31547f8d2bf5c423a87719f78cc03859, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutAway: 0
-  cutAwayTime: 0
-  lngth: 200
-  wdth: 70
-  JetForce: 50
-  spinSpeed: 2
-  starton: 1
-  sound: {fileID: 0}
-  on: 0
 --- !u!1002 &11400001
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61511a73719ce44a4bacff45e540e7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resetTransform: 0
-  secondaryScript: Windmill
 --- !u!1002 &11400003
 EditorExtensionImpl:
   serializedVersion: 6
@@ -437,3 +403,20 @@ Prefab:
 --- !u!1002 &100100001
 EditorExtensionImpl:
   serializedVersion: 6
+--- !u!114 &114961932478241460
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d04aac84eb416214b883becb06dc8e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: {fileID: 0}
+  mainCollider: {fileID: 0}
+  stateMask: 1496
+  activeInEndgame: 0
+  speed: 400
+  axis: {x: 0, y: 0, z: 1}

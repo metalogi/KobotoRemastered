@@ -39,3 +39,6 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
 
 [Serializable] 
 public class SerializableDictionaryOfStringAndInt : SerializableDictionary<string, int> {}
+
+[Serializable]
+public class SavedLevelDictionary : SerializableDictionary<string, LevelSaveData> { }
