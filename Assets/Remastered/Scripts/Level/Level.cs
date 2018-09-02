@@ -72,9 +72,15 @@ public class Level : KobotoMono {
 
     T FindTaggedInScene<T>(string tag) {
         GameObject obj = GameObject.FindWithTag(tag);
+        if (obj == null)
+        {
+            Debug.LogError("No object with tag: " + tag);
+        }
         return obj.GetComponent<T>();
     }
-    protected override void Init(EGameState gameState) {
+
+    protected override void Init(EGameState gameState) 
+    {
 
         levelObjects = new List<LevelObjectBase>(GetComponentsInChildren<LevelObjectBase>());
 

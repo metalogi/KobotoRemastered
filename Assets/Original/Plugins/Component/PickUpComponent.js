@@ -10,24 +10,25 @@ private var pickedUp = false;
 
 function Awake()
 {
-	cam = Camera.main.GetComponent(CameraManager);
-	editor =FindObjectOfType(UIEditor);
-	renderers = GetComponentsInChildren (MeshRenderer);
-	localPos = transform.localPosition;
+	//cam = Camera.main.GetComponent(CameraManager);
+	//editor =FindObjectOfType(UIEditor);
+	//renderers = GetComponentsInChildren (MeshRenderer);
+	//localPos = transform.localPosition;
 }
 
 function Update()
 {
-	if (regenerate)
-	{
-		if (!on && editor.components[index].count == 0)
-		{
-			Reset(true);
-		}
-	}
+	//if (regenerate)
+	//{
+	//	if (!on && editor.components[index].count == 0)
+	//	{
+	//		Reset(true);
+	//	}
+	//}
 }
 
 function OnTriggerEnter (col:Collider) {
+	return;
 	var junc : Juncore = col.GetComponent(Juncore);
 	if (junc&&on)
 	{

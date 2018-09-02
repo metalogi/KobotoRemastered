@@ -9,16 +9,7 @@ var flakes: int =500;
 
 function Awake()
 {
-	on=false;
-	if (PlayerPrefs.GetInt("WorldsUnlocked",1) >1) on=true;
-	
-	if (on)
-	{
-	emitter  = GetComponent(ParticleEmitter);
-	pAnim =GetComponent(ParticleAnimator);
-	emitter.Emit(flakes);
-	o=base.position;
-	}
+
 	
 }
 
@@ -40,46 +31,46 @@ function LowPassFilterAccelerometer() : Vector3
 }
 
 function Update () {
-	if (on)
-	{
+	// if (on)
+	// {
 	
-	acc=Input.acceleration;
+	// acc=Input.acceleration;
 	
-	accFiltered=LowPassFilterAccelerometer();
-	shakeMag = Mathf.Abs(acc.sqrMagnitude-accFiltered.sqrMagnitude);
-	//print (shakeMag);
+	// accFiltered=LowPassFilterAccelerometer();
+	// shakeMag = Mathf.Abs(acc.sqrMagnitude-accFiltered.sqrMagnitude);
+	// //print (shakeMag);
 	
 	
 	
-	pAnim.force.z = -20*accFiltered.y;
-	pAnim.force.y = 40*accFiltered.x;
+	// pAnim.force.z = -20*accFiltered.y;
+	// pAnim.force.y = 40*accFiltered.x;
 	
-	var ps = emitter.particles;
-	for (var i=0; i<ps.Length; i++) 
-	{
+	// var ps = emitter.particles;
+	// for (var i=0; i<ps.Length; i++) 
+	// {
 	
-		if ((shakeMag+extraShake)>shakeThres) ps[i].velocity += 20*Random.onUnitSphere * (shakeMag+extraShake);
-		if ((ps[i].position.y<(o.y-2)) || (ps[i].position-o).magnitude >110)
-		{ 
-			ps[i].position.y = -500;
-			ps[i].energy =-1;
-			emitter.Emit(1);
-		}
+	// 	if ((shakeMag+extraShake)>shakeThres) ps[i].velocity += 20*Random.onUnitSphere * (shakeMag+extraShake);
+	// 	if ((ps[i].position.y<(o.y-2)) || (ps[i].position-o).magnitude >110)
+	// 	{ 
+	// 		ps[i].position.y = -500;
+	// 		ps[i].energy =-1;
+	// 		emitter.Emit(1);
+	// 	}
 		
-	}
-	emitter.particles=ps;
-	}
+	// }
+	// emitter.particles=ps;
+	// }
 }
 
 
 function Shake(mag : float, shakeTime:float)
 {
-	var timer :float =shakeTime;
-	while (timer>0)
-	{
-		print ("extraShake =" + extraShake);
-		extraShake= Mathf.Lerp(0,mag,timer/shakeTime);
-		timer -= Time.deltaTime;
-		yield;
-	}
+	// var timer :float =shakeTime;
+	// while (timer>0)
+	// {
+	// 	print ("extraShake =" + extraShake);
+	// 	extraShake= Mathf.Lerp(0,mag,timer/shakeTime);
+	// 	timer -= Time.deltaTime;
+	// 	yield;
+	// }
 }

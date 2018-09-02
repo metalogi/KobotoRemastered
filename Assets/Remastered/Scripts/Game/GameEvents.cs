@@ -1,32 +1,83 @@
 ﻿//#define DEBUG_STATES
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public static class GameEvents  {
+
+    public enum GameEventEnum
+    {
+        CollectedBonusToken
+    }
+
+    static Dictionary<GameEventEnum, GameEvent> events = new Dictionary<GameEventEnum, GameEvent> {
+        {GameEventEnum.CollectedBonusToken, new GameEvent()}
+    };
+
+    public abstract class GameEventArguments
+    {
+
+    }
+    public delegate void GameEventHandler(GameEventArguments args);
+
+    public class GameEvent
+    {
+        public event GameEventHandler gEvent;
+
+        Type argumentType;
+            
+
+        public void Trigger(GameEventArguments args)
+        {
+            if (gEvent != null)
+            {
+                gEvent(args);
+            }
+        }
+
+        public void AddListener(GameEventHandler listener)
+        {
+            gEvent -= listener;
+            gEvent += listener;
+        }
+
+        public void RemoveListener(GameEventHandler listener)
+        {
+            gEvent -= listener;
+        }
+    }
+
+
+    public static void AddListener(GameEventEnum eventType, GameEventHandler listener)
+    {
+        GameEvent e;
+        if (events.TryGetValue(eventType, out e))
+        {
+            e.AddListener(listener);
+        }
+    }
+
+    public static void Trigger(GameEventEnum eventType, GameEventArguments args)
+    {
+        GameEvent e;
+        if (events.TryGetValue(eventType, out e))
+        {
+            e.Trigger(args);
+        }
+    }
+
+    
+
+    #region GameState
 
     public static EGameState gameState {get; private set;}
 
 
-    #region GameState
+
     public delegate void GameStateChangeEventHandler(EGameState fromState, EGameState toState);
-//    static event GameStateChangeEventHandler GameStateChanged;
-//    public static void OnGameStateChange(EGameState fromState, EGameState toState) {
-//        Debug.Log("Game state change " + fromState + " => " + toState);
-//
-//        if (GameStateChanged != null) {
-//            GameStateChanged(fromState, toState);
-//        }
-//    }
-//    public static void AddGameStateListener(GameStateChangeEventHandler listener) {
-//        Debug.Log("Adding game state listener");
-//        GameStateChanged -= listener;
-//        GameStateChanged += listener;
-//    }
-//    public static void RemoveGameStateListener(GameStateChangeEventHandler listener) {
-//        GameStateChanged -= listener;
-//    }
 
     //Entered
     static event GameStateChangeEventHandler GameStateEntered;
@@ -74,30 +125,7 @@ public static class GameEvents  {
     #endregion
 
 
-    #region GameEvents
 
-
-    public delegate void GameEventHandler();
-
-    public class GameEvent {
-        public  event GameEventHandler gEvent;
-
-        public void Trigger() {
-            if (gEvent != null) {
-                gEvent();
-            }
-        }
-
-        public void AddListener(GameEventHandler listener) {
-            gEvent -= listener;
-            gEvent += listener;
-        }
-
-        public void RemoveListener(GameEventHandler listener) {
-            gEvent -= listener;
-        }
-    }
-    #endregion
 
    
 

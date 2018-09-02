@@ -12,6 +12,9 @@ public class LevelObjectBase : KobotoMono {
 
     protected bool isActive;
 
+    protected int worldNumber;
+    protected int levelNumber;
+
     protected override void Init(EGameState gameState) {
         if (trigger == null) {
             trigger = FindCollider(true);
@@ -19,7 +22,10 @@ public class LevelObjectBase : KobotoMono {
         if (mainCollider == null) {
             mainCollider = FindCollider(false);
         }
+        worldNumber = ProgressManager.CurrentWorldNumber;
+        levelNumber = ProgressManager.CurrentLevelNumber;
     }
+
 
     Collider FindCollider(bool trigger) {
         foreach (Collider c in GetComponentsInChildren<Collider>()) {
@@ -78,6 +84,10 @@ public class LevelObjectBase : KobotoMono {
         if (koboto != null) {
             OnKobotoEnter(koboto);
         }
+        else
+        {
+            OnObjectEnter(other);
+        }
     }
 
     void OnTriggerExit(Collider other) {
@@ -89,11 +99,23 @@ public class LevelObjectBase : KobotoMono {
         if (koboto != null) {
             OnKobotoExit(koboto);
         }
+        else
+        {
+            OnObjectExit(other);
+        }
     }
 
     protected virtual void OnKobotoEnter(Koboto koboto) {
     }
 
     protected virtual void OnKobotoExit(Koboto koboto) {
+    }
+
+    protected virtual void OnObjectEnter(Collider collider)
+    {
+    }
+
+    protected virtual void OnObjectExit(Collider collider)
+    {
     }
 }

@@ -33,6 +33,9 @@ public class AppController : MonoBehaviour {
 
     void Start(){
         GameEvents.AddGameStateEnteredListener(GameStateEnteredListener);
+
+        GameEvents.AddListener(GameEvents.GameEventEnum.CollectedBonusToken, OnCollectedBonusToken);
+      
         LoadWorldMap(1);
     }
         
@@ -82,6 +85,13 @@ public class AppController : MonoBehaviour {
             LoadWorldMap(ProgressManager.CurrentWorldNumber);
             break;
         }
+    }
+
+    void OnCollectedBonusToken(GameEvents.GameEventArguments data)
+    {
+        BonusTokenCollectedData tokenData = data as BonusTokenCollectedData;
+        ProgressManager.instance.CollectBonusToken(tokenData.worldNumber, tokenData.levelNumber, tokenData.index);
+        
     }
 
     IEnumerator TransitionToScene(string scenePath, EGameState endState) {

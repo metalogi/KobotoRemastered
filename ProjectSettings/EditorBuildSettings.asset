@@ -32,3 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Remastered/Scenes/World1/Level07.unity
     guid: ce623ca8db4fe954b8c3e75d92ce70a9
+  - enabled: 1
+    path: Assets/Remastered/Scenes/World1/Level06.unity
+    guid: 04c023d6796207b49b3355cf5f59d499
+  m_configObjects: {}

@@ -160,6 +160,32 @@ public class ProgressManager : MonoBehaviour {
 
     }
 
+    public bool GetBonusTokenCollected(int worldNumber, int levelNumber, int index)
+    {
+        int levelIndex = levelNumber - 1;
+        int worldIndex = worldNumber - 1;
+        if (WorldExists(worldIndex, levelIndex))
+        {
+            var levelProgress = gameProgress[worldIndex][levelIndex];
+            return levelProgress.bonusTokens[index];
+        }
+        return false;
+    }
+
+    public void CollectBonusToken(int worldNumber, int levelNumber, int index)
+    {
+        int levelIndex = levelNumber - 1;
+        int worldIndex = worldNumber - 1;
+        if (WorldExists(worldIndex, levelIndex))
+        {
+            var levelProgress = gameProgress[worldIndex][levelIndex];
+            levelProgress.bonusTokens[index] = true;
+
+            WriteToSaveData(levelProgress.levelUID, (s) => s.bonusTokens[index] = true);
+            SaveToFile();
+        }
+    }
+
     void WriteToSaveData(string uid, Action<LevelSaveData> saveAction)
     {
         LevelSaveData saveData = null;
@@ -326,27 +352,24 @@ public class ProgressManager : MonoBehaviour {
         Debug.Log("Wrote save file to " + savePath);
     }
 
-
-
 }
 
 public class LevelProgress {
     public string levelUID;
     public bool unlocked;
     public bool passed;
-    public bool[] bonusTokens;
+    public bool[] bonusTokens = new bool[3];
 
     public void LoadFromSave(LevelSaveData from)
     {
         unlocked = from.unlocked;
         passed = from.passed;
-        if (from.bonusTokens != null)
+
+        for (int i=0; i<3; i++)
         {
-            for (int i=0; i<Math.Min(from.bonusTokens.Length, bonusTokens.Length); i++)
-            {
-                bonusTokens[i] = from.bonusTokens[i];
-            }
+            bonusTokens[i] = from.bonusTokens[i];
         }
+        
     }
 }
 

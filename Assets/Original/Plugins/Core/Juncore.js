@@ -1373,8 +1373,7 @@ if( hasPropellor && prop.height > 0 && !ridge.isKinematic && propellorTrans)
 				{ propellorSound.engine.volume = Mathf.Lerp(0.5,1,propRotateSpeed/3);
 				propellorSound.engine.pitch = Mathf.Lerp(1.5,2,propRotateSpeed/3);
 				}
-				propellorDust.TurnOn(true);
-				propellorDust.emitter.transform.position = prhit.point;
+		
 				}
 				else
 				{
@@ -1826,11 +1825,11 @@ if(!passenger){
 
 		
 //Add on Forces from Jetsteams and Windmills
-	for (var js:Jetstream in jetStreams) {MoveForce+=js.GetForce(trans.position);}
-		for( var curWindmill:Windmill in windmills )
-			{
-				MoveForce += curWindmill.TestZone(trans.position);
-			}
+	// for (var js:Jetstream in jetStreams) {MoveForce+=js.GetForce(trans.position);}
+	// 	for( var curWindmill:Windmill in windmills )
+	// 		{
+	// 			MoveForce += curWindmill.TestZone(trans.position);
+	// 		}
 	
 	
 //Add Gravity,or if stuck to ceiling with quad wheels or magnet, add ceiling force
