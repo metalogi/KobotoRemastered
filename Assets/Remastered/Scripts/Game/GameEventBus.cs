@@ -96,43 +96,44 @@ public abstract class GameEventBusNoData
     }
 }
 
-public abstract class GenericEventBus
-{
-    GameEventBase[] events;
 
-    protected GenericEventBus(List<GameEventBase> eventList)
-    {
-        events = eventList.ToArray();
-    }
+//public abstract class GenericEventBus
+//{
+//    GameEventBase[] events;
 
-    protected void AddListener<T>(int eventIndex, GameEvent<T>.GameEventHandler listener) where T : class
-    {
-        if (eventIndex < 0 || eventIndex >= events.Length)
-        {
-            Debug.LogAssertion("Event index out of range");
-            return;
-        }
-        ((GameEvent<T>)events[eventIndex]).AddListener(listener);
-    }
+//    protected GenericEventBus(List<GameEventBase> eventList)
+//    {
+//        events = eventList.ToArray();
+//    }
 
-    protected void RemoveListener<T>(int eventIndex, GameEvent<T>.GameEventHandler listener) where T : class
-    {
-        if (eventIndex < 0 || eventIndex >= events.Length)
-        {
-            Debug.LogAssertion("Event index out of range");
-            return;
-        }
-        ((GameEvent<T>)events[eventIndex]).RemoveListener(listener);
-    }
+//    protected void AddListener<T>(int eventIndex, GameEvent<T>.GameEventHandler listener) where T : class
+//    {
+//        if (eventIndex < 0 || eventIndex >= events.Length)
+//        {
+//            Debug.LogAssertion("Event index out of range");
+//            return;
+//        }
+//        ((GameEvent<T>)events[eventIndex]).AddListener(listener);
+//    }
 
-    protected void Trigger<T>(int eventIndex, T data) where T : class
-    {
-        if (eventIndex < 0 || eventIndex >= events.Length)
-        {
-            Debug.LogAssertion("Event index out of range");
-            return;
-        }
-        ((GameEvent<T>)events[eventIndex]).Trigger(data);
-    }
-}
+//    protected void RemoveListener<T>(int eventIndex, GameEvent<T>.GameEventHandler listener) where T : class
+//    {
+//        if (eventIndex < 0 || eventIndex >= events.Length)
+//        {
+//            Debug.LogAssertion("Event index out of range");
+//            return;
+//        }
+//        ((GameEvent<T>)events[eventIndex]).RemoveListener(listener);
+//    }
+
+//    protected void Trigger<T>(int eventIndex, T data) where T : class
+//    {
+//        if (eventIndex < 0 || eventIndex >= events.Length)
+//        {
+//            Debug.LogAssertion("Event index out of range");
+//            return;
+//        }
+//        ((GameEvent<T>)events[eventIndex]).Trigger(data);
+//    }
+//}
 
