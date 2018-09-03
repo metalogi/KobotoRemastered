@@ -2,69 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void KobotoEventHandler(Koboto koboto);
 
 public enum KEventEnum {
     Rescued,
     Died,
     Selected,
     FiredJetpack,
-    PickedUpJetpack
+    PickedUpJetpack,
+    Count = 5
 }
 
 
-public static class KobotoEvents   {
+public class KobotoEvents : GameEventBus<Koboto>   {
 
-    static Dictionary<KEventEnum, KEvent> events = new Dictionary<KEventEnum, KEvent> {
-        {KEventEnum.Rescued, new KEvent()},
-        {KEventEnum.Died, new KEvent()},
-        {KEventEnum.Selected, new KEvent()},
-        {KEventEnum.FiredJetpack, new KEvent() },
-        {KEventEnum.PickedUpJetpack, new KEvent() }
-    };
-
-
-    public class KEvent
+    public static KobotoEvents CreateEventBus()
     {
-        public event KobotoEventHandler kEvent;
-
-        public void Trigger(Koboto koboto)
-        {
-            if (kEvent != null)
-            {
-                kEvent(koboto);
-            }
-        }
-
-        public void AddListener(KobotoEventHandler listener)
-        {
-            kEvent -= listener;
-            kEvent += listener;
-        }
-
-        public void RemoveListener(KobotoEventHandler listener)
-        {
-            kEvent -= listener;
-        }
+        return new KobotoEvents((int)KEventEnum.Count);
     }
 
+    protected KobotoEvents(int eventCount) : base(eventCount) {}
 
-    public static void AddListener(KEventEnum eventType, KobotoEventHandler listener)
+    public void AddListener(KEventEnum eventType, GameEvent<Koboto>.GameEventHandler listener)
     {
-        KEvent e;
-        if (events.TryGetValue(eventType, out e))
-        {
-            e.AddListener(listener);
-        }
+        AddListener((int)eventType, listener);
     }
 
-    public static void Trigger(KEventEnum eventType, Koboto koboto)
+    public void RemoveListener(KEventEnum eventType, GameEvent<Koboto>.GameEventHandler listener)
     {
-        KEvent e;
-        if (events.TryGetValue(eventType, out e))
-        {
-            e.Trigger(koboto);
-        }
+        RemoveListener((int)eventType, listener);
     }
 
+    public void Trigger(KEventEnum eventType, Koboto koboto)
+    {
+        Trigger((int)eventType, koboto);
+    }
 }

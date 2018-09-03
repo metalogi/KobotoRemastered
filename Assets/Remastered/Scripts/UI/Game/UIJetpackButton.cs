@@ -13,9 +13,9 @@ public class UIJetpackButton : UIAttachmentButton {
     public override void Init(UIGame uiGame)
     {
         base.Init(uiGame);
-        KobotoEvents.AddListener(KEventEnum.Selected, OnKobotoSelect);
-        KobotoEvents.AddListener(KEventEnum.FiredJetpack, OnKobotoJetpackEvent);
-        KobotoEvents.AddListener(KEventEnum.PickedUpJetpack, OnKobotoJetpackEvent);
+        Koboto.Events.AddListener(KEventEnum.Selected, OnKobotoSelect);
+        Koboto.Events.AddListener(KEventEnum.FiredJetpack, OnKobotoJetpackEvent);
+        Koboto.Events.AddListener(KEventEnum.PickedUpJetpack, OnKobotoJetpackEvent);
     }
 
     protected override void OnClick()

@@ -37,7 +37,7 @@ public class GameCam : KCam {
 	// Use this for initialization
 	void Start () {
         startPos = transform.position;
-        KobotoEvents.AddListener(KEventEnum.Selected, OnKobotoSelected);
+        Koboto.Events.AddListener(KEventEnum.Selected, OnKobotoSelected);
         posStack = new PStack(stackSize);
         outDist = baseOutDist;
         targetOutDist = baseOutDist;

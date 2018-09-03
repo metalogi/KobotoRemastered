@@ -80,7 +80,7 @@ public class LevelObjectBonusToken : LevelObjectBase {
 
 }
 
-public class BonusTokenData : GameEvents.GameEventData
+public class BonusTokenData 
 {
     public int worldNumber;
     public int levelNumber;

@@ -67,6 +67,8 @@ public enum KobotoDeath {
 
 public class Koboto : KobotoMonoRigidbody {
 
+    public static KobotoEvents Events = KobotoEvents.CreateEventBus();
+
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
     [HideInInspector]
@@ -291,7 +293,7 @@ public class Koboto : KobotoMonoRigidbody {
 
     public void Rescue(LevelObjectHome home) {
         SetState(KobotoState.Rescued);
-        KobotoEvents.Trigger(KEventEnum.Rescued, this);
+        Koboto.Events.Trigger(KEventEnum.Rescued, this);
     }
 
     public void Kill(KobotoDeath deathType, Transform killer) {

@@ -21,7 +21,7 @@ public class AttachmentJetpack : AttachmentBase {
 
             count--;
             Debug.Log("Firing jetpack");
-            KobotoEvents.Trigger(KEventEnum.FiredJetpack, koboto);
+            Koboto.Events.Trigger(KEventEnum.FiredJetpack, koboto);
 
         }
     }
@@ -29,7 +29,7 @@ public class AttachmentJetpack : AttachmentBase {
     public void PickupFuel()
     {
         count++;
-        KobotoEvents.Trigger(KEventEnum.PickedUpJetpack, koboto);
+        Koboto.Events.Trigger(KEventEnum.PickedUpJetpack, koboto);
     }
 
     public override void OnAttachToKoboto(Koboto koboto)

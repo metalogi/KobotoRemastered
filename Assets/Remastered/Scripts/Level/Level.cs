@@ -181,7 +181,7 @@ public class Level : KobotoMono {
 
     void SelectKoboto(Koboto koboto) {
         selectedKoboto = koboto;
-        KobotoEvents.Trigger(KEventEnum.Selected, koboto);
+        Koboto.Events.Trigger(KEventEnum.Selected, koboto);
     }
 
     public void ToggleAttachmentOnSelectedKoboto(EAttachmentType attachmentType) {
