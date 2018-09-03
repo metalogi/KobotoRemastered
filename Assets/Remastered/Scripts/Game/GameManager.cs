@@ -215,6 +215,11 @@ public class GameManager : MonoBehaviour {
         currentLevel.ToggleAttachmentOnSelectedKoboto(type);
     }
 
+    public void JetpackButtonPressed()
+    {
+        currentLevel.JetpackButtonPressed();
+    }
+
     public void Pause() {
         RequestState(EGameState.Paused);
     }

@@ -92,10 +92,15 @@ public class UIGame : KobotoMono {
 
 
     public void AttachmentButtonPressed(UIAttachmentButton button, EAttachmentType type) {
-        Debug.Log("Attachment: " + type);
         game.AttachmentButtonPressed(type);
 
     }
+
+    public void JetpackButtonPressed(UIAttachmentButton button)
+    {
+        game.JetpackButtonPressed();
+    }
+
 
     public void NextLevelButtonPressed(){
         game.LoadNextLevel();

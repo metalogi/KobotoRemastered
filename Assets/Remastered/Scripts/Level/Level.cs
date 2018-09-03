@@ -154,6 +154,10 @@ public class Level : KobotoMono {
             kobotos.Add(koboto);
             koboto.SetState(KobotoState.Alive);
 
+            if (availableAttachments.Contains(EAttachmentType.Jetpack))
+            {
+                koboto.AddAttachment(EAttachmentType.Jetpack);
+            }
         }
         SelectKoboto(kobotos[0]);
     }
@@ -170,6 +174,11 @@ public class Level : KobotoMono {
         gameCam.Reset();
     }
 
+    public Koboto GetSelectedKoboto()
+    {
+        return selectedKoboto;
+    }
+
     void SelectKoboto(Koboto koboto) {
         selectedKoboto = koboto;
         KobotoEvents.Trigger(KEventEnum.Selected, koboto);
@@ -178,6 +187,14 @@ public class Level : KobotoMono {
     public void ToggleAttachmentOnSelectedKoboto(EAttachmentType attachmentType) {
         if (selectedKoboto != null) {
             selectedKoboto.ToggleAttachment(attachmentType);
+        }
+    }
+
+    public void JetpackButtonPressed()
+    {
+        if (selectedKoboto != null)
+        {
+            selectedKoboto.JetpackButtonPressed();
         }
     }
         

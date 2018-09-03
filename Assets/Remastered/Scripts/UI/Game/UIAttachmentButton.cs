@@ -7,11 +7,11 @@ using UnityEngine.UI;
 public class UIAttachmentButton : MonoBehaviour {
 
     public EAttachmentType attachmentType;
-    Button button;
-    UIGame uiGame;
+    protected Button button;
+    protected UIGame uiGame;
    
 
-    public void Init(UIGame uiGame) {
+    public virtual void Init(UIGame uiGame) {
         this.uiGame = uiGame;
     }
 
@@ -24,7 +24,7 @@ public class UIAttachmentButton : MonoBehaviour {
     }
 
     public void OnDisable() {
-        button.onClick.RemoveListener (OnClick);
+        button.onClick.RemoveListener(OnClick);
     }
 
 
@@ -33,11 +33,11 @@ public class UIAttachmentButton : MonoBehaviour {
     }
 
 
-    void OnClick() {
+    protected virtual void OnClick() {
         if (uiGame == null) {
             return;
         }
-        uiGame.AttachmentButtonPressed (this, attachmentType);
+        uiGame.AttachmentButtonPressed(this, attachmentType);
 
     }
 

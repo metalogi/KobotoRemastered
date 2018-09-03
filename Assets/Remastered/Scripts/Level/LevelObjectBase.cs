@@ -15,6 +15,8 @@ public class LevelObjectBase : KobotoMono {
     protected int worldNumber;
     protected int levelNumber;
 
+    MaterialAlphaFade materialFader;
+
     protected override void Init(EGameState gameState) {
         if (trigger == null) {
             trigger = FindCollider(true);
@@ -117,5 +119,23 @@ public class LevelObjectBase : KobotoMono {
 
     protected virtual void OnObjectExit(Collider collider)
     {
+    }
+
+    protected void FadeAlpha(float targetAlpha, float speed = 1f, float delay = 0f)
+    {
+        if (materialFader == null)
+        {
+            materialFader = gameObject.AddComponent<MaterialAlphaFade>();
+        }
+        materialFader.FadeTo(targetAlpha, speed, delay);
+    }
+
+    protected void SetAlpha(float targetAlpha)
+    {
+        if (materialFader == null)
+        {
+            materialFader = gameObject.AddComponent<MaterialAlphaFade>();
+        }
+        materialFader.Set(targetAlpha);
     }
 }

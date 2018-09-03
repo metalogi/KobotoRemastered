@@ -9,14 +9,16 @@ public enum EAttachmentType {
     Magnet,
     Propellor,
     Parachute,
-    Hammer
+    Hammer,
+    Jetpack
 }
 
 public enum EAttachmentTarget {
     Wheels,
     Bottom,
     Top,
-    Front
+    Front,
+    Jetpack
 }
 
 public enum EColliderType {
@@ -56,6 +58,8 @@ public static class Attachments  {
 
         case EAttachmentType.Hammer:
             return EAttachmentTarget.Front;
+        case EAttachmentType.Jetpack:
+            return EAttachmentTarget.Jetpack;
             
         }
         

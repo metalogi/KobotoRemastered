@@ -82,6 +82,7 @@ public class Koboto : KobotoMonoRigidbody {
     Dictionary<EAttachmentType, AttachmentBase> currentAttachments;
 
     List<EAttachmentType> attachmentOrder = new List<EAttachmentType>(){
+        EAttachmentType.Jetpack,
         EAttachmentType.Wheels,
         EAttachmentType.Magnet,
         EAttachmentType.Spring,
@@ -89,6 +90,7 @@ public class Koboto : KobotoMonoRigidbody {
         EAttachmentType.DoubleWheels,
         EAttachmentType.Parachute
     };
+
 
     KobotoParameters parameters;
 
@@ -158,8 +160,6 @@ public class Koboto : KobotoMonoRigidbody {
             attachmentTargetLookup.Add(point.targetType, point.transform);
         }
 
-
-      //  AddAttachment(EAttachmentType.Wheels);
         doFixedUpdate = (gameState == EGameState.Play);
         SetupCollider ();
         defaultParent = transform.parent;
@@ -187,6 +187,12 @@ public class Koboto : KobotoMonoRigidbody {
         } else {
             AddAttachment(type);
         }
+    }
+
+    public void JetpackButtonPressed()
+    {
+        var jetpack = GetAttachment<AttachmentJetpack>(EAttachmentType.Jetpack);
+        jetpack.JetpackButtonPressed();
     }
 
     public void AddAttachment(EAttachmentType type) {
@@ -243,6 +249,15 @@ public class Koboto : KobotoMonoRigidbody {
         attachmentTargetLookup.TryGetValue(target, out t);
         return t;
 
+    }
+
+    public T GetAttachment<T>(EAttachmentType type) where T : AttachmentBase
+    {
+        if (currentAttachments.ContainsKey(type))
+        {
+            return (T)currentAttachments[type];
+        }
+        return null;
     }
 
     public void SetLevelBounds(Bounds bounds) {

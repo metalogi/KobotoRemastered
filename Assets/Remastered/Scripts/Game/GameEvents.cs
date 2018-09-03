@@ -5,32 +5,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum EGameEvent
+{
+    CollectedBonusToken
+}
 
-public static class GameEvents  {
+public static class GameEvents
+{
 
-    public enum GameEventEnum
+    static Dictionary<EGameEvent, GameEventBase> events = new Dictionary<EGameEvent, GameEventBase>
     {
-        CollectedBonusToken
-    }
-
-    static Dictionary<GameEventEnum, GameEvent> events = new Dictionary<GameEventEnum, GameEvent> {
-        {GameEventEnum.CollectedBonusToken, new GameEvent()}
+        {EGameEvent.CollectedBonusToken, new GameEvent<BonusTokenData>()}
     };
 
-    public abstract class GameEventArguments
-    {
+    public abstract class GameEventData{}
+    public abstract class GameEventBase{}
 
-    }
-    public delegate void GameEventHandler(GameEventArguments args);
-
-    public class GameEvent
+    public class GameEventNoData : GameEventBase
     {
+        public delegate void GameEventHandler();
         public event GameEventHandler gEvent;
 
-        Type argumentType;
-            
+        public void Trigger()
+        {
+            if (gEvent != null)
+            {
+                gEvent();
+            }
+        }
 
-        public void Trigger(GameEventArguments args)
+        public void AddListener(GameEventHandler listener)
+        {
+            gEvent -= listener;
+            gEvent += listener;
+        }
+
+        public void RemoveListener(GameEventHandler listener)
+        {
+            gEvent -= listener;
+        }
+    }
+
+    public class GameEvent<T> : GameEventBase  where T : GameEventData
+    {
+        public delegate void GameEventHandler(T args);
+        public event GameEventHandler gEvent;
+
+        public void Trigger(T args)
         {
             if (gEvent != null)
             {
@@ -50,22 +71,58 @@ public static class GameEvents  {
         }
     }
 
-
-    public static void AddListener(GameEventEnum eventType, GameEventHandler listener)
+    public static void AddListener(EGameEvent eventType, GameEventNoData.GameEventHandler listener)
     {
-        GameEvent e;
-        if (events.TryGetValue(eventType, out e))
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEventNoData))
         {
-            e.AddListener(listener);
+            ((GameEventNoData)e).AddListener(listener);
         }
     }
 
-    public static void Trigger(GameEventEnum eventType, GameEventArguments args)
+    public static void RemoveListener(EGameEvent eventType, GameEventNoData.GameEventHandler listener)
     {
-        GameEvent e;
-        if (events.TryGetValue(eventType, out e))
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEventNoData))
         {
-            e.Trigger(args);
+            ((GameEventNoData)e).RemoveListener(listener);
+        }
+    }
+
+    public static void Trigger(EGameEvent eventType)
+    {
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEventNoData))
+        {
+            ((GameEventNoData)e).Trigger();
+        }
+    }
+
+
+    public static void AddListener<T>(EGameEvent eventType, GameEvent<T>.GameEventHandler listener) where T:GameEventData
+    {
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEvent<T>))
+        {
+            ((GameEvent<T>)e).AddListener(listener);
+        }
+    }
+
+    public static void RemoveListener<T>(EGameEvent eventType, GameEvent<T>.GameEventHandler listener) where T : GameEventData
+    {
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEvent<T>))
+        {
+            ((GameEvent<T>)e).RemoveListener(listener);
+        }
+    }
+
+    public static void Trigger<T>(EGameEvent eventType, T args) where T:GameEventData
+    {
+        GameEventBase e;
+        if (events.TryGetValue(eventType, out e) && (e is GameEvent<T>))
+        {
+            ((GameEvent<T>)e).Trigger(args);
         }
     }
 

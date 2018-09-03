@@ -7,7 +7,9 @@ public delegate void KobotoEventHandler(Koboto koboto);
 public enum KEventEnum {
     Rescued,
     Died,
-    Selected
+    Selected,
+    FiredJetpack,
+    PickedUpJetpack
 }
 
 
@@ -16,41 +18,51 @@ public static class KobotoEvents   {
     static Dictionary<KEventEnum, KEvent> events = new Dictionary<KEventEnum, KEvent> {
         {KEventEnum.Rescued, new KEvent()},
         {KEventEnum.Died, new KEvent()},
-        {KEventEnum.Selected, new KEvent()}
-
+        {KEventEnum.Selected, new KEvent()},
+        {KEventEnum.FiredJetpack, new KEvent() },
+        {KEventEnum.PickedUpJetpack, new KEvent() }
     };
 
 
-    public class KEvent {
-        public  event KobotoEventHandler kEvent;
+    public class KEvent
+    {
+        public event KobotoEventHandler kEvent;
 
-        public void Trigger(Koboto koboto) {
-            if (kEvent != null) {
+        public void Trigger(Koboto koboto)
+        {
+            if (kEvent != null)
+            {
                 kEvent(koboto);
             }
         }
 
-        public void AddListener(KobotoEventHandler listener) {
+        public void AddListener(KobotoEventHandler listener)
+        {
             kEvent -= listener;
             kEvent += listener;
         }
 
-        public void RemoveListener(KobotoEventHandler listener) {
+        public void RemoveListener(KobotoEventHandler listener)
+        {
             kEvent -= listener;
         }
     }
-        
 
-    public static void AddListener(KEventEnum eventType, KobotoEventHandler listener) {
+
+    public static void AddListener(KEventEnum eventType, KobotoEventHandler listener)
+    {
         KEvent e;
-        if (events.TryGetValue(eventType, out e)) {
+        if (events.TryGetValue(eventType, out e))
+        {
             e.AddListener(listener);
         }
     }
 
-    public static void Trigger(KEventEnum eventType, Koboto koboto) {
+    public static void Trigger(KEventEnum eventType, Koboto koboto)
+    {
         KEvent e;
-        if (events.TryGetValue(eventType, out e)) {
+        if (events.TryGetValue(eventType, out e))
+        {
             e.Trigger(koboto);
         }
     }

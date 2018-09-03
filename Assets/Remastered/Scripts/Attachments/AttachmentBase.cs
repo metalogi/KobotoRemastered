@@ -13,6 +13,8 @@ public class AttachmentBase : MonoBehaviour {
 
     public EColliderType colliderType;
 
+    public bool alwaysAttached = false;
+
     public void Remove() {
         GameObject.Destroy(gameObject);
     }

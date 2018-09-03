@@ -38,7 +38,7 @@ public class LevelObjectBonusToken : LevelObjectBase {
         {
             if (collected && !alreadyCollected)
             {
-                GameEvents.Trigger(GameEvents.GameEventEnum.CollectedBonusToken, new BonusTokenCollectedData { worldNumber = worldNumber, levelNumber = levelNumber, index = index });
+                GameEvents.Trigger<BonusTokenData>(EGameEvent.CollectedBonusToken, new BonusTokenData { worldNumber = worldNumber, levelNumber = levelNumber, index = index });
             }
         }
     }
@@ -80,7 +80,7 @@ public class LevelObjectBonusToken : LevelObjectBase {
 
 }
 
-public class BonusTokenCollectedData : GameEvents.GameEventArguments
+public class BonusTokenData : GameEvents.GameEventData
 {
     public int worldNumber;
     public int levelNumber;
