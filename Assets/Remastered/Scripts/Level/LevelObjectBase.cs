@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +46,12 @@ public class LevelObjectBase : KobotoMono {
     }
 
     protected override void DidEnterGameState(EGameState gameState, EGameState fromState) {
+
+        if (gameState == EGameState.Play && !IsPauseState(fromState))
+        {
+            StopAllCoroutines();
+            DidRestartLevel();
+        }
         if ((gameState & stateMask) == gameState) {
             SetActive(true);
         }
@@ -58,6 +65,9 @@ public class LevelObjectBase : KobotoMono {
 
         }
     }
+
+    protected virtual void DidRestartLevel()
+    { }
 
     void Update() {
         if (isActive) {
@@ -75,6 +85,17 @@ public class LevelObjectBase : KobotoMono {
     }
 
     protected virtual void FixedUpdatePlay() {
+    }
+
+    protected bool IsPaused()
+    {
+        return IsPauseState(currentGameState);
+    }
+
+    bool IsPauseState(EGameState state)
+    {
+        return state == EGameState.Paused
+            || state == EGameState.Map;
     }
 
     void OnTriggerEnter(Collider other) {
@@ -137,5 +158,24 @@ public class LevelObjectBase : KobotoMono {
             materialFader = gameObject.AddComponent<MaterialAlphaFade>();
         }
         materialFader.Set(targetAlpha);
+    }
+
+    protected void DoActionAfterUnpausedTime(Action action, float time)
+    {
+        StartCoroutine(DoActionAfterUnpausedTimeCoroutine(action, time));
+    }
+
+    IEnumerator DoActionAfterUnpausedTimeCoroutine(Action action, float time)
+    {
+        while (time > 0)
+        {
+            if (!IsPaused())
+            {
+                time -= Time.deltaTime;
+            }
+            yield return null;
+        }
+        action();
+        yield break;
     }
 }

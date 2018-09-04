@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class AttachmentJetpack : AttachmentBase {
 
-    public int count;
+    internal int count;
 
     Koboto koboto;
     float burnTimeLeft;
 
     const float totalBurnTime = 0.9f;
-    const float maxThrust = 400f;
+    const float maxThrust = 350f;
+
+    Animator animator;
+    AudioSource burnSound;
 
 
     public void JetpackButtonPressed()
@@ -21,8 +24,9 @@ public class AttachmentJetpack : AttachmentBase {
 
             count--;
             Debug.Log("Firing jetpack");
+            animator.Play("Fire");
+            burnSound.Play();
             Koboto.Events.Trigger(KEventEnum.FiredJetpack, koboto);
-
         }
     }
 
@@ -36,6 +40,8 @@ public class AttachmentJetpack : AttachmentBase {
     {
         base.OnAttachToKoboto(koboto);
         this.koboto = koboto;
+        animator = GetComponent<Animator>();
+        burnSound = GetComponent<AudioSource>();
     }
 
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters)
@@ -44,10 +50,25 @@ public class AttachmentJetpack : AttachmentBase {
         {
             return;
         }
+        float t = 1f - burnTimeLeft / totalBurnTime; // normalized time
 
-        moveForce.airMove = sensors.upVector * maxThrust * burnTimeLeft / totalBurnTime;
-        moveForce.airForcesSet = true;
+        const float rampUp = 0.1f;
+        if (t < rampUp)
+        {
+            t = t/ rampUp;
+        }
+        moveForce.airMove = sensors.upVector * maxThrust * t;
+       
         burnTimeLeft -= Time.fixedDeltaTime;
+
+        moveForce.tiltAngle = 25f * input.move;
+        moveForce.tiltStrength = 0.2f;
+        moveForce.airDrag = 1f;
+
+        moveForce.airMove += sensors.forwardVector * input.move * 120f;
+
+        moveForce.airForcesSet = true;
+
 
         if (burnTimeLeft <= 0)
         {
