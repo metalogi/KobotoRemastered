@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class AttachmentJetpack : AttachmentBase {
 
@@ -50,13 +51,16 @@ public class AttachmentJetpack : AttachmentBase {
         {
             return;
         }
+
         float t = 1f - burnTimeLeft / totalBurnTime; // normalized time
 
-        const float rampUp = 0.1f;
-        if (t < rampUp)
-        {
-            t = t/ rampUp;
-        }
+        Func<float, float> f_sin = (float s) => Mathf.Sin(s * Mathf.PI);
+        Func<float, float> f_parab = (float s) => 1 - (s - 1) * (s - 1);
+        Func<float, float, float> f_skewedSin = (float s, float skew) => f_sin(Mathf.Lerp(t, f_parab(t), skew));
+
+        t = f_skewedSin(t, 0.5f);
+        
+
         moveForce.airMove = sensors.upVector * maxThrust * t;
        
         burnTimeLeft -= Time.fixedDeltaTime;
