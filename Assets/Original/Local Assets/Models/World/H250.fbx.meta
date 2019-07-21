@@ -1,513 +1,644 @@
 fileFormatVersion: 2
 guid: 43e4ddf40d0e143ddb0cfa0056f4b7e7
 ModelImporter:
-  fileIDToRecycleName:
-    4300000: H250
-    4300002: H250_Dml__Dml__frag_01
-    4300004: H250_Dml__Dml__frag_02
-    4300006: H250_Dml__Dml__frag_03
-    4300008: H250_Dml__Dml__frag_04
-    4300010: H250_Dml__Dml__frag_05
-    4300012: H250_Dml__Dml__frag_06
-    4300014: H250_Dml__Dml__frag_07
-    4300016: H250_Dml__Dml__frag_08
-    4300018: H250_Dml__Dml__frag_09
-    4300020: H250_Dml__Dml__frag_10
-    4300022: H250_Dml__Dml__frag_11
-    4300024: H250_Dml__Dml__frag_12
-    4300026: H250_Dml__Dml__frag_13
-    4300028: H250_Dml__Dml__frag_14
-    4300030: H250_Dml__Dml__frag_15
-    4300032: H250_Dml__Dml__frag_16
-    4300034: H250_Dml__Dml__frag_17
-    4300036: H250_Dml__Dml__frag_18
-    4300038: H250_Dml__Dml__frag_19
-    4300040: H250_Dml__Dml__frag_20
-    4300042: H250_Dml__Dml__frag_21
-    4300044: H250_Dml__Dml__frag_22
-    4300046: H250_Dml__Dml__frag_23
-    4300048: H250_Dml__Dml__frag_24
-    4300050: H250_Dml__Dml__frag_25
-    4300052: H250_Dml__Dml__frag_26
-    4300054: H250_Dml__Dml__frag_27
-    4300056: H250_Dml__Dml__frag_28
-    4300058: H250_Dml__Dml__frag_29
-    4300060: H250_Dml__Dml__frag_30
-    4300062: H250_Dml__Dml__frag_31
-    4300064: H250_Dml__Dml__frag_32
-    4300066: H252
-    7400000: Take 001 //// H250
-    100100000: DataTemplate __Singleton__
-  serializedVersion: 10
+  serializedVersion: 25
+  internalIDToNameTable:
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      111: 11100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: //RootNode
+  - first:
+      4: 400004
+    second: H250_Dml__Dml__frag_01
+  - first:
+      33: 3300002
+    second: H250_Dml__Dml__frag_01
+  - first:
+      23: 2300002
+    second: H250_Dml__Dml__frag_01
+  - first:
+      1: 100004
+    second: H250_Dml__Dml__frag_01
+  - first:
+      4: 400006
+    second: H250_Dml__Dml__frag_02
+  - first:
+      33: 3300004
+    second: H250_Dml__Dml__frag_02
+  - first:
+      23: 2300004
+    second: H250_Dml__Dml__frag_02
+  - first:
+      1: 100006
+    second: H250_Dml__Dml__frag_02
+  - first:
+      4: 400008
+    second: H250_Dml__Dml__frag_03
+  - first:
+      33: 3300006
+    second: H250_Dml__Dml__frag_03
+  - first:
+      23: 2300006
+    second: H250_Dml__Dml__frag_03
+  - first:
+      1: 100008
+    second: H250_Dml__Dml__frag_03
+  - first:
+      4: 400010
+    second: H250_Dml__Dml__frag_04
+  - first:
+      33: 3300008
+    second: H250_Dml__Dml__frag_04
+  - first:
+      23: 2300008
+    second: H250_Dml__Dml__frag_04
+  - first:
+      1: 100010
+    second: H250_Dml__Dml__frag_04
+  - first:
+      4: 400012
+    second: H250_Dml__Dml__frag_05
+  - first:
+      33: 3300010
+    second: H250_Dml__Dml__frag_05
+  - first:
+      23: 2300010
+    second: H250_Dml__Dml__frag_05
+  - first:
+      1: 100012
+    second: H250_Dml__Dml__frag_05
+  - first:
+      4: 400014
+    second: H250_Dml__Dml__frag_06
+  - first:
+      33: 3300012
+    second: H250_Dml__Dml__frag_06
+  - first:
+      23: 2300012
+    second: H250_Dml__Dml__frag_06
+  - first:
+      1: 100014
+    second: H250_Dml__Dml__frag_06
+  - first:
+      4: 400016
+    second: H250_Dml__Dml__frag_07
+  - first:
+      33: 3300014
+    second: H250_Dml__Dml__frag_07
+  - first:
+      23: 2300014
+    second: H250_Dml__Dml__frag_07
+  - first:
+      1: 100016
+    second: H250_Dml__Dml__frag_07
+  - first:
+      4: 400018
+    second: H250_Dml__Dml__frag_08
+  - first:
+      33: 3300016
+    second: H250_Dml__Dml__frag_08
+  - first:
+      23: 2300016
+    second: H250_Dml__Dml__frag_08
+  - first:
+      1: 100018
+    second: H250_Dml__Dml__frag_08
+  - first:
+      4: 400020
+    second: H250_Dml__Dml__frag_09
+  - first:
+      33: 3300018
+    second: H250_Dml__Dml__frag_09
+  - first:
+      23: 2300018
+    second: H250_Dml__Dml__frag_09
+  - first:
+      1: 100020
+    second: H250_Dml__Dml__frag_09
+  - first:
+      4: 400022
+    second: H250_Dml__Dml__frag_10
+  - first:
+      33: 3300020
+    second: H250_Dml__Dml__frag_10
+  - first:
+      23: 2300020
+    second: H250_Dml__Dml__frag_10
+  - first:
+      1: 100022
+    second: H250_Dml__Dml__frag_10
+  - first:
+      4: 400024
+    second: H250_Dml__Dml__frag_11
+  - first:
+      33: 3300022
+    second: H250_Dml__Dml__frag_11
+  - first:
+      23: 2300022
+    second: H250_Dml__Dml__frag_11
+  - first:
+      1: 100024
+    second: H250_Dml__Dml__frag_11
+  - first:
+      4: 400026
+    second: H250_Dml__Dml__frag_12
+  - first:
+      33: 3300024
+    second: H250_Dml__Dml__frag_12
+  - first:
+      23: 2300024
+    second: H250_Dml__Dml__frag_12
+  - first:
+      1: 100026
+    second: H250_Dml__Dml__frag_12
+  - first:
+      4: 400028
+    second: H250_Dml__Dml__frag_13
+  - first:
+      33: 3300026
+    second: H250_Dml__Dml__frag_13
+  - first:
+      23: 2300026
+    second: H250_Dml__Dml__frag_13
+  - first:
+      1: 100028
+    second: H250_Dml__Dml__frag_13
+  - first:
+      4: 400030
+    second: H250_Dml__Dml__frag_14
+  - first:
+      33: 3300028
+    second: H250_Dml__Dml__frag_14
+  - first:
+      23: 2300028
+    second: H250_Dml__Dml__frag_14
+  - first:
+      1: 100030
+    second: H250_Dml__Dml__frag_14
+  - first:
+      4: 400032
+    second: H250_Dml__Dml__frag_15
+  - first:
+      33: 3300030
+    second: H250_Dml__Dml__frag_15
+  - first:
+      23: 2300030
+    second: H250_Dml__Dml__frag_15
+  - first:
+      1: 100032
+    second: H250_Dml__Dml__frag_15
+  - first:
+      4: 400034
+    second: H250_Dml__Dml__frag_16
+  - first:
+      33: 3300032
+    second: H250_Dml__Dml__frag_16
+  - first:
+      23: 2300032
+    second: H250_Dml__Dml__frag_16
+  - first:
+      1: 100034
+    second: H250_Dml__Dml__frag_16
+  - first:
+      4: 400036
+    second: H250_Dml__Dml__frag_17
+  - first:
+      33: 3300034
+    second: H250_Dml__Dml__frag_17
+  - first:
+      23: 2300034
+    second: H250_Dml__Dml__frag_17
+  - first:
+      1: 100036
+    second: H250_Dml__Dml__frag_17
+  - first:
+      4: 400038
+    second: H250_Dml__Dml__frag_18
+  - first:
+      33: 3300036
+    second: H250_Dml__Dml__frag_18
+  - first:
+      23: 2300036
+    second: H250_Dml__Dml__frag_18
+  - first:
+      1: 100038
+    second: H250_Dml__Dml__frag_18
+  - first:
+      4: 400040
+    second: H250_Dml__Dml__frag_19
+  - first:
+      33: 3300038
+    second: H250_Dml__Dml__frag_19
+  - first:
+      23: 2300038
+    second: H250_Dml__Dml__frag_19
+  - first:
+      1: 100040
+    second: H250_Dml__Dml__frag_19
+  - first:
+      4: 400042
+    second: H250_Dml__Dml__frag_20
+  - first:
+      33: 3300040
+    second: H250_Dml__Dml__frag_20
+  - first:
+      23: 2300040
+    second: H250_Dml__Dml__frag_20
+  - first:
+      1: 100042
+    second: H250_Dml__Dml__frag_20
+  - first:
+      4: 400044
+    second: H250_Dml__Dml__frag_21
+  - first:
+      33: 3300042
+    second: H250_Dml__Dml__frag_21
+  - first:
+      23: 2300042
+    second: H250_Dml__Dml__frag_21
+  - first:
+      1: 100044
+    second: H250_Dml__Dml__frag_21
+  - first:
+      4: 400046
+    second: H250_Dml__Dml__frag_22
+  - first:
+      33: 3300044
+    second: H250_Dml__Dml__frag_22
+  - first:
+      23: 2300044
+    second: H250_Dml__Dml__frag_22
+  - first:
+      1: 100046
+    second: H250_Dml__Dml__frag_22
+  - first:
+      4: 400048
+    second: H250_Dml__Dml__frag_23
+  - first:
+      33: 3300046
+    second: H250_Dml__Dml__frag_23
+  - first:
+      23: 2300046
+    second: H250_Dml__Dml__frag_23
+  - first:
+      1: 100048
+    second: H250_Dml__Dml__frag_23
+  - first:
+      4: 400050
+    second: H250_Dml__Dml__frag_24
+  - first:
+      33: 3300048
+    second: H250_Dml__Dml__frag_24
+  - first:
+      23: 2300048
+    second: H250_Dml__Dml__frag_24
+  - first:
+      1: 100050
+    second: H250_Dml__Dml__frag_24
+  - first:
+      4: 400052
+    second: H250_Dml__Dml__frag_25
+  - first:
+      33: 3300050
+    second: H250_Dml__Dml__frag_25
+  - first:
+      23: 2300050
+    second: H250_Dml__Dml__frag_25
+  - first:
+      1: 100052
+    second: H250_Dml__Dml__frag_25
+  - first:
+      4: 400054
+    second: H250_Dml__Dml__frag_26
+  - first:
+      33: 3300052
+    second: H250_Dml__Dml__frag_26
+  - first:
+      23: 2300052
+    second: H250_Dml__Dml__frag_26
+  - first:
+      1: 100054
+    second: H250_Dml__Dml__frag_26
+  - first:
+      4: 400056
+    second: H250_Dml__Dml__frag_27
+  - first:
+      33: 3300054
+    second: H250_Dml__Dml__frag_27
+  - first:
+      23: 2300054
+    second: H250_Dml__Dml__frag_27
+  - first:
+      1: 100056
+    second: H250_Dml__Dml__frag_27
+  - first:
+      4: 400058
+    second: H250_Dml__Dml__frag_28
+  - first:
+      33: 3300056
+    second: H250_Dml__Dml__frag_28
+  - first:
+      23: 2300056
+    second: H250_Dml__Dml__frag_28
+  - first:
+      1: 100058
+    second: H250_Dml__Dml__frag_28
+  - first:
+      4: 400060
+    second: H250_Dml__Dml__frag_29
+  - first:
+      33: 3300058
+    second: H250_Dml__Dml__frag_29
+  - first:
+      23: 2300058
+    second: H250_Dml__Dml__frag_29
+  - first:
+      1: 100060
+    second: H250_Dml__Dml__frag_29
+  - first:
+      4: 400062
+    second: H250_Dml__Dml__frag_30
+  - first:
+      33: 3300060
+    second: H250_Dml__Dml__frag_30
+  - first:
+      23: 2300060
+    second: H250_Dml__Dml__frag_30
+  - first:
+      1: 100062
+    second: H250_Dml__Dml__frag_30
+  - first:
+      4: 400064
+    second: H250_Dml__Dml__frag_31
+  - first:
+      33: 3300062
+    second: H250_Dml__Dml__frag_31
+  - first:
+      23: 2300062
+    second: H250_Dml__Dml__frag_31
+  - first:
+      1: 100064
+    second: H250_Dml__Dml__frag_31
+  - first:
+      4: 400066
+    second: H250_Dml__Dml__frag_32
+  - first:
+      33: 3300064
+    second: H250_Dml__Dml__frag_32
+  - first:
+      23: 2300064
+    second: H250_Dml__Dml__frag_32
+  - first:
+      1: 100066
+    second: H250_Dml__Dml__frag_32
+  - first:
+      4: 400002
+    second: H252
+  - first:
+      33: 3300000
+    second: H252
+  - first:
+      23: 2300000
+    second: H252
+  - first:
+      1: 100000
+    second: H252
+  - first:
+      43: 4300000
+    second: H250
+  - first:
+      43: 4300002
+    second: H250_Dml__Dml__frag_01
+  - first:
+      43: 4300004
+    second: H250_Dml__Dml__frag_02
+  - first:
+      43: 4300006
+    second: H250_Dml__Dml__frag_03
+  - first:
+      43: 4300008
+    second: H250_Dml__Dml__frag_04
+  - first:
+      43: 4300010
+    second: H250_Dml__Dml__frag_05
+  - first:
+      43: 4300012
+    second: H250_Dml__Dml__frag_06
+  - first:
+      43: 4300014
+    second: H250_Dml__Dml__frag_07
+  - first:
+      43: 4300016
+    second: H250_Dml__Dml__frag_08
+  - first:
+      43: 4300018
+    second: H250_Dml__Dml__frag_09
+  - first:
+      43: 4300020
+    second: H250_Dml__Dml__frag_10
+  - first:
+      43: 4300022
+    second: H250_Dml__Dml__frag_11
+  - first:
+      43: 4300024
+    second: H250_Dml__Dml__frag_12
+  - first:
+      43: 4300026
+    second: H250_Dml__Dml__frag_13
+  - first:
+      43: 4300028
+    second: H250_Dml__Dml__frag_14
+  - first:
+      43: 4300030
+    second: H250_Dml__Dml__frag_15
+  - first:
+      43: 4300032
+    second: H250_Dml__Dml__frag_16
+  - first:
+      43: 4300034
+    second: H250_Dml__Dml__frag_17
+  - first:
+      43: 4300036
+    second: H250_Dml__Dml__frag_18
+  - first:
+      43: 4300038
+    second: H250_Dml__Dml__frag_19
+  - first:
+      43: 4300040
+    second: H250_Dml__Dml__frag_20
+  - first:
+      43: 4300042
+    second: H250_Dml__Dml__frag_21
+  - first:
+      43: 4300044
+    second: H250_Dml__Dml__frag_22
+  - first:
+      43: 4300046
+    second: H250_Dml__Dml__frag_23
+  - first:
+      43: 4300048
+    second: H250_Dml__Dml__frag_24
+  - first:
+      43: 4300050
+    second: H250_Dml__Dml__frag_25
+  - first:
+      43: 4300052
+    second: H250_Dml__Dml__frag_26
+  - first:
+      43: 4300054
+    second: H250_Dml__Dml__frag_27
+  - first:
+      43: 4300056
+    second: H250_Dml__Dml__frag_28
+  - first:
+      43: 4300058
+    second: H250_Dml__Dml__frag_29
+  - first:
+      43: 4300060
+    second: H250_Dml__Dml__frag_30
+  - first:
+      43: 4300062
+    second: H250_Dml__Dml__frag_31
+  - first:
+      43: 4300064
+    second: H250_Dml__Dml__frag_32
+  - first:
+      43: 4300066
+    second: H252
+  - first:
+      74: 7400000
+    second: Take 001 //// H250
+  - first:
+      1001: 100100000
+    second: DataTemplate __Singleton__
+  - first:
+      74: 1827226128182048838
+    second: Take 001
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 01 - Default
+    second: {fileID: 2100000, guid: af69684d407b14e3aa9536796e515d21, type: 2}
   materials:
     importMaterials: 1
     materialName: 3
     materialSearch: 1
+    materialLocation: 0
   animations:
-    generateAnimations: 3
+    legacyGenerateAnimations: 3
     bakeSimulation: 0
-    splitAnimations: 1
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
-    clipAnimations: []
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      internalID: 1827226128182048838
+      firstFrame: 0
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: 0.01
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMesh: 0
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 0
     normalImportMode: 1
     tangentImportMode: 1
-  textMetaNamesToFileIDs:
-    //RootNode:
-      data:
-        first: 1
-        second: a2860100
-      data:
-        first: 4
-        second: 801a0600
-      data:
-        first: 111
-        second: 605fa900
-    H250_Dml__Dml__frag_01:
-      data:
-        first: 1
-        second: a4860100
-      data:
-        first: 4
-        second: 841a0600
-      data:
-        first: 23
-        second: 62182300
-      data:
-        first: 33
-        second: a25a3200
-    H250_Dml__Dml__frag_02:
-      data:
-        first: 1
-        second: a6860100
-      data:
-        first: 4
-        second: 861a0600
-      data:
-        first: 23
-        second: 64182300
-      data:
-        first: 33
-        second: a45a3200
-    H250_Dml__Dml__frag_03:
-      data:
-        first: 1
-        second: a8860100
-      data:
-        first: 4
-        second: 881a0600
-      data:
-        first: 23
-        second: 66182300
-      data:
-        first: 33
-        second: a65a3200
-    H250_Dml__Dml__frag_04:
-      data:
-        first: 1
-        second: aa860100
-      data:
-        first: 4
-        second: 8a1a0600
-      data:
-        first: 23
-        second: 68182300
-      data:
-        first: 33
-        second: a85a3200
-    H250_Dml__Dml__frag_05:
-      data:
-        first: 1
-        second: ac860100
-      data:
-        first: 4
-        second: 8c1a0600
-      data:
-        first: 23
-        second: 6a182300
-      data:
-        first: 33
-        second: aa5a3200
-    H250_Dml__Dml__frag_06:
-      data:
-        first: 1
-        second: ae860100
-      data:
-        first: 4
-        second: 8e1a0600
-      data:
-        first: 23
-        second: 6c182300
-      data:
-        first: 33
-        second: ac5a3200
-    H250_Dml__Dml__frag_07:
-      data:
-        first: 1
-        second: b0860100
-      data:
-        first: 4
-        second: 901a0600
-      data:
-        first: 23
-        second: 6e182300
-      data:
-        first: 33
-        second: ae5a3200
-    H250_Dml__Dml__frag_08:
-      data:
-        first: 1
-        second: b2860100
-      data:
-        first: 4
-        second: 921a0600
-      data:
-        first: 23
-        second: 70182300
-      data:
-        first: 33
-        second: b05a3200
-    H250_Dml__Dml__frag_09:
-      data:
-        first: 1
-        second: b4860100
-      data:
-        first: 4
-        second: 941a0600
-      data:
-        first: 23
-        second: 72182300
-      data:
-        first: 33
-        second: b25a3200
-    H250_Dml__Dml__frag_10:
-      data:
-        first: 1
-        second: b6860100
-      data:
-        first: 4
-        second: 961a0600
-      data:
-        first: 23
-        second: 74182300
-      data:
-        first: 33
-        second: b45a3200
-    H250_Dml__Dml__frag_11:
-      data:
-        first: 1
-        second: b8860100
-      data:
-        first: 4
-        second: 981a0600
-      data:
-        first: 23
-        second: 76182300
-      data:
-        first: 33
-        second: b65a3200
-    H250_Dml__Dml__frag_12:
-      data:
-        first: 1
-        second: ba860100
-      data:
-        first: 4
-        second: 9a1a0600
-      data:
-        first: 23
-        second: 78182300
-      data:
-        first: 33
-        second: b85a3200
-    H250_Dml__Dml__frag_13:
-      data:
-        first: 1
-        second: bc860100
-      data:
-        first: 4
-        second: 9c1a0600
-      data:
-        first: 23
-        second: 7a182300
-      data:
-        first: 33
-        second: ba5a3200
-    H250_Dml__Dml__frag_14:
-      data:
-        first: 1
-        second: be860100
-      data:
-        first: 4
-        second: 9e1a0600
-      data:
-        first: 23
-        second: 7c182300
-      data:
-        first: 33
-        second: bc5a3200
-    H250_Dml__Dml__frag_15:
-      data:
-        first: 1
-        second: c0860100
-      data:
-        first: 4
-        second: a01a0600
-      data:
-        first: 23
-        second: 7e182300
-      data:
-        first: 33
-        second: be5a3200
-    H250_Dml__Dml__frag_16:
-      data:
-        first: 1
-        second: c2860100
-      data:
-        first: 4
-        second: a21a0600
-      data:
-        first: 23
-        second: 80182300
-      data:
-        first: 33
-        second: c05a3200
-    H250_Dml__Dml__frag_17:
-      data:
-        first: 1
-        second: c4860100
-      data:
-        first: 4
-        second: a41a0600
-      data:
-        first: 23
-        second: 82182300
-      data:
-        first: 33
-        second: c25a3200
-    H250_Dml__Dml__frag_18:
-      data:
-        first: 1
-        second: c6860100
-      data:
-        first: 4
-        second: a61a0600
-      data:
-        first: 23
-        second: 84182300
-      data:
-        first: 33
-        second: c45a3200
-    H250_Dml__Dml__frag_19:
-      data:
-        first: 1
-        second: c8860100
-      data:
-        first: 4
-        second: a81a0600
-      data:
-        first: 23
-        second: 86182300
-      data:
-        first: 33
-        second: c65a3200
-    H250_Dml__Dml__frag_20:
-      data:
-        first: 1
-        second: ca860100
-      data:
-        first: 4
-        second: aa1a0600
-      data:
-        first: 23
-        second: 88182300
-      data:
-        first: 33
-        second: c85a3200
-    H250_Dml__Dml__frag_21:
-      data:
-        first: 1
-        second: cc860100
-      data:
-        first: 4
-        second: ac1a0600
-      data:
-        first: 23
-        second: 8a182300
-      data:
-        first: 33
-        second: ca5a3200
-    H250_Dml__Dml__frag_22:
-      data:
-        first: 1
-        second: ce860100
-      data:
-        first: 4
-        second: ae1a0600
-      data:
-        first: 23
-        second: 8c182300
-      data:
-        first: 33
-        second: cc5a3200
-    H250_Dml__Dml__frag_23:
-      data:
-        first: 1
-        second: d0860100
-      data:
-        first: 4
-        second: b01a0600
-      data:
-        first: 23
-        second: 8e182300
-      data:
-        first: 33
-        second: ce5a3200
-    H250_Dml__Dml__frag_24:
-      data:
-        first: 1
-        second: d2860100
-      data:
-        first: 4
-        second: b21a0600
-      data:
-        first: 23
-        second: 90182300
-      data:
-        first: 33
-        second: d05a3200
-    H250_Dml__Dml__frag_25:
-      data:
-        first: 1
-        second: d4860100
-      data:
-        first: 4
-        second: b41a0600
-      data:
-        first: 23
-        second: 92182300
-      data:
-        first: 33
-        second: d25a3200
-    H250_Dml__Dml__frag_26:
-      data:
-        first: 1
-        second: d6860100
-      data:
-        first: 4
-        second: b61a0600
-      data:
-        first: 23
-        second: 94182300
-      data:
-        first: 33
-        second: d45a3200
-    H250_Dml__Dml__frag_27:
-      data:
-        first: 1
-        second: d8860100
-      data:
-        first: 4
-        second: b81a0600
-      data:
-        first: 23
-        second: 96182300
-      data:
-        first: 33
-        second: d65a3200
-    H250_Dml__Dml__frag_28:
-      data:
-        first: 1
-        second: da860100
-      data:
-        first: 4
-        second: ba1a0600
-      data:
-        first: 23
-        second: 98182300
-      data:
-        first: 33
-        second: d85a3200
-    H250_Dml__Dml__frag_29:
-      data:
-        first: 1
-        second: dc860100
-      data:
-        first: 4
-        second: bc1a0600
-      data:
-        first: 23
-        second: 9a182300
-      data:
-        first: 33
-        second: da5a3200
-    H250_Dml__Dml__frag_30:
-      data:
-        first: 1
-        second: de860100
-      data:
-        first: 4
-        second: be1a0600
-      data:
-        first: 23
-        second: 9c182300
-      data:
-        first: 33
-        second: dc5a3200
-    H250_Dml__Dml__frag_31:
-      data:
-        first: 1
-        second: e0860100
-      data:
-        first: 4
-        second: c01a0600
-      data:
-        first: 23
-        second: 9e182300
-      data:
-        first: 33
-        second: de5a3200
-    H250_Dml__Dml__frag_32:
-      data:
-        first: 1
-        second: e2860100
-      data:
-        first: 4
-        second: c21a0600
-      data:
-        first: 23
-        second: a0182300
-      data:
-        first: 33
-        second: e05a3200
-    H252:
-      data:
-        first: 1
-        second: a0860100
-      data:
-        first: 4
-        second: 821a0600
-      data:
-        first: 23
-        second: 60182300
-      data:
-        first: 33
-        second: a05a3200
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 0.01
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

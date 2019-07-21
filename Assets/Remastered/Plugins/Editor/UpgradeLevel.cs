@@ -12,8 +12,8 @@ public class UpgradeLevel : MonoBehaviour {
             t.gameObject.layer = LayerMask.NameToLayer("Default");
             Connector c = t.GetComponent<Connector> ();
             if (c != null) {
-                if (c.splinePrefs.numPoints < 18) {
-                    c.splinePrefs.numPoints = 18;
+                if (c.numPoints < 18) {
+                    c.numPoints = 18;
                     c.UpdateMesh (18);
                 }
             }
