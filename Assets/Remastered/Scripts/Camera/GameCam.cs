@@ -32,8 +32,6 @@ public class GameCam : KCam {
 
     Vector3 startPos;
 
-
-
 	// Use this for initialization
 	void Start () {
         startPos = transform.position;

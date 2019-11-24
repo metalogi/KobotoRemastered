@@ -45,6 +45,7 @@ public class KobotoSensor {
     public bool localAboveGround;
     public float localGroundDist;
     public Vector3 localAboveGroundPoint;
+    public Collider localAboveGroundCollider;
 
     public bool belowCeiling;
     public float belowCeilingDist;
@@ -162,7 +163,7 @@ public class KobotoSensor {
 
     #if UNITY_EDITOR
 
-    public bool visualize = true;
+    public bool visualize = false;
 
     void OnGUI() {
         if (visualize) {
@@ -280,6 +281,7 @@ public class KobotoSensor {
 
 
         bool adjacentToGround = localDownProbe.didHit && localDownProbe.hit.distance < onGroundTestDist;
+        adjacentToGround &= Vector3.Angle(localDownProbe.hit.normal, Vector3.up) < 80.0f;
         if (adjacentToGround) {
            // Debug.Log("Hit ground: " + localDownProbe.hit.collider.name);
 
@@ -324,6 +326,10 @@ public class KobotoSensor {
             for (int i=0; i<airProbes.Length; i++) {
                 var probe = airProbes[i];
                 if (!probe.didHit) {
+                    continue;
+                }
+                if (Mathf.Abs(probe.hit.normal.y) < 0.05f) // ignore walls
+                {
                     continue;
                 }
                 bool ceilingHit = probe.hit.normal.y < 0;
@@ -373,6 +379,15 @@ public class KobotoSensor {
             localCeilingDist = localUpProbe.hit.distance;
             localBelowCeilingPoint = localUpProbe.hit.point;
             localBelowCeilingCollider = localUpProbe.hit.collider;
+        }
+
+        localAboveGround = localDownProbe.didHit;
+        if (localAboveGround)
+        {
+            localAboveGroundPoint = localDownProbe.hit.point;
+            localGroundDist = localDownProbe.hit.distance;
+            localAboveGroundCollider = localDownProbe.hit.collider;
+            
         }
 
         if ((onGround && !wasOnGround) || (onCeiling && !wasOnCeiling)) {

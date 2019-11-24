@@ -25,6 +25,10 @@ public class AttachmentPropeller : AttachmentBase {
     PDController motorControl;
     float bladeSpeed;
 
+    bool overGround;
+    Vector3 groundPoint;
+    Vector3 groundVector;
+
     public override void OnAttachToKoboto (Koboto koboto)
     {
         base.OnAttachToKoboto (koboto);
@@ -36,12 +40,37 @@ public class AttachmentPropeller : AttachmentBase {
 
     public override void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
 
-        float height = sensors.heightAboveGround;
-        bool overGround = sensors.aboveGround && height < maxHeight;
 
-        if (overGround) {
+        bool wasOverGround = overGround;
+        bool overGroundLocal = sensors.localAboveGround && sensors.localGroundDist < maxHeight;
+        bool overGroundVertical = sensors.aboveGround && sensors.heightAboveGround < maxHeight;
 
-            dustVFX.transform.position = sensors.aboveGroundPoint;
+        overGround = overGroundLocal || overGroundVertical;
+
+        if (overGround)
+        {
+            Vector3 point;
+            if (overGround && overGroundLocal)
+            {
+                point = (sensors.aboveGroundPoint + sensors.localAboveGroundPoint) * 0.5f;
+            }
+            else
+            {
+                point = overGroundLocal ? sensors.localAboveGroundPoint : sensors.aboveGroundPoint;
+            }
+            if (!wasOverGround)
+            {
+                groundPoint = point;
+            }
+            else
+            {
+                groundPoint = Vector3.Lerp(groundPoint, point, 4f * Time.fixedDeltaTime);
+            }
+
+            groundVector =  groundPoint - sensors.positionTrail[0];
+            float height = groundVector.magnitude;
+          
+            dustVFX.transform.position = groundPoint;
             dustVFX.SetActive(true);
            
             float heightError =  targetHeight - height;
@@ -81,10 +110,18 @@ public class AttachmentPropeller : AttachmentBase {
         bladeTransform.Rotate(Vector3.up * bladeSpeed, Space.Self);
     }
 
+    public override void ModifyCameraPivot(ref Vector3 cameraPivotOffset)
+    {
+        float amount = 0.25f;
+        float yAmount = 0.5f;
+        cameraPivotOffset.Set(amount* groundVector.x, yAmount * groundVector.y, amount * groundVector.z);
+    }
+
     public override void KobotoEnteredState(Koboto koboto, KobotoState state) {
         base.KobotoEnteredState(koboto, state);
         if (state != KobotoState.Alive) {
             dustVFX.SetActive(false);
+            overGround = false;
         }
     }
 }

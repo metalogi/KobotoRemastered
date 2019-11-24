@@ -38,6 +38,11 @@ public class AttachmentBase : MonoBehaviour {
     public virtual void ModifyMoveForce(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
     }
 
+    public virtual void ModifyCameraPivot(ref Vector3 cameraPivotOffset)
+    {
+
+    }
+
     protected virtual void ApplyStandardModification(KobotoMoveForce moveForce, InputData input, KobotoSensor sensors, KobotoParameters parameters) {
 
        

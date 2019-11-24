@@ -69,6 +69,8 @@ public class Koboto : KobotoMonoRigidbody {
 
     public static KobotoEvents Events = KobotoEvents.CreateEventBus();
 
+    public Transform kobotoTransform;
+    public Transform rotatePivot;
     public BoxCollider boxCollider;
     public CapsuleCollider capsuleCollider;
     [HideInInspector]
@@ -105,8 +107,10 @@ public class Koboto : KobotoMonoRigidbody {
     Vector3 colliderSizeTarget;
     KobotoSensor sensors;
     KobotoMoveForce moveForce;
+    Vector3 cameraPivotOffset;
+    Vector3 cameraPivotOffsetTarget;
 
-    PIDController tiltController;
+    PIDController rotationController;
     // for testing pd values at runtime
     [SerializeField]
     float tiltControllerP = 6f;
@@ -130,13 +134,11 @@ public class Koboto : KobotoMonoRigidbody {
 
     Vector3 defaultCom;
 
-	
-
     protected override void Init(EGameState gameState) {
         parameters = GetComponent<KobotoParameters>();
         soundPlayer = GetComponent<KobotoSoundPlayer> ();
 
-        tiltController = new PIDController(tiltControllerP, tiltControllerI, tiltControllerD);
+        rotationController = new PIDController(tiltControllerP, tiltControllerI, tiltControllerD);
       
         sensors = new KobotoSensor();
         moveForce = new KobotoMoveForce();
@@ -152,7 +154,6 @@ public class Koboto : KobotoMonoRigidbody {
         tiltAngle = 0f;
 
         defaultCom = rb.centerOfMass;
-
 
         attachmentTargetContents = new Dictionary<EAttachmentTarget, AttachmentBase>();
         attachmentTargetLookup = new Dictionary<EAttachmentTarget, Transform>();
@@ -406,7 +407,7 @@ public class Koboto : KobotoMonoRigidbody {
 
     public void GetCameraInfo(out Vector3 focus, out float dist, out float tilt)
     {
-        focus = transform.position;
+        focus = rotatePivot.position + cameraPivotOffset;
         dist = sensors.cameraPushOut;
         bool nearCeiling = sensors.onCeiling ||( sensors.closeToCeiling && sensors.distanceToCeiling < 1.5f);
         tilt = nearCeiling ? -18f : 0f;
@@ -428,8 +429,10 @@ public class Koboto : KobotoMonoRigidbody {
         }
 
         if (tiltControllerEditParams) {
-            tiltController.AdjustPD (tiltControllerP, tiltControllerI, tiltControllerD);
+            rotationController.AdjustPD (tiltControllerP, tiltControllerI, tiltControllerD);
         }
+
+        cameraPivotOffset = Vector3.Lerp(cameraPivotOffset, cameraPivotOffsetTarget, Time.fixedDeltaTime * 4.0f);
 
         switch (currentState) {
         case KobotoState.Alive:
@@ -447,15 +450,16 @@ public class Koboto : KobotoMonoRigidbody {
         moveForce.Clear(parameters);
         InputData inputData = InputManager.Instance.Read();
 
-
-        sensors.UpdateAll(transform, activeCollider);
+        sensors.UpdateAll(kobotoTransform, activeCollider);
         sensors.UpdateZones(levelZones);
 
+        cameraPivotOffsetTarget = Vector3.zero;
 
         foreach (var attachmentType in attachmentOrder) {
             if (currentAttachments.ContainsKey(attachmentType)) {
                 AttachmentBase attachment = currentAttachments[attachmentType];
                 attachment.ModifyMoveForce(moveForce, inputData, sensors, parameters);
+                attachment.ModifyCameraPivot(ref cameraPivotOffsetTarget);
             }
 
         }
@@ -473,16 +477,26 @@ public class Koboto : KobotoMonoRigidbody {
         
 
         upRotation = Quaternion.Lerp(upRotation, moveForce.upRotation, 0.5f);
-        tiltAngle = Mathf.Lerp(tiltAngle, moveForce.tiltAngle, moveForce.tiltStrength);
+        
 
-        float tiltTargetAngle = Utils.AngleFromWorldUp(upRotation) + tiltAngle;
-        float currentTiltAngle = Utils.AngleFromWorldUp(transform.up);
+        float targetAngle = Utils.AngleFromWorldUp(upRotation) + tiltAngle;
 
 
-        float tiltAngleError = tiltTargetAngle - currentTiltAngle;
+        float currentAngle = Utils.AngleFromWorldUp(kobotoTransform.up);
 
-        float correction = tiltController.Update(tiltAngleError, Time.fixedDeltaTime);
+
+        float rotationAngleError = targetAngle - currentAngle;
+
+        float correction = rotationController.Update(rotationAngleError, Time.fixedDeltaTime);
+
         rb.AddTorque(correction * Vector3.right);
+
+        tiltAngle = Mathf.Lerp(tiltAngle, moveForce.tiltAngle, 4f * Time.fixedDeltaTime);
+
+
+        float clampedTilt = Mathf.Clamp(tiltAngle + currentAngle, -75f, 75f) - currentAngle;
+
+        rotatePivot.localRotation = Quaternion.Lerp(rotatePivot.localRotation, Quaternion.AngleAxis(moveForce.tiltStrength * clampedTilt, Vector3.right), 16f * Time.fixedDeltaTime);
 
     }
 
@@ -499,8 +513,10 @@ public class Koboto : KobotoMonoRigidbody {
         {
             if (!moveForce.airForcesSet)
             {
-                const float alignToGroundStartDist = 4f;
-                const float alignToGroundEndDist = 1f;
+                float alignToGroundStartDist = Mathf.Min(0.75f + 0.25f * sensors.velocity.magnitude, 3f);
+                const float alignToGroundEndDist = 0.5f;
+
+                Debug.Log("align start " + alignToGroundStartDist);
 
                 const float alignToCeilingStartDist = 5f;
                 const float alignToCeilingEndDist = 2f;
@@ -542,11 +558,13 @@ public class Koboto : KobotoMonoRigidbody {
                     Quaternion groundAlign = Utils.TiltFromUpVector(sensors.closestGroundNormal);
                     Quaternion currentRot = Utils.TiltFromUpVector(sensors.upVector);
                     if (sensors.distanceToGround > alignToGroundEndDist) {
-                        groundAlign = Quaternion.Lerp(currentRot, groundAlign, 6f * Time.fixedDeltaTime);
+                        groundAlign = Quaternion.Lerp(currentRot, groundAlign, 8f * Time.fixedDeltaTime);
                     }
                     float t = Mathf.Clamp01((alignToGroundStartDist - sensors.distanceToGround) / (alignToGroundStartDist - alignToGroundEndDist));
                     moveForce.upRotation = Quaternion.Lerp(sensors.airBaseRotation, groundAlign, t);
                     moveForce.tiltStrength = Mathf.Clamp01(1f - 4f * t);
+
+                    Debug.DrawLine(sensors.closestGroundPoint, sensors.closestGroundPoint + sensors.closestGroundNormal, Color.blue);
                 }
                 else
                 {

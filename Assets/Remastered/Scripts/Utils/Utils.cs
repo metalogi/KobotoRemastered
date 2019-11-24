@@ -28,4 +28,14 @@ public static class Utils {
     {
         return new Vector2(v.z, v.y);
     }
+
+    public static float Smoothstep(float edge0, float edge1, float x)
+    {
+        // Scale, bias and saturate x to 0..1 range
+        x = Mathf.Clamp01((x - edge0) / (edge1 - edge0));
+        // Evaluate polynomial
+        return x * x * (3 - 2 * x);
+    }
+
+    
 }
