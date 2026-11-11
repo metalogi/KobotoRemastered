@@ -1,6 +1,6 @@
 # 06 — Known issues
 
-Found by reading code, scene data, the 2019.1 editor log and the Unity 4 project folder. Items marked **(log)** are confirmed by the editor log; the rest are from code reading and have **not been reproduced at runtime**. Line numbers are for the current HEAD (`3e109e3`). Paths are under `Assets/Remastered/Scripts/` unless they start with another folder.
+Found by reading code, scene data, the 2019.1 editor log and the Unity 4 project folder. Items marked **(log)** are confirmed by the editor log; the rest are from code reading and have **not been reproduced at runtime**. Line numbers are for `3e109e3`; no code has changed since. Paths are under `Assets/Remastered/Scripts/` unless they start with another folder.
 
 Severity: **A** blocks a playable device build or loses progress; **B** wrong behaviour a player would notice; **C** latent, cosmetic or hygiene.
 

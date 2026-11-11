@@ -7,7 +7,7 @@
 | Remote | `https://github.com/metalogi/KobotoRemastered.git` |
 | Working branch | `unity2019-upgrade`, pushed to and tracking `origin/unity2019-upgrade` |
 | Baseline | Tag `baseline-2019.1` on `727115f` (2026-11-10): the last 2019-era code (`3e109e3`, 2019-11-23, "tilt changes and wheel fixes") plus these docs, the `.gitignore` and the editor's clean-up. Pushed to origin |
-| `master` | Still at `3e109e3`, one commit behind the working branch; it does not have `Docs/` or the `.gitignore` |
+| `master` | Fast-forwarded to the working branch on 2026-11-10 and pushed; the two branches are identical |
 | Commits | 68 at the baseline tag |
 | Tracked files | about 3,500 (half are `.meta`) |
 | `.gitignore` | Committed in the baseline. Ignores Unity-generated folders and the root `/Original/` folder |
@@ -39,7 +39,8 @@ The branch was fast-forwarded from `552afc6` to `3e109e3` on 2026-11-10. That la
 | 2017-12 → 2018-08 | | | Spring, propeller, hammer, breakables, parachute, level zones, quad wheels, camera zones |
 | 2018-09-02 | `03b6564` | 2018.2.6f1 | Upgrade to 2018 (UnityScript support ends here). Progress manager rewrite, drowning, jetpack, events revamp |
 | 2019-07-20 | `552afc6` | 2019.1.10f1 | Upgrade to 2019. Connector mesh generator ported to C# |
-| 2019-11-23 | `3e109e3` (`master`) | 2019.1.10f1 | Tilt and wheel fixes — last work on the project |
+| 2019-11-23 | `3e109e3` | 2019.1.10f1 | Tilt and wheel fixes — last code change before the 2026 restoration |
+| 2026-11-10 | `727115f` (tag `baseline-2019.1`) | 2019.1.10f1 | Audit docs, `.gitignore`, editor `.meta` clean-up; `master` and `unity2019-upgrade` brought level |
 
 The Unity 4 project is not in git as a runnable snapshot: the earliest commit already has the scripts disabled, lacks the Maya model files, and has no `ProjectSettings` from that era. The local Unity 4 folder fills those gaps, including the original build-scene order ([04-level-inventory.md](04-level-inventory.md)).
 
