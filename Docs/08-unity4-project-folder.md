@@ -23,7 +23,7 @@ Added 2026-11-10. `G:\UnityProjects\Kubrik\Original` is a local, git-ignored cop
 - **Extra audio:** two tracks not in the repo (`kubrik_dark_theme_final1.mp3`, `kubrik_fail_jingle_final1.mp3`), a 96 kbps and a VBR encode of in-game track 1, three M4A demos, and 64 extra WAV effects. No uncompressed music masters.
 - **Extra textures:** 105 PNG plus BMP/PSD, including `UI_atlas3.png` (2048²), `levelMap1024X4096.png`, front-end art, `kubrikGUISkin` GUI skins, app icons (largest 512²). Same era and resolution as the repo — **no high-resolution art sources**. The `pngs` folder is identical in size to the sprites already in the repo.
 - **`buildTest/`**: an Xcode project and player data for an armv7 iOS build (65 level files). It cannot run on current iOS (64-bit only) but its `Data/*.assets` hold every imported mesh and animation.
-- **`Library/`**: Unity 4 import cache, so a Unity 4.2 editor should be able to open and play the project without re-importing — the best available reference for "original playability".
+- **`Library/`**: Unity 4 import cache. It would have let Unity 4.2 play the project without re-importing the Maya files, but Unity 4.2 can no longer be activated (doc 03). The original now runs from a Unity 5.6 copy instead, which rebuilds this cache.
 - Scenes, prefabs and materials are **binary** here; the repo's text versions remain the ones to parse. Asset GUIDs match the repo for 1,133 of 1,149 common paths.
 
 ## Maya models: the main new problem
@@ -42,7 +42,7 @@ How the references break down by kind (those 145 scenes plus the original prefab
 
 ## Effect on the plan
 
-Folded into [07-upgrade-plan.md](07-upgrade-plan.md): scope is 60 levels; Phase 0 gains "run the original in Unity 4.2 and record it" and an asset-recovery step; a physics-target decision (D9) was added because the original ran gravity −90.81 at 10× scale (−9.08 at the remaster's scale) at 25 Hz against the remaster's −15 at 100 Hz.
+Folded into [07-upgrade-plan.md](07-upgrade-plan.md): scope is 60 levels; Phase 0 gains "run the original and record it" (first planned for Unity 4.2, done in Unity 5.6 on 2026-11-11) and an asset-recovery step; a physics-target decision (D9) was added because the original ran gravity −90.81 at 10× scale (−9.08 at the remaster's scale) at 25 Hz against the remaster's −15 at 100 Hz.
 
 ## Tools
 

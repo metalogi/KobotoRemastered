@@ -18,7 +18,7 @@ Phase 0  Baseline & recovery ──► Phase 1  Unity 6 ──► Phase 2  Shipp
 | # | Decision | Status |
 |---|---|---|
 | D1 | Level scope | **Resolved: all 60.** 10 ported, 50 to go. Order is the Unity 4 build order (doc 04) |
-| D2 | Reference for "original playability" | **Largely resolved.** The Unity 4 folder is a complete 4.2.0f4 project with import cache. Open question: does that editor still install, activate and open it on this machine (Phase 0)? |
+| D2 | Reference for "original playability" | **Resolved 2026-11-11: Unity 5.6.** Unity 4.2 cannot be activated any more (Unity's server fails the request). A copy of the original project runs in Unity 5.6.7f1 with the original scripts and settings; 33 Maya models are swapped for FBX versions. Caveat: 5.6 uses a newer physics engine (PhysX 3.3) than 4.2 (PhysX 2.8), so handling is close to, not identical to, the shipped game. See doc 03 |
 | D3 | Source art | **Resolved.** Maya sources exist for models; there are no higher-resolution 2D sources or music masters. 2D art is upscale-or-redraw |
 | D4 | Render pipeline: stay on Built-in or move to URP | Open. Suggested: URP, as its own phase after the engine upgrade |
 | D5 | Front-end scope | Open. Suggested: restore world select and tutorials; drop social links. The trophy room was not in the shipped build list, so leave it out |
@@ -26,7 +26,7 @@ Phase 0  Baseline & recovery ──► Phase 1  Unity 6 ──► Phase 2  Shipp
 | D7 | Controls: tilt only, or tilt plus a touch alternative | Open. Suggested: tilt default, touch alternative in settings |
 | D8 | Minimum device / iOS version | Open. Suggested: whatever the chosen Unity 6 release requires, tested on the oldest phone you own |
 | D9 | **Physics target: original feel or the remaster's?** The remaster uses gravity −15 at 100 Hz; the original is equivalent to −9.08 at 25 Hz | Open. Decide after playing the original and the remaster side by side in Phase 0. Everything tuned later depends on it |
-| D10 | Maya | **Resolved: not available.** The 13 models with no FBX are recovered by export from the Unity 4 editor, or by extraction from the old build data (Phase 0) |
+| D10 | Maya | **Resolved: not available.** The 13 models with no FBX are recovered by extraction from the old build data (Phase 0); exporting from the Unity 4 editor is no longer possible |
 
 ## Phase 0 — Baseline and asset recovery
 
@@ -40,18 +40,20 @@ Housekeeping:
 
 Get the original running:
 
-- Install Unity 4.2.0f4 from the download archive. Open a **copy** of `/Original/KobotoU4/KobotoU4` (keep its `Library`, so the Maya files are not re-imported).
-- Play and screen-record all 60 levels. These recordings define "original playability" for Phase 5.
-- If 4.2 will not install or activate, fall back to a 2017.4 editor on a copy. UnityScript still compiles there, but the Maya models will fail to import, so that reference would be missing geometry until the models below are recovered.
+- Done 2026-11-11: the original runs in Unity 5.6.7f1 from the working copy `/Original/KobotoU4_unity56` (doc 03, "Reference build"). Unity 4.2 was tried first and cannot be activated.
+- Play and screen-record all 60 levels in that copy. These recordings define "original playability" for Phase 5. Note per level anything that looks wrong because of the missing models or the newer physics engine, so it is not mistaken for original behaviour.
+- When the 13 missing models are recovered (below), add them to the working copy too and re-record the affected levels (mostly Worlds 2 and 3).
 
 Recover what the repo never had (all from the Unity 4 folder; details in doc 08):
 
 1. **Small assets, copied with their `.meta` files** so existing GUID references resolve: the eight physics materials, `fireworks.js` and `Button.js` (as data shims later), the two missing music tracks, `GameplayParameters.prefab` and the GUI skins if wanted for reference. Binary `.prefab`/`.physicmaterial` files import fine; Unity rewrites them as text.
-2. **Model reference remap (33 models).** Write a script that rewrites `guid: <maya file>` to `guid: <matching *_fbx.fbx>` in scene and prefab YAML wherever the sub-asset ID tables agree — 24 models match exactly, 9 need a small per-model table. Run it with the editor closed over the 60 level scenes, the ten remastered levels and the prefabs. `tools/level_missing_assets.py` measures progress: its "maya" column should fall to the 13 below.
-3. **The 13 models with no FBX** (`bambooA`, `hungry_caterpillar`, `w1_bgTree`, `snow1/2/3`, `snow1_lb`, `CAVE1/2/3`, `jetPakIceMonsta`, `chase_slope`, `tutorialSign1@On`). Without Maya, in order of preference:
-   - **Export from the Unity 4 editor.** With the project open on its cached imports, a short editor script can save each model's imported meshes and animation clips as native `.asset` / `.anim` files. Bring those into the repo (through the 2019.1 project first, so they are upgraded one step at a time) and point the references at them with the same remap script. This keeps exact geometry, UVs and animation curves.
-   - **Extract from the old build.** `buildTest/Data/*.assets` contains every imported mesh and clip. Community asset-extraction tools that support Unity 4 can export them. Use this if the Unity 4 editor route fails.
-   - **A Maya trial or a friend with Maya** to batch-export FBX is the cleanest result if it becomes possible, and worth doing eventually for `hungry_caterpillar` (47 meshes, 75 clips), which is the one complex rig.
+2. **Model fix for 33 models.** Two ways, both proven on the 5.6 working copy's metadata:
+   - *File swap* (what `tools/swap_maya_for_fbx.py` does to the working copy): put the repo's FBX in place of the `.mb` but keep the `.mb`'s `.meta`, so the GUID and sub-asset IDs are unchanged and no scene needs editing. The script renames the main animation clip entry and marks clips Legacy.
+   - *Reference remap* in the repo: rewrite `guid: <maya file>` to `guid: <matching *_fbx.fbx>` in scene and prefab YAML. The repo's FBX files already have their own GUIDs and some prefabs point at them, so this avoids two assets for one model.
+   Either way, `tools/level_missing_assets.py` measures progress: its "maya" column should fall to the 13 below. Known loss: the FBX `butterfly` has only its main clip, so the per-wing clips used by World 3 butterflies are gone.
+3. **The 13 models with no FBX** (`bambooA`, `hungry_caterpillar`, `w1_bgTree`, `snow1/2/3`, `snow1_lb`, `CAVE1/2/3`, `jetPakIceMonsta`, `chase_slope`, `tutorialSign1@On`). Without Maya or a working Unity 4 editor, in order of preference:
+   - **Extract from the old build.** `buildTest/Data/*.assets` in the Unity 4 folder contains every imported mesh and clip. An open-source asset-extraction tool that reads Unity 4 data (for example AssetStudio) can export them as FBX or OBJ. Give each a `.meta` with the Maya file's GUID and sub-asset IDs, as the swap script does.
+   - **A Maya trial or someone with Maya** to batch-export FBX is the cleanest result if it becomes possible, and worth it eventually for `hungry_caterpillar` (47 meshes, 75 clips), the one complex rig.
    - Most of the 13 are single static meshes (cave and snow floors, a tree, bamboo), so rebuilding one by hand is a tolerable last resort.
 
 Then baseline the remaster:
@@ -226,7 +228,7 @@ Exit: side-by-side with the original recordings, nothing looks soft or stretched
 
 | Phase | Size | Main driver |
 |---|---|---|
-| 0 Baseline and recovery | M | Getting Unity 4.2 running; recording 60 levels; the 13 models with no FBX |
+| 0 Baseline and recovery | M | Recording 60 levels; the 13 models with no FBX (the original already runs in Unity 5.6) |
 | 1 Unity 6 | S–M | Physics retuning after the PhysX change |
 | 2 Shippable slice | M | Device bring-up and tilt tuning; needs a Mac |
 | 3 Modernise | M | Breadth of small refactors; tests |
@@ -239,9 +241,9 @@ Exit: side-by-side with the original recordings, nothing looks soft or stretched
 
 | Risk | Mitigation |
 |---|---|
-| Unity 4.2.0f4 will not install, activate or open the project today | Try it first, in Phase 0. Fallbacks: a 2017.4 editor on a copy (after model recovery), or extraction from `buildTest/Data` |
-| The 13 models cannot be exported cleanly without Maya | Three routes in Phase 0; most are single static meshes; `hungry_caterpillar` is the only complex one and affects 3 levels |
-| Remap script points a reference at the wrong sub-mesh | Remap only where ID tables match; hand-check the 9 mismatched models; asset-integrity test; compare against Unity 4 recordings |
+| The Unity 5.6 reference differs from the shipped game (newer physics engine, missing models) | Treat 5.6 recordings as close, not exact; note visible model gaps per level; if an old iOS device with the shipped game turns up, prefer it for disputed levels |
+| The 13 models cannot be extracted cleanly without Maya | Extraction from `buildTest/Data` first; most are single static meshes; `hungry_caterpillar` is the only complex one and affects 3 levels |
+| Model swap or remap points a reference at the wrong sub-mesh | Swap or remap only where ID tables match; hand-check the 9 mismatched models; asset-integrity test; compare against the 5.6 recordings |
 | Physics feel drifts across engine versions, or the target is never agreed | Decide D9 in Phase 0; isolate the PhysX hop; recorded-input completion tests |
 | Scope: 50 levels and many one-off mechanics | World-by-world milestones; the per-level converter report shows the true cost of each level before committing to it |
 | Per-creature handling differences turn out to matter | Compare `Juncore` values across creature prefabs early in Phase 5 using the shims |
@@ -251,9 +253,10 @@ Exit: side-by-side with the original recordings, nothing looks soft or stretched
 
 ## Suggested next steps
 
-1. Install Unity 4.2.0f4 and try opening a copy of the Unity 4 folder. This single test decides the reference (D2) and the model-recovery route (D10).
-2. Copy the eight physics materials into the repo and write the model GUID remap script.
-3. Add the three missing levels to the build list; play all ten in 2019.1; record and compare with the original; decide D9.
-4. Arrange Mac access (D6).
+1. Record the 60 levels in the Unity 5.6 working copy.
+2. Extract the 13 missing models from `buildTest/Data` and add them to the working copy.
+3. Copy the eight physics materials into the repo and fix the 33 model references there.
+4. Add the three missing levels to the build list; play all ten in 2019.1; record and compare with the original; decide D9.
+5. Arrange Mac access (D6).
 
-(The first step from the original list — commit, tag `baseline-2019.1` — was done on 2026-11-10.)
+Done so far: commit and tag `baseline-2019.1` (2026-11-10); original running in Unity 5.6 (2026-11-11).

@@ -86,7 +86,7 @@ Severity: **A** blocks a playable device build or loses progress; **B** wrong be
 
 - Actual play behaviour of levels 1–10 (physics feel, whether each is completable, camera framing). Needs a play-test pass in the editor.
 - Whether the current HEAD compiles — the editor log predates the fast-forward. The six changed scripts are small edits and look self-consistent.
-- Whether Unity 4.2.0f4 opens the Unity 4 folder and plays it without re-importing the Maya files.
+- Behaviour of the shipped game in its own engine. Unity 4.2 cannot be activated; the reference is the Unity 5.6 copy, which uses a newer physics engine (doc 03).
 - How the missing meshes look in practice: which objects are invisible in the ten ported levels.
 - Device behaviour of any kind; there is no iOS build environment on this machine.
 - Per-creature handling differences in the original prefabs.

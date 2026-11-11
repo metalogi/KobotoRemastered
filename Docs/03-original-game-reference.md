@@ -8,7 +8,7 @@ The original is the specification for "original playability". It exists in two p
 | Scenes, prefabs, materials | Text YAML — parseable, and what Unity 6 will read | Binary (Unity 4.2) — needs an editor to read |
 | Models | FBX conversions for some; no Maya files | All 115 Maya source files |
 | Project settings | None from the Unity 4 era | Complete (binary) |
-| Can it run? | No | Should open and play in Unity 4.2.0f4 |
+| Can it run? | No | Not in Unity 4.2 (licence cannot be activated); a copy runs in Unity 5.6 (see "Reference build") |
 
 Use the repo copy for level data and the local copy for behaviour, settings and missing assets. Asset GUIDs agree between the two for 1,133 of 1,149 shared paths, so references carry across. Doc [08](08-unity4-project-folder.md) lists what the local copy adds.
 
@@ -95,9 +95,33 @@ Prefabs in `Prefabs/Components/`: `DoubleWheels`, `QuadWheels`, `Spring`, `Magne
 
 ## Reference build
 
-The Unity 4 folder is the reference. It is a complete project saved by **Unity 4.2.0f4** with its `Library` import cache, so that editor version (still available from Unity's download archive) should open it and play every level in the editor without re-importing anything. This has not been tried yet. Two cautions:
+**The original runs in Unity 5.6.7f1**, from the working copy `/Original/KobotoU4_unity56` (git-ignored, like the rest of `/Original`). Confirmed 2026-11-11: it compiles and plays from `Assets/Scenes/blank.unity` (build scene 0) through the splash screen into World 1 level 1.
 
-- If the editor decides to re-import the Maya files it will fail, because Maya is not installed. Work on a copy of the folder and do not delete `Library`.
-- The folder also contains `buildTest/`, an Xcode project and player data for an armv7 iOS build. It cannot run on any current iPhone (64-bit only since iOS 11), but its `Data/*.assets` files contain every imported mesh, animation and texture and can be read by asset-extraction tools.
+### Why not Unity 4.2
 
-Once the original runs in the editor, record each of the 60 levels being completed. Those recordings are the acceptance reference for level restoration.
+Unity 4.2.0f4 is installed at `G:/Unity4` but cannot be licensed:
+
+1. Its 2009 certificate bundle lacks the root Unity's licence server uses ("DigiCert Global Root G2"). That root was added from the Windows trusted store to `Editor/WebKit.resources/certificates/cacert.pem`; the original is kept as `cacert.pem.orig`. This got past the "Peer certificate cannot be authenticated" error.
+2. The activation request then fails on Unity's side: `activation.unity3d.com` returns HTTP 500, code `120.999`, and the editor reports "A valid Unity licence is not available". Nothing on this machine can fix that, and patching the licence check is out of bounds.
+
+### How the 5.6 working copy was made
+
+- **Copied** `Assets` and `ProjectSettings` from the Unity 4 folder (no `Library` or `buildTest`).
+- **Swapped 33 Maya models for FBX** with `tools/swap_maya_for_fbx.py` (doc 07, Phase 0). The originals are kept in `_maya_originals/`.
+- **Opened in Unity 5.6.7f1** (installed at `G:/Unity/5.6.7f1`; it used the machine's existing 2018 Personal licence file) and let it upgrade the project.
+- **Fixed compile errors:**
+  - Moved two unused sample scripts that use removed mesh-strip functions (`MeshCombineUtility.cs`, `CombineChildren.cs`) to `_removed_scripts/`.
+  - Corrected one line in `Plugins/LevelObject/GeneralReset.js` that Unity's script updater broke.
+  - Let the script updater fix NGUI and the editor tools.
+- **Batch compile.** With the editor closed, compiles can be run from the command line: `G:/Unity/5.6.7f1/Editor/Unity.exe -batchmode -nographics -quit -projectPath <copy> -logFile <log>`.
+
+### How faithful it is
+
+- **Same as shipped:** scripts, scenes, prefabs, materials, textures, audio, and project settings (gravity, 25 Hz timestep, default `Ice` physics material).
+- **Different physics engine:** Unity 5 uses PhysX 3.3 and Unity 4 used PhysX 2.8. Rolling, friction and joints will feel similar but not identical.
+- **Missing models:** the 13 models with no FBX are absent, mostly in Worlds 2 and 3, and World 3 butterflies lack their wing animation.
+- **Other differences:** fixed-function shader effects that Unity 5 dropped (reflections, projector shadows) do not render. A few objects (for example the main camera in level 1) still report a missing script; these have not been investigated yet.
+
+Record each of the 60 levels being completed in this copy. Those recordings are the acceptance reference for level restoration.
+
+The Unity 4 folder also contains `buildTest/`, an Xcode project and player data for an armv7 iOS build. It cannot run on any current iPhone (64-bit only since iOS 11), but its `Data/*.assets` files contain every imported mesh, animation and texture and are the source for the 13 missing models. An old iPhone or iPad (iOS 10 or earlier) still holding the shipped game would be a more faithful reference than the 5.6 copy, if one exists.

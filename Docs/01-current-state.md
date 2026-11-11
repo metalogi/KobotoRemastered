@@ -27,6 +27,8 @@ The branch was fast-forwarded from `552afc6` to `3e109e3` on 2026-11-10. That la
 
 `/Original/KobotoU4/KobotoU4` is a complete copy of the original project (Unity 4.2.0f4, 646 MB with its `Library` and an old iOS build). It is git-ignored. It holds assets and settings the repo lacks; see [08-unity4-project-folder.md](08-unity4-project-folder.md).
 
+`/Original/KobotoU4_unity56` (also git-ignored) is a working copy of it upgraded to Unity 5.6.7f1, which compiles and plays. It is the reference for how the original plays, since Unity 4.2 can no longer be activated; see [03-original-game-reference.md](03-original-game-reference.md#reference-build).
+
 ## History
 
 | Date | Commit | Unity | Milestone |
