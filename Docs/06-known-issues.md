@@ -13,7 +13,7 @@ Severity: **A** blocks a playable device build or loses progress; **B** wrong be
 | R3 | B | `Scenes/World1/level08.unity` is lower-case; `GameData` refers to `World1/Level08`. Harmless on Windows, a risk on case-sensitive file systems and in path lookups. |
 | R4 | B | Player settings are placeholders: company `DefaultCompany`, bundle id `com.Company.ProductName`, minimum iOS 7.0, scripting backend unset, legacy .NET 3.5 runtime. |
 | R5 | B | All four autorotation orientations are enabled. Tilt control reads one gravity axis and assumes a fixed landscape orientation. |
-| R6 | C | `.gitignore` added 2026-11-10 but not yet committed, along with `Docs/` and the editor's `.meta` clean-up. No Git LFS for binaries. |
+| R6 | C | `.gitignore` **resolved** — added and committed 2026-11-10 in the `baseline-2019.1` commit. Still open: no Git LFS for binaries. |
 | R7 | C | Seven obsolete packages in `manifest.json` (ads, analytics, purchasing, collab, UNet HLAPI, package-manager-ui, XR legacy input). |
 | R8 | C | `GameData.asset` has placeholder "Snow" and "Jungle" worlds (not live) whose levels reuse World 1 UIDs (`w1l1`…) and scene paths. |
 

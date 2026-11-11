@@ -8,7 +8,7 @@ Added 2026-11-10. `G:\UnityProjects\Kubrik\Original` is a local, git-ignored cop
 |---|---|
 | "Which 30 levels?" | All **60** shipped (confirmed by Ed). 50 remain to port. |
 | World 1 slot 10 is missing; Level10 came from `parachuteSimple` | Slot 10 is **`3-Ed/reflectionTest.unity`** (from the real build list). It is in the repo, but that copy was edited in place during the remaster. Remastered `Level10` derives from it. |
-| Branch is behind `master`; no `.gitignore` | `unity2019-upgrade` fast-forwarded to `3e109e3`; `.gitignore` added (ignores `Library/`, `Temp/`, and root `/Original/`). Neither is committed yet. |
+| Branch is behind `master`; no `.gitignore` | `unity2019-upgrade` fast-forwarded to `3e109e3`; `.gitignore` added (ignores `Library/`, `Temp/`, and root `/Original/`). Both committed and pushed with the docs as `727115f`, tagged `baseline-2019.1`. |
 | Missing prefab GUID `5ac905b7…` found nowhere | It is `Local Assets/Models/World/plant1.mb`, a Maya file that was never committed. See "Maya models" below. |
 | Build order reconstructed from scripts | Read from `ProjectSettings/EditorBuildSettings.asset`: 0 `blank`, 1 `splash_3d`, 2 `3-Ed/worldSelectScreen`, 3 `menu`, 4 `menuSnow`, 5 `menuMachine`, 6–65 the 60 levels in the order listed in `tools/level_missing_assets.py`. `trophyRoom` is not in the list. |
 | Source art might exist outside the repo | Maya sources: yes. Higher-resolution textures or music masters: no. Maya itself is not available. |

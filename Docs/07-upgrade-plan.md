@@ -34,8 +34,7 @@ Purpose: make the repo complete and make every later change comparable against a
 
 Housekeeping:
 
-- Done: branch fast-forwarded to `3e109e3`; `.gitignore` added.
-- Commit the `.gitignore`, `Docs/` and the five orphan `.meta` deletions. Tag the result `baseline-2019.1`.
+- Done 2026-11-10: branch fast-forwarded to `3e109e3`; `.gitignore`, `Docs/` and the editor's `.meta` clean-up committed as `727115f`, tagged `baseline-2019.1`, and pushed.
 - Consider Git LFS before adding more binaries.
 - Add `level08`, `Level09`, `Level10` to the build scene list.
 
@@ -252,8 +251,9 @@ Exit: side-by-side with the original recordings, nothing looks soft or stretched
 
 ## Suggested next steps
 
-1. Commit the `.gitignore`, `Docs/` and `.meta` clean-up; tag `baseline-2019.1`.
-2. Install Unity 4.2.0f4 and try opening a copy of the Unity 4 folder. This single test decides the reference (D2) and the model-recovery route (D10).
-3. Copy the eight physics materials into the repo and write the model GUID remap script.
-4. Add the three missing levels to the build list; play all ten in 2019.1; record and compare with the original; decide D9.
-5. Arrange Mac access (D6).
+1. Install Unity 4.2.0f4 and try opening a copy of the Unity 4 folder. This single test decides the reference (D2) and the model-recovery route (D10).
+2. Copy the eight physics materials into the repo and write the model GUID remap script.
+3. Add the three missing levels to the build list; play all ten in 2019.1; record and compare with the original; decide D9.
+4. Arrange Mac access (D6).
+
+(The first step from the original list — commit, tag `baseline-2019.1` — was done on 2026-11-10.)

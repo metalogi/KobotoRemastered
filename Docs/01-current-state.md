@@ -5,19 +5,23 @@
 | | |
 |---|---|
 | Remote | `https://github.com/metalogi/KobotoRemastered.git` |
-| Checked-out branch | `unity2019-upgrade`, HEAD `3e109e3` (2019-11-23) "tilt changes and wheel fixes" — the same commit as `master` / `origin/master` |
-| Commits | 67, single author |
+| Working branch | `unity2019-upgrade`, pushed to and tracking `origin/unity2019-upgrade` |
+| Baseline | Tag `baseline-2019.1` on `727115f` (2026-11-10): the last 2019-era code (`3e109e3`, 2019-11-23, "tilt changes and wheel fixes") plus these docs, the `.gitignore` and the editor's clean-up. Pushed to origin |
+| `master` | Still at `3e109e3`, one commit behind the working branch; it does not have `Docs/` or the `.gitignore` |
+| Commits | 68 at the baseline tag |
 | Tracked files | about 3,500 (half are `.meta`) |
-| `.gitignore` | Added 2026-11-10 (uncommitted). Ignores Unity-generated folders and the root `/Original/` folder |
+| `.gitignore` | Committed in the baseline. Ignores Unity-generated folders and the root `/Original/` folder |
 | Git LFS | Not used. Binary art is committed directly (~48 MB `.git`) |
 
 The branch was fast-forwarded from `552afc6` to `3e109e3` on 2026-11-10. That last commit (36 files) touched `Koboto.cs`, `KobotoSensor.cs`, `AttachmentWheels.cs`, `AttachmentPropeller.cs`, `AttachmentBase.cs`, `Utils.cs`; the `TreeGuy`, `Wheels`, `Propellor` and `Spring` prefabs; a new spoked-wheel model and textures; and re-saved `Level01/02/03/04/07/09`. It adds a visual tilt pivot on the creature, wheel-spin animation, camera pivot offsets per attachment, and retuned air/ground alignment. Input, progression, build settings and project settings were not changed by it. Line numbers quoted in doc 06 for `Koboto.cs` were taken at `552afc6` and have shifted slightly.
 
-### Uncommitted changes in the working tree
+### What the baseline commit added
+
+`727115f` holds everything from the 2026 audit on top of the 2019 code:
 
 - New: `.gitignore`, `Docs/`.
-- Deleted by the Unity 2019.1.10f1 editor on opening: five orphaned folder `.meta` files (`Assets/Original/Prefabs/NewKoboto.meta`, `Assets/Original/Scripts.meta`, `Assets/Remastered/Shaders.meta`, `Assets/Remastered/Sound.meta`, `Assets/Remastered/VFX 1.meta`). The folders they describe are empty and so were never in git. Safe to commit.
-- Modified by the editor: `ProjectSettings/VFXManager.asset`.
+- Removed by the Unity 2019.1.10f1 editor on opening: five orphaned folder `.meta` files (`Assets/Original/Prefabs/NewKoboto.meta`, `Assets/Original/Scripts.meta`, `Assets/Remastered/Shaders.meta`, `Assets/Remastered/Sound.meta`, `Assets/Remastered/VFX 1.meta`). The folders they describe were empty and so were never in git.
+- Rewritten by the editor: `ProjectSettings/VFXManager.asset` (binary to text).
 
 ### Local, untracked: the Unity 4 project
 
